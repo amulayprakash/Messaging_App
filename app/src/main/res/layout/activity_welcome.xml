@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightPurple"
+    tools:context="com.example.quagnitia.messaging_app.Activity.WelcomeActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/dimension30dp"
+            android:layout_height="@dimen/dimension30dp"
+            android:tint="@color/colorWhite"
+            android:layout_margin="@dimen/dimension10dp"
+            android:src="@drawable/ic_back"
+
+            />
+
+           <TextView
+               android:id="@+id/txtLogOut"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="right"
+               android:textSize="@dimen/dimension25dp"
+               android:layout_marginRight="@dimen/dimension15dp"
+               android:layout_gravity="center_vertical"
+               android:textColor="@color/colorWhite"
+               android:text="@string/logout"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/txtWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/dimension30dp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/welcome"/>
+
+
+</RelativeLayout>
