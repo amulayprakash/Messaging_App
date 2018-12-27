@@ -53,4 +53,5 @@ public class SplashActivity extends AppCompatActivity {
         inFromLeft.setInterpolator(new AccelerateInterpolator());
         return inFromLeft;
     }
+
 }
