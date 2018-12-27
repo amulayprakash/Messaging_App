@@ -23,6 +23,7 @@ import com.example.quagnitia.messaging_app.Model.UserResponse;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,7 +81,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.llLogin:
                 if (validation()) {
-                    callLoginWS();
+                    if(!NetworkUtils.checkNetworkConnection(this)) {
+                        callLoginWS();
+                    }else{
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 break;
             case R.id.rlMain:
@@ -116,7 +122,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (userResponse.getError().equals("0")) {
                         // preferences.setLOGIN(true);
                         Toast.makeText(MainActivity.this, "Login Successfull..!!!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        User userlog = userResponse.getUser();
+                        if(userlog!=null){
+                            com.example.quagnitia.messaging_app.Preferences.Preferences preferences1 = new com.example.quagnitia.messaging_app.Preferences.Preferences(MainActivity.this);
+                            preferences1.setLogin(true);
+                            preferences1.saveAgentName(MainActivity.this,(userlog.getName()));
+                            preferences1.saveAgentId(MainActivity.this,userlog.getUserID());
+                            preferences1.saveSchool(MainActivity.this,userlog.getSchoolName());
+                        }
                         String name = etEmail.getText().toString().trim();
                         Intent loginIntent = new Intent(context, WelcomeActivity.class);
                         loginIntent.putExtra("name", name);
@@ -125,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //finish();
                     } else if (userResponse.getError().equalsIgnoreCase("1")) {
                         Toast.makeText(MainActivity.this, "Login Failed..!!!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Please register your account", Toast.LENGTH_SHORT).show();
@@ -152,9 +167,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user.setEmail(etEmail.getText().toString().trim());
         user.setPassword(etPass.getText().toString().trim());
         user.setLogin_type("0");
+        user.setFcmTokenId(getToken());
         return user;
     }
 
+    private String getToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log and toast
+        //  Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+        String msg = "Instance ID Token: " + token;
+//        Log.v("TOKENS",token);
+        return token;
+    }
 
     private boolean validation() {
         boolean flag = false;
@@ -165,15 +189,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (!etEmail.getText().toString().trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
             Toast.makeText(context, "Please enter valid email", Toast.LENGTH_SHORT).show();
             etEmail.setError("Enter valid email");
-        } else if (etPass.getText().length() < 6) {
-            Toast.makeText(context, R.string.emailVali, Toast.LENGTH_SHORT).show();
-            etPass.setError("Enter min 6 character");
+//        } else if (etPass.getText().length() < 6) {
+//            Toast.makeText(context, R.string.emailVali, Toast.LENGTH_SHORT).show();
+//            etPass.setError("Enter min 6 character");
         } else
             flag = true;
 
 
         return flag;
     }
+
 
     public void hideSoftKeyboard() {
         InputMethodManager inm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);

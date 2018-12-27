@@ -3,8 +3,7 @@ package com.example.quagnitia.messaging_app.Model;
 import java.io.Serializable;
 
 
-
-public class UserResponse implements Serializable {
+public class MsgResponse implements Serializable {
 
     private String error = "";
 
@@ -17,13 +16,6 @@ public class UserResponse implements Serializable {
         this.error = error;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public User getUser() {
         return user;
@@ -33,7 +25,7 @@ public class UserResponse implements Serializable {
         this.user = user;
     }
 
-    private String message = "";
+
     private User user = new User();
 
     public Data getData() {
@@ -55,5 +47,15 @@ public class UserResponse implements Serializable {
     }
 
     private Data prev = new Data();
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    private Message message = new Message();
 
 }

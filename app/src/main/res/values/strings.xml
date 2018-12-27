@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">messaging_app</string>
+    <string name="app_name">Messaging App</string>
     <string name="userName">User Name</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="forget">Forget Password</string>
     <string name="welcome">Welcome</string>
     <string name="logout">Logout</string>
-    <string name="alertlogout">Are You Sure??</string>
+    <string name="alertlogout">Are you sure ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="inProgress">In Progress...</string>
@@ -15,7 +15,6 @@
     <string name="plwait">Please Wait</string>
     <string name="severNotResponding">Server Not Responding</string>
     <string name="nointernetconnection">No Internet Connection</string>
-
 
 
 </resources>

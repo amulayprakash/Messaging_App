@@ -5,9 +5,9 @@ package com.example.quagnitia.messaging_app.webservice;
  */
 
 public class ConstatntsApi {
-    static final String BASE_URL = "http://test.arihantwebconsultancy.com/s1ttest/public/api/";//test env path
+    static final String BASE_URL = "http://rapidxx.com/aqi/api/public/v1/";//"http://test.arihantwebconsultancy.com/s1ttest/public/api/";//test env path
 
     static final String LOGIN_URL = "login";
     static final String FORGOT_URL="forgotpassword";
-
+    static final String SHOWMESSAGE="ShowMessage";
 }

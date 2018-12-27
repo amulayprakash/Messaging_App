@@ -43,7 +43,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initListner() {
-        etEmail.setOnClickListener(this);
+//        etEmail.setOnClickListener(this);
         txtResetPassword.setOnClickListener(this);
         txtCancel.setOnClickListener(this);
         txtLogin.setOnClickListener(this);

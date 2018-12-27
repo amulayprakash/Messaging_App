@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "344123787985",
+    "firebase_url": "https://messagingapp-36f7c.firebaseio.com",
+    "project_id": "messagingapp-36f7c",
+    "storage_bucket": "messagingapp-36f7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344123787985:android:eed2f8a88f684396",
+        "android_client_info": {
+          "package_name": "com.example.quagnitia.messaging_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344123787985-c9u0rmcnlsekva7i3igmllp8d7d5gc33.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quagnitia.messaging_app",
+            "certificate_hash": "8020a441c1b597b28d2a07e8c5ee881ab6a59c9c"
+          }
+        },
+        {
+          "client_id": "344123787985-tkfk46tttemqid5okhmlqfp327cce68j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZUw4iyXK4zvcGFj6BpXf_MrRXsHNZtqc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344123787985-tkfk46tttemqid5okhmlqfp327cce68j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
