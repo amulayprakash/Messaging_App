@@ -4,7 +4,7 @@ package com.example.quagnitia.messaging_app.Model;
  * Created by Niki on 20-12-2018.
  */
 
-public class Message {
+public class Text {
 
     public String getSubject() {
         return subject;

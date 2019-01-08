@@ -2,6 +2,7 @@ package com.example.quagnitia.messaging_app.webservice;
 
 
 import com.example.quagnitia.messaging_app.Model.MsgResponse;
+import com.example.quagnitia.messaging_app.Model.Req;
 import com.example.quagnitia.messaging_app.Model.User;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
 
@@ -24,7 +25,7 @@ public interface ApiServices {
     Call<UserResponse> forgotPassword(@Query("email") String email);
 
     @POST(ConstatntsApi.SHOWMESSAGE)
-    Call<MsgResponse> showMessage(@Query("userId") String userId);
+    Call<MsgResponse> showMessage(@Body Req user);
 
 
 }

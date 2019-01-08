@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -21,12 +20,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.quagnitia.messaging_app.Model.Message;
+import com.example.quagnitia.messaging_app.Model.Req;
+import com.example.quagnitia.messaging_app.Model.Text;
 import com.example.quagnitia.messaging_app.Model.MsgResponse;
+import com.example.quagnitia.messaging_app.Model.User;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -38,7 +40,6 @@ import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WelcomeActivity extends AppCompatActivity {
     ImageView imgBack;
@@ -239,6 +240,15 @@ public class WelcomeActivity extends AppCompatActivity {
         return "";
     }
 
+    private String getToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log and toast
+        //  Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+        String msg = "Instance ID Token: " + token;
+//        Log.v("TOKENS",token);
+        return token;
+    }
+
     private void callMessageWS() {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -247,13 +257,16 @@ public class WelcomeActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
 
         ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
-        Call<MsgResponse> call = apiService.showMessage(preferences.getAgentId(this));
+        Req user = new Req();
+        user.setFcmTokenId(getToken());
+        user.setUserId(preferences.getAgentId(this));
+        Call<MsgResponse> call = apiService.showMessage(user);
 
         Log.i("@nikita", "LoginUrl: " + call.request().url().toString());
         call.enqueue(new Callback<MsgResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<MsgResponse> call, @NonNull Response<MsgResponse> response) {
+            public void onResponse(Call<MsgResponse> call, retrofit2.Response<MsgResponse> response) {
                 Log.i("@nikita", "LoginResp: " + response);
                 MsgResponse userResponse = response.body();
                 if (userResponse != null) {
@@ -277,7 +290,7 @@ public class WelcomeActivity extends AppCompatActivity {
 //                            preferences.putString("datelast", userlast.getAqiDateTime());
 //                        }
 
-                        Message msg = userResponse.getMessage();
+                        Text msg = userResponse.getText();
                         if (msg != null) {
                             preferences.putString("subject", msg.getSubject());
                             preferences.putString("body", msg.getBody());
@@ -292,6 +305,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
                 progressDialog.dismiss();
             }
+
+//            @Override
+//            public void onResponsejj(@NonNull Call<MsgResponse> call, @NonNull retrofit2.Text response) {
+//
+//            }
 
             @Override
             public void onFailure(@NonNull Call<MsgResponse> call, @NonNull Throwable t) {

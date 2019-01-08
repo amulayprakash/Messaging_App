@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         loginIntent.putExtra("name", name);
                         startActivity(loginIntent);
                         clearData();
-                        //finish();
+                        finish();
                     } else if (userResponse.getError().equalsIgnoreCase("1")) {
                         Toast.makeText(MainActivity.this, "Login Failed..!!!", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();

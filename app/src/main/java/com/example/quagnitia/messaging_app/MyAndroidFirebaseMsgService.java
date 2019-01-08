@@ -37,17 +37,18 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
         if (pref.isLogin()) {
             try {
-                JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-                showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+//                JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
+//                showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+                showNoti( remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
                 Intent in = new Intent(this, WelcomeActivity.class);
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
             } catch (Exception e) {
                 e.printStackTrace();
-                showNoti("Message", "New status!");
-                Intent in = new Intent(this, WelcomeActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(in);
+//                showNoti("Text", "New status!");
+//                Intent in = new Intent(this, WelcomeActivity.class);
+//                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(in);
             }
         }
 
@@ -59,7 +60,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        Intent i = new Intent("com.quagnitia.zapfin.RECEIVE_BADGES").putExtra("some_msg", "NEW NOTIFICATION");
 //        this.sendBroadcast(i);//nikita
 
-        String messageBody = Html.fromHtml(msg).toString();
+        String messageBody = Html.fromHtml(msg).toString().replace("\n"," ");
         Intent intent = new Intent(this, WelcomeActivity.class);
 
         //nikita
@@ -69,7 +70,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.logo3);
+                R.drawable.aqi);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_btn_speak_now)

@@ -7,6 +7,16 @@ public class MsgResponse implements Serializable {
 
     private String error = "";
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    private String message="";
+
 
     public String getError() {
         return error;
@@ -48,14 +58,15 @@ public class MsgResponse implements Serializable {
 
     private Data prev = new Data();
 
-    public void setMessage(Message message) {
-        this.message = message;
+
+    public Text getText() {
+        return text;
     }
 
-    public Message getMessage() {
-        return message;
+    public void setText(Text text) {
+        this.text = text;
     }
 
-    private Message message = new Message();
+    private Text text = new Text();
 
 }
