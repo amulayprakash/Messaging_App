@@ -20,10 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quagnitia.messaging_app.Model.MsgResponse;
 import com.example.quagnitia.messaging_app.Model.Req;
 import com.example.quagnitia.messaging_app.Model.Text;
-import com.example.quagnitia.messaging_app.Model.MsgResponse;
-import com.example.quagnitia.messaging_app.Model.User;
+import com.example.quagnitia.messaging_app.Preferences.AlarmLogTable;
+import com.example.quagnitia.messaging_app.Preferences.DBHelper;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
@@ -48,9 +49,11 @@ public class WelcomeActivity extends AppCompatActivity {
     WebView txtbody;
     LinearLayout lin2, lin3;
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         final Window win = getWindow();
@@ -61,14 +64,18 @@ public class WelcomeActivity extends AppCompatActivity {
 
         preferences = new Preferences(WelcomeActivity.this);
 
-        txtbody = findViewById(R.id.txtbody);
-        imgBack=findViewById(R.id.imgBack);
+        dbHelper = new DBHelper(this);
+        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
+        try {
+            AlarmLogTable.insertLogData("Step 4: Landing screen opened.", "Message shown on activity");
+            txtbody = findViewById(R.id.txtbody);
+            imgBack=findViewById(R.id.imgBack);
 //        txtmsg = findViewById(R.id.txtmsg);
-        txtLogOut=findViewById(R.id.txtLogOut);
-        txtname = findViewById(R.id.txtname);
+            txtLogOut=findViewById(R.id.txtLogOut);
+            txtname = findViewById(R.id.txtname);
 //        txtmsgname = findViewById(R.id.txtmsgname);
 //        txtlevel = findViewById(R.id.txtlevel);
-        txtschool = findViewById(R.id.txtschool);
+            txtschool = findViewById(R.id.txtschool);
 //        head = findViewById(R.id.head);
 //        lin2 = findViewById(R.id.lin2);
 //        txtlevellast = findViewById(R.id.txtlevellast);
@@ -77,51 +84,55 @@ public class WelcomeActivity extends AppCompatActivity {
 //        txttime = findViewById(R.id.txttime);
 //        txttimelast = findViewById(R.id.txttimelast);
 
-        txtname.setText("Welcome " + preferences.getAgentName(this) + " !");
+            txtname.setText("Welcome " + preferences.getAgentName(this) + " !");
 //        txtschool.setText(preferences.getSchool(this));
 
-        txtLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            txtLogOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                final Dialog dialog = new Dialog(WelcomeActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_alert);
-                TextView txtYes = dialog.findViewById(R.id.txtYes);
-                TextView txtNo = dialog.findViewById(R.id.txtNo);
+                    final Dialog dialog = new Dialog(WelcomeActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_alert);
+                    TextView txtYes = dialog.findViewById(R.id.txtYes);
+                    TextView txtNo = dialog.findViewById(R.id.txtNo);
 
-                txtYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    txtYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-                        new com.example.quagnitia.messaging_app.Preferences.Preferences(WelcomeActivity.this).clearPreferences();
-                        Intent newIntent = new Intent(WelcomeActivity.this,MainActivity.class);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(newIntent);
+                            new com.example.quagnitia.messaging_app.Preferences.Preferences(WelcomeActivity.this).clearPreferences();
+                            Intent newIntent = new Intent(WelcomeActivity.this,MainActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
 //                        Toast.makeText(WelcomeActivity.this, "Sign Out...", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                txtNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
+                            finish();
+                        }
+                    });
+                    txtNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
 
-                    }
-                });
+                        }
+                    });
 
-                dialog.show();
+                    dialog.show();
 
-            }
-        });
+                }
+            });
 
 //        setdata();
 
-        if (!NetworkUtils.checkNetworkConnection(this)) {
-            callMessageWS();
-        } else {
-            Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+            if (!NetworkUtils.checkNetworkConnection(this)) {
+                callMessageWS();
+            } else {
+                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception ex) {
+            AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
+            ex.printStackTrace();
         }
     }
 
