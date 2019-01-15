@@ -1,8 +1,14 @@
 package com.example.quagnitia.messaging_app.Activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -11,6 +17,9 @@ import android.widget.TextView;
 
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
+
+import java.io.File;
+import java.io.IOException;
 
 public class SplashActivity extends AppCompatActivity {
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
@@ -29,14 +38,8 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (preferences.isLogin()) {
-                    Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
-                    startActivity(in);
-                } else {
-                    Intent in = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(in);
-                }
-                finish();
+                accessPermission();
+
             }
         }, 1000);
 
@@ -54,4 +57,108 @@ public class SplashActivity extends AppCompatActivity {
         return inFromLeft;
     }
 
+    private static final int REQUEST_CALL_PERMISSION = 100;
+
+    @SuppressLint("NewApi")
+    private void accessPermission() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ||
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ||
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+
+                ) {
+            requestPermissions(new String[]{
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, REQUEST_CALL_PERMISSION);
+
+        } else {
+
+            try {
+                File dir = new File(Environment.getExternalStorageDirectory(), "/ESFAQI/");
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                } else {
+                    try {
+//                                File dir = new File(Environment.getExternalStorageDirectory()+"Dir_name_here");
+                        if (dir.isDirectory())
+                        {
+                            String[] children = dir.list();
+                            for (int i = 0; i < children.length; i++)
+                            {
+                                new File(dir, children[i]).delete();
+                            }
+                        }
+                        dir.mkdirs();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (preferences.isLogin()) {
+                Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
+                startActivity(in);
+            } else {
+                Intent in = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(in);
+            }
+            finish();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CALL_PERMISSION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        File dir = new File(Environment.getExternalStorageDirectory(), "/ESFAQI/");
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        } else {
+                            try {
+//                                File dir = new File(Environment.getExternalStorageDirectory()+"Dir_name_here");
+                                if (dir.isDirectory())
+                                {
+                                    String[] children = dir.list();
+                                    for (int i = 0; i < children.length; i++)
+                                    {
+                                        new File(dir, children[i]).delete();
+                                    }
+                                }
+                                dir.mkdirs();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (preferences.isLogin()) {
+                        Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
+                        startActivity(in);
+                    } else {
+                        Intent in = new Intent(SplashActivity.this, MainActivity.class);
+                        startActivity(in);
+                    }
+                    finish();
+
+                } else {
+                    accessPermission();
+                }
+                return;
+            }
+        }
+    }
 }

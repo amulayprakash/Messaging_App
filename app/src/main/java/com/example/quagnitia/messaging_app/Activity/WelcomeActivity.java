@@ -3,10 +3,10 @@ package com.example.quagnitia.messaging_app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -15,18 +15,26 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.quagnitia.messaging_app.Model.Message;
-import com.example.quagnitia.messaging_app.Model.MsgResponse;
+import com.example.quagnitia.messaging_app.Model.Data;
+
+import com.example.quagnitia.messaging_app.Model.PagingItem;
+import com.example.quagnitia.messaging_app.Model.Req;
+import com.example.quagnitia.messaging_app.Model.Text;
+import com.example.quagnitia.messaging_app.Model.UserResponse;
+import com.example.quagnitia.messaging_app.Preferences.AlarmLogTable;
+import com.example.quagnitia.messaging_app.Preferences.DBHelper;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -35,21 +43,28 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WelcomeActivity extends AppCompatActivity {
     ImageView imgBack;
-    TextView  txtmsg, txtmsgname, txtlevel, txtschool, txtLogOut, txtname, txtlevellast, txtmsglast, txttimelast, txttime;
+    TextView txtmsg, txtmsgname, txtlevel, txtschool, txtLogOut, txtname, txtlevellast, txtmsglast, txttimelast, txttime;
     RelativeLayout head;
     WebView txtbody;
     LinearLayout lin2, lin3;
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
+    DBHelper dbHelper;
+    Button btnprev, btnnext;
+    ProgressDialog pd;
+    int totalPage = 0;
+    int count = 0;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
@@ -59,16 +74,27 @@ public class WelcomeActivity extends AppCompatActivity {
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.setMessage("Fetching message!");
+        pd.setCancelable(false);
+
         preferences = new Preferences(WelcomeActivity.this);
 
-        txtbody = findViewById(R.id.txtbody);
-        imgBack=findViewById(R.id.imgBack);
+        dbHelper = new DBHelper(this);
+        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
+        try {
+            AlarmLogTable.insertLogData("Step 4: Landing screen opened.", "Message shown on activity");
+            txtbody = findViewById(R.id.txtbody);
+            imgBack = findViewById(R.id.imgBack);
 //        txtmsg = findViewById(R.id.txtmsg);
-        txtLogOut=findViewById(R.id.txtLogOut);
-        txtname = findViewById(R.id.txtname);
+            txtLogOut = findViewById(R.id.txtLogOut);
+            txtname = findViewById(R.id.txtname);
+            btnnext = findViewById(R.id.btnnext);
+            btnprev = findViewById(R.id.btnprev);
 //        txtmsgname = findViewById(R.id.txtmsgname);
 //        txtlevel = findViewById(R.id.txtlevel);
-        txtschool = findViewById(R.id.txtschool);
+            txtschool = findViewById(R.id.txtschool);
 //        head = findViewById(R.id.head);
 //        lin2 = findViewById(R.id.lin2);
 //        txtlevellast = findViewById(R.id.txtlevellast);
@@ -77,51 +103,82 @@ public class WelcomeActivity extends AppCompatActivity {
 //        txttime = findViewById(R.id.txttime);
 //        txttimelast = findViewById(R.id.txttimelast);
 
-        txtname.setText("Welcome " + preferences.getAgentName(this) + " !");
+            txtname.setText("Welcome " + preferences.getAgentName(this) + " !");
 //        txtschool.setText(preferences.getSchool(this));
 
-        txtLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            view = findViewById(R.id.vw);
 
-                final Dialog dialog = new Dialog(WelcomeActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_alert);
-                TextView txtYes = dialog.findViewById(R.id.txtYes);
-                TextView txtNo = dialog.findViewById(R.id.txtNo);
+            btnprev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                txtYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
+                        txtbody.setVisibility(View.GONE);
+                        count = count - 1;
+                        callMessageWS("" + count);
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
-                        new com.example.quagnitia.messaging_app.Preferences.Preferences(WelcomeActivity.this).clearPreferences();
-                        Intent newIntent = new Intent(WelcomeActivity.this,MainActivity.class);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(newIntent);
+            btnnext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
+                        txtbody.setVisibility(View.GONE);
+                        count = count + 1;
+                        callMessageWS("" + count);
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            txtLogOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    final Dialog dialog = new Dialog(WelcomeActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_alert);
+                    TextView txtYes = dialog.findViewById(R.id.txtYes);
+                    TextView txtNo = dialog.findViewById(R.id.txtNo);
+
+                    txtYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            new com.example.quagnitia.messaging_app.Preferences.Preferences(WelcomeActivity.this).clearPreferences();
+                            Intent newIntent = new Intent(WelcomeActivity.this, MainActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
 //                        Toast.makeText(WelcomeActivity.this, "Sign Out...", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                txtNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
+                            finish();
+                        }
+                    });
+                    txtNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
 
-                    }
-                });
+                        }
+                    });
 
-                dialog.show();
+                    dialog.show();
 
-            }
-        });
+                }
+            });
 
 //        setdata();
 
-        if (!NetworkUtils.checkNetworkConnection(this)) {
-            callMessageWS();
-        } else {
-            Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+            btnprev.setVisibility(View.GONE);
+            loadFirstPage();
+        } catch (Exception ex) {
+            AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
+            ex.printStackTrace();
         }
     }
 
@@ -240,25 +297,67 @@ public class WelcomeActivity extends AppCompatActivity {
         return "";
     }
 
-    private void callMessageWS() {
+    private String getToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log and toast
+        //  Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+        String msg = "Instance ID Token: " + token;
+//        Log.v("TOKENS",token);
+        return token;
+    }
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.loading));
-        progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
+    private void loadFirstPage() {//nikita
+
+        if (!NetworkUtils.checkNetworkConnection(this)) {
+            callMessageWS("start");
+        } else {
+            Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+//    private void loadNextPage() {//nikita
+//        if (!NetworkUtils.checkNetworkConnection(this)) {
+//            callMessageWS("next");
+//        } else {
+//            Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    private void callMessageWS(final String type) {
+        txtbody.setVisibility(View.VISIBLE);
+        pd.show();
+//        final ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage(getResources().getString(R.string.loading));
+//        progressDialog.show();
+//        progressDialog.setCanceledOnTouchOutside(false);
 
         ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
-        Call<MsgResponse> call = apiService.showMessage(preferences.getAgentId(this));
+        Req user = new Req();
+        UserResponse msgResponse = new UserResponse();
+        user.setFcmTokenId(getToken());
+        user.setUserId(preferences.getAgentId(this));
+        Call<UserResponse> call;
+
+        if (type.equalsIgnoreCase("start")) {
+            call = apiService.showMessage2(user);
+        } else {
+            PagingItem pagingItem = new PagingItem();
+            pagingItem.setUserID(preferences.getAgentId(this));
+            pagingItem.setPage(type);
+            call = apiService.showNextMessage2(pagingItem);
+        }
 
         Log.i("@nikita", "LoginUrl: " + call.request().url().toString());
-        call.enqueue(new Callback<MsgResponse>() {
+        call.enqueue(new Callback<UserResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<MsgResponse> call, @NonNull Response<MsgResponse> response) {
+            public void onResponse(Call<UserResponse> call, retrofit2.Response<UserResponse> response) {
                 Log.i("@nikita", "LoginResp: " + response);
-                MsgResponse userResponse = response.body();
+                UserResponse userResponse = response.body();
                 if (userResponse != null) {
                     if (userResponse.getError().equals("0")) {
+                        //   userResponse.getText().getNext_page_url();
                         // preferences.setLOGIN(true);
 //                        Toast.makeText(WelcomeActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -278,26 +377,65 @@ public class WelcomeActivity extends AppCompatActivity {
 //                            preferences.putString("datelast", userlast.getAqiDateTime());
 //                        }
 
-                        Message msg = userResponse.getMessage();
-                        if (msg != null) {
-                            preferences.putString("subject", msg.getSubject());
-                            preferences.putString("body", msg.getBody());
+
+                        if (type.equalsIgnoreCase("start")) {
+                            totalPage = userResponse.getText().getTotal();
+                        } else {
+                            Random rnd = new Random();
+                            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                            view.setBackgroundColor(color);
                         }
 
-                        setdata();
+                        if (count == totalPage) {
+                            btnnext.setVisibility(View.GONE);
+                        } else {
+                            btnnext.setVisibility(View.VISIBLE);
+                        }
+//                        if (next_page_url == null || next_page_url.isEmpty()) {
+//                            btnnext.setVisibility(View.GONE);
+//                        } else {
+//                            btnnext.setVisibility(View.VISIBLE);
+//                        }
+
+                        if (count < 1) {
+                            btnprev.setVisibility(View.GONE);
+                        } else {
+                            btnprev.setVisibility(View.VISIBLE);
+                        }
+//                        if (prev_page_url == null || prev_page_url.isEmpty()) {
+//                            btnprev.setVisibility(View.GONE);
+//                        } else {
+//                            btnprev.setVisibility(View.VISIBLE);
+//                        }
+
+                        if (!userResponse.getText().getData().isEmpty()) {
+                            Data msg = userResponse.getText().getData().get(0);
+                            if (msg != null) {
+                                preferences.putString("subject", msg.getSubject());
+                                preferences.putString("body", msg.getBody());
+                                setdata();
+                            }
+
+
+                        }
                     } else if (userResponse.getError().equalsIgnoreCase("1")) {
 //                        Toast.makeText(WelcomeActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
 //                    Toast.makeText(MainActivity.this, "Please register your account", Toast.LENGTH_SHORT).show();
                 }
-                progressDialog.dismiss();
+                pd.dismiss();
             }
 
+//            @Override
+//            public void onResponsejj(@NonNull Call<MsgResponse> call, @NonNull retrofit2.Text response) {
+//
+//            }
+
             @Override
-            public void onFailure(@NonNull Call<MsgResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 Log.i("@nikita", "Error: " + t.toString());
-                progressDialog.dismiss();
+                pd.dismiss();
 //                Toast.makeText(MainActivity.this, getResources().getString(R.string.inProgress) + "", LENGTH_SHORT).show();
 
             }

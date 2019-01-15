@@ -10,4 +10,5 @@ public class ConstatntsApi {
     static final String LOGIN_URL = "login";
     static final String FORGOT_URL="forgotpassword";
     static final String SHOWMESSAGE="ShowMessage";
+    static final String SHOWMESSAGE2="ShowMessage2";
 }
