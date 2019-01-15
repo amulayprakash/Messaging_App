@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/colorWhite"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -11,19 +11,20 @@
 
         <RelativeLayout
             android:id="@+id/head"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dimension60dp"
-        android:layout_width="match_parent"
             android:background="@color/colorPurple">
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/imgBack"
-            android:layout_width="@dimen/dimension20dp"
-            android:layout_height="@dimen/dimension20dp"
-            android:tint="@color/colorWhite"
-            android:layout_margin="@dimen/dimension10dp"
-            android:src="@drawable/ic_back"
 
-            />
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="@dimen/dimension20dp"
+                android:layout_height="@dimen/dimension20dp"
+                android:layout_margin="@dimen/dimension10dp"
+                android:src="@drawable/ic_back"
+                android:tint="@color/colorWhite"
+                android:visibility="gone"
+
+                />
 
             <TextView
                 android:id="@+id/txtname"
@@ -43,70 +44,69 @@
             <TextView
                 android:id="@+id/txtLogOut"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/dimension15dp"
                 android:drawableRight="@drawable/ic_logout"
                 android:drawableTint="@color/colorWhite"
-               android:layout_height="wrap_content"
-               android:gravity="right"
+                android:gravity="right"
                 android:text=""
-               android:layout_marginRight="@dimen/dimension15dp"
-               android:layout_gravity="center_vertical"
-               android:textColor="@color/colorWhite"
+                android:textColor="@color/colorWhite"
                 android:textSize="@dimen/dimension20dp" />
 
         </RelativeLayout>
-    <TextView
-        android:id="@+id/txtschool"
-        android:layout_below="@+id/head"
-        android:layout_marginBottom="@dimen/dimension10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/dimension20dp"
-        android:layout_margin="@dimen/dimension10dp"
-        android:padding="@dimen/dimension10dp"
-        android:text=""
-        android:textColor="@color/colorBlack"
-        android:textStyle="normal" />
 
-        <WebView
-            android:visibility="gone"
-            android:id="@+id/txtbody"
-            android:layout_below="@+id/txtschool"
-            android:layout_marginBottom="@dimen/dimension10dp"
+        <TextView
+            android:id="@+id/txtschool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="@dimen/dimension15dp"
+            android:layout_below="@+id/head"
             android:layout_margin="@dimen/dimension10dp"
+            android:layout_marginBottom="@dimen/dimension10dp"
+            android:gravity="center_horizontal"
             android:padding="@dimen/dimension10dp"
             android:text=""
             android:textColor="@color/colorBlack"
+            android:textSize="@dimen/dimension20dp"
             android:textStyle="normal" />
 
+        <WebView
+            android:id="@+id/txtbody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtschool"
+            android:layout_margin="@dimen/dimension10dp"
+            android:layout_marginBottom="@dimen/dimension10dp"
+            android:gravity="left"
+            android:padding="@dimen/dimension10dp"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="normal"
+            android:visibility="gone" />
 
 
         <LinearLayout
-            android:visibility="gone"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtbody">
+            android:layout_below="@+id/txtbody"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
-                android:gravity="center"
                 android:id="@+id/lin2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_margin="@dimen/dimension10dp"
                 android:background="@color/colorPrimaryDark"
+                android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dimension10dp"
@@ -114,22 +114,22 @@
                     android:text="Current Level"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:paddingTop="@dimen/dimension10dp"
                     android:id="@+id/txtlevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dimension10dp"
                     android:gravity="center"
+                    android:paddingTop="@dimen/dimension10dp"
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/txtmsgname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,18 +138,19 @@
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txtmsg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:layout_margin="@dimen/dimension3dp"
-                    android:padding="@dimen/dimension3dp"
-                    android:elevation="@dimen/dimension10dp"
-                    android:text=""
                     android:background="#EBEAE9"
+                    android:elevation="@dimen/dimension10dp"
+                    android:gravity="left"
+                    android:padding="@dimen/dimension3dp"
+                    android:text=""
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/dimension18dp"
                     android:textStyle="normal" />
@@ -169,19 +170,18 @@
             </LinearLayout>
 
             <LinearLayout
-                android:gravity="center"
                 android:id="@+id/lin3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_margin="@dimen/dimension10dp"
                 android:background="@color/colorPrimaryDark"
+                android:gravity="center"
                 android:orientation="vertical"
                 android:padding="@dimen/dimension5dp"
                 android:visibility="gone">
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dimension10dp"
@@ -189,7 +189,8 @@
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txtlevellast"
@@ -203,7 +204,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/txtmsgnamelast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,10 +212,10 @@
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/txtmsglast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -224,7 +224,9 @@
                     android:text=""
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimension20dp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/txttimelast"
                     android:layout_width="match_parent"
