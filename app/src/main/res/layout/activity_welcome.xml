@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/colorWhite"
-    android:layout_height="match_parent">
+
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
@@ -70,13 +68,18 @@
         android:textColor="@color/colorBlack"
         android:textStyle="normal" />
 
+    <ScrollView
+        android:layout_above="@+id/rlbtm"
+        android:layout_below="@+id/txtschool"
+        android:layout_width="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_height="match_parent">
         <WebView
-            android:visibility="gone"
+            android:layout_height="match_parent"
             android:id="@+id/txtbody"
-            android:layout_below="@+id/txtschool"
             android:layout_marginBottom="@dimen/dimension10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:visibility="gone"
             android:gravity="left"
             android:textSize="@dimen/dimension15dp"
             android:layout_margin="@dimen/dimension10dp"
@@ -84,7 +87,7 @@
             android:text=""
             android:textColor="@color/colorBlack"
             android:textStyle="normal" />
-
+    </ScrollView>
 
 
         <LinearLayout
@@ -92,7 +95,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtbody">
+            android:layout_below="@+id/txtschool">
 
             <LinearLayout
                 android:gravity="center"
@@ -239,5 +242,39 @@
             </LinearLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_margin="@dimen/dimension10dp"
+            android:id="@+id/rlbtm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/dimension10dp">
+
+            <Button
+                android:textSize="16sp"
+                android:id="@+id/btnprev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/dimension10dp"
+                android:background="@drawable/bgcorner3"
+                android:text="Prev"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <Button
+                android:textSize="16sp"
+                android:id="@+id/btnnext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dimension10dp"
+                android:background="@drawable/bgcorner3"
+                android:text="Next"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
     </RelativeLayout>
-</ScrollView>

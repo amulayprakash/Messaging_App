@@ -2,6 +2,7 @@ package com.example.quagnitia.messaging_app.webservice;
 
 
 import com.example.quagnitia.messaging_app.Model.MsgResponse;
+import com.example.quagnitia.messaging_app.Model.PagingItem;
 import com.example.quagnitia.messaging_app.Model.Req;
 import com.example.quagnitia.messaging_app.Model.User;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
@@ -26,6 +27,12 @@ public interface ApiServices {
 
     @POST(ConstatntsApi.SHOWMESSAGE)
     Call<MsgResponse> showMessage(@Body Req user);
+
+    @POST(ConstatntsApi.SHOWMESSAGE2)
+    Call<UserResponse> getMessage(@Body Req user);
+
+    @POST(ConstatntsApi.SHOWMESSAGE2)
+    Call<UserResponse> getNextMessage(@Body PagingItem pagingItem);
 
 
 }

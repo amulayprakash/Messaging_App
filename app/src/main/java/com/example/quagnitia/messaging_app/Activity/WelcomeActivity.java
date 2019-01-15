@@ -14,6 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -50,6 +51,8 @@ public class WelcomeActivity extends AppCompatActivity {
     LinearLayout lin2, lin3;
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
     DBHelper dbHelper;
+    Button btnprev, btnnext;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,11 @@ public class WelcomeActivity extends AppCompatActivity {
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
+        pd = new ProgressDialog(this);
+        pd.setTitle("Loading...");
+        pd.setMessage("Fetching message!");
+        pd.setCancelable(false);
+
         preferences = new Preferences(WelcomeActivity.this);
 
         dbHelper = new DBHelper(this);
@@ -73,6 +81,8 @@ public class WelcomeActivity extends AppCompatActivity {
 //        txtmsg = findViewById(R.id.txtmsg);
             txtLogOut=findViewById(R.id.txtLogOut);
             txtname = findViewById(R.id.txtname);
+            btnnext = findViewById(R.id.btnnext);
+            btnprev = findViewById(R.id.btnprev);
 //        txtmsgname = findViewById(R.id.txtmsgname);
 //        txtlevel = findViewById(R.id.txtlevel);
             txtschool = findViewById(R.id.txtschool);
@@ -86,6 +96,30 @@ public class WelcomeActivity extends AppCompatActivity {
 
             txtname.setText("Welcome " + preferences.getAgentName(this) + " !");
 //        txtschool.setText(preferences.getSchool(this));
+
+            btnprev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
+                        callMessageWS();
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            btnnext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
+                        callMessageWS();
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
             txtLogOut.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -260,12 +294,26 @@ public class WelcomeActivity extends AppCompatActivity {
         return token;
     }
 
-    private void callMessageWS() {
+    private void loadFirstPage() {//nikita
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.loading));
-        progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
+        if (!NetworkUtils.checkNetworkConnection(this)) {
+            callMessageWS();
+        } else {
+            Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void loadNextPage() {//nikita
+
+    }
+
+    private void callMessageWS() {
+        pd.show();
+//        final ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage(getResources().getString(R.string.loading));
+//        progressDialog.show();
+//        progressDialog.setCanceledOnTouchOutside(false);
 
         ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
         Req user = new Req();
@@ -314,7 +362,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else {
 //                    Toast.makeText(MainActivity.this, "Please register your account", Toast.LENGTH_SHORT).show();
                 }
-                progressDialog.dismiss();
+                pd.dismiss();
             }
 
 //            @Override
@@ -325,7 +373,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<MsgResponse> call, @NonNull Throwable t) {
                 Log.i("@nikita", "Error: " + t.toString());
-                progressDialog.dismiss();
+                pd.dismiss();
 //                Toast.makeText(MainActivity.this, getResources().getString(R.string.inProgress) + "", LENGTH_SHORT).show();
 
             }
