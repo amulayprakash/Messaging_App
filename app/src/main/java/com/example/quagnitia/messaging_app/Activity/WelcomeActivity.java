@@ -111,14 +111,14 @@ public class WelcomeActivity extends AppCompatActivity {
             btnprev.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
                         txtbody.setVisibility(View.GONE);
-                        count = count - 1;
+                        count = count + 1;
                         callMessageWS("" + count);
                     } else {
                         Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
 
@@ -128,11 +128,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
                     if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
                         txtbody.setVisibility(View.GONE);
-                        count = count + 1;
+                        count = count - 1;
                         callMessageWS("" + count);
                     } else {
                         Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
 
@@ -173,8 +174,8 @@ public class WelcomeActivity extends AppCompatActivity {
             });
 
 //        setdata();
-
             btnprev.setVisibility(View.GONE);
+            btnnext.setVisibility(View.GONE);
             loadFirstPage();
         } catch (Exception ex) {
             AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
@@ -387,9 +388,9 @@ public class WelcomeActivity extends AppCompatActivity {
                         }
 
                         if (count == totalPage) {
-                            btnnext.setVisibility(View.GONE);
+                            btnprev.setVisibility(View.GONE);
                         } else {
-                            btnnext.setVisibility(View.VISIBLE);
+                            btnprev.setVisibility(View.VISIBLE);
                         }
 //                        if (next_page_url == null || next_page_url.isEmpty()) {
 //                            btnnext.setVisibility(View.GONE);
@@ -398,9 +399,9 @@ public class WelcomeActivity extends AppCompatActivity {
 //                        }
 
                         if (count < 1) {
-                            btnprev.setVisibility(View.GONE);
+                            btnnext.setVisibility(View.GONE);
                         } else {
-                            btnprev.setVisibility(View.VISIBLE);
+                            btnnext.setVisibility(View.VISIBLE);
                         }
 //                        if (prev_page_url == null || prev_page_url.isEmpty()) {
 //                            btnprev.setVisibility(View.GONE);

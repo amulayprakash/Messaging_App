@@ -258,29 +258,29 @@
             android:padding="@dimen/dimension10dp">
 
             <Button
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:id="@+id/btnprev"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimension80dp"
+                android:layout_height="@dimen/dimension40dp"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="left"
                 android:layout_marginLeft="@dimen/dimension10dp"
-                android:background="@drawable/bgcorner3"
+                android:background="@drawable/login_bor"
                 android:text="Prev"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
             <Button
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:id="@+id/btnnext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimension80dp"
+                android:layout_height="@dimen/dimension40dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:layout_marginRight="@dimen/dimension10dp"
-                android:background="@drawable/bgcorner3"
+                android:background="@drawable/login_bor"
                 android:text="Next"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
         </RelativeLayout>
 

@@ -1,11 +1,14 @@
 package com.example.quagnitia.messaging_app;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -17,8 +20,6 @@ import com.example.quagnitia.messaging_app.Preferences.DBHelper;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -84,7 +85,10 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.aqi);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ///**For sound**/ assignmentNotification.defaults |= Notification.DEFAULT_SOUND;
+        long[] vibrate = {0, 100, 200, 300};
+        ///**For vibrate**/ assignmentNotification.vibrate = vibrate;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_btn_speak_now)
                 .setLargeIcon(bitmap)
@@ -92,14 +96,40 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
                 .setTicker(messageBody)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody))
                 .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setAutoCancel(true).setShowWhen(true)
                 .setContentIntent(pendingIntent);
+
+
+        notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+        notificationBuilder.setSound(notificationSoundUri);
+        notificationBuilder.setVibrate(vibrate);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(reqid++ /* ID of notification */, notificationBuilder.build());
+//        notificationManager.notify(reqid++ /* ID of notification */, notificationBuilder.build());
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            if (notificationSoundUri != null) {
+                // Changing Default mode of notification
+                notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
+                // Creating an Audio Attribute
+                AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .build();
+
+                // Creating Channel
+                NotificationChannel notificationChannel = new NotificationChannel("123", "Notifications", NotificationManager.IMPORTANCE_HIGH);
+                notificationChannel.setSound(notificationSoundUri, audioAttributes);
+                mNotificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        mNotificationManager.notify(reqid, notificationBuilder.build());
 
         AlarmLogTable.insertLogData("Step 2: Notification shown", title);
     }
