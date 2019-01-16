@@ -55,7 +55,7 @@ public class WelcomeActivity extends AppCompatActivity {
     WebView txtbody;
     LinearLayout lin2, lin3;
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
-    DBHelper dbHelper;
+//    DBHelper dbHelper;
     Button btnprev, btnnext;
     ProgressDialog pd;
     int totalPage = 0;
@@ -81,10 +81,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         preferences = new Preferences(WelcomeActivity.this);
 
-        dbHelper = new DBHelper(this);
-        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
+//        dbHelper = new DBHelper(this);
+//        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
         try {
-            AlarmLogTable.insertLogData("Step 4: Landing screen opened.", "Message shown on activity");
+//            AlarmLogTable.insertLogData("Step 4: Landing screen opened.", "Message shown on activity");
             txtbody = findViewById(R.id.txtbody);
             imgBack = findViewById(R.id.imgBack);
 //        txtmsg = findViewById(R.id.txtmsg);
@@ -178,7 +178,7 @@ public class WelcomeActivity extends AppCompatActivity {
             btnnext.setVisibility(View.GONE);
             loadFirstPage();
         } catch (Exception ex) {
-            AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
+//            AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
             ex.printStackTrace();
         }
     }
@@ -344,7 +344,7 @@ public class WelcomeActivity extends AppCompatActivity {
             call = apiService.showMessage2(user);
         } else {
             PagingItem pagingItem = new PagingItem();
-            pagingItem.setUserID(preferences.getAgentId(this));
+            pagingItem.setUserId(preferences.getAgentId(this));
             pagingItem.setPage(type);
             call = apiService.showNextMessage2(pagingItem);
         }
@@ -412,9 +412,15 @@ public class WelcomeActivity extends AppCompatActivity {
                         if (!userResponse.getText().getData().isEmpty()) {
                             Data msg = userResponse.getText().getData().get(0);
                             if (msg != null) {
-                                preferences.putString("subject", msg.getSubject());
-                                preferences.putString("body", msg.getBody());
-                                setdata();
+//                                preferences.putString("subject", msg.getSubject());
+//                                preferences.putString("body", msg.getBody());
+//                                setdata();
+
+                                txtschool.setText(msg.getSubject());
+                                String summary = (msg.getBody());
+                                txtbody.loadData(summary, "text/html", "utf-8");
+                                txtbody.setAnimation(inFromRightAnimation());
+                                txtbody.setVisibility(View.VISIBLE);
                             }
 
 

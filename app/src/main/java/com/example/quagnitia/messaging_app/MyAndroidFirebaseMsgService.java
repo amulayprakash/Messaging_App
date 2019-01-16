@@ -30,7 +30,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
     //    DBHelper dbHelper;
     int currentHour = 0, currentMin = 0, currentZone = 0;
     boolean isCorrect = false;
-    DBHelper dbHelper;
+//    DBHelper dbHelper;
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
 //        Log.v("GOTMSG", remoteMessage.toString());
@@ -38,12 +38,12 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        Log.v("GOTMSG", remoteMessage.getData().toString());
 
         Preferences pref = new Preferences(this);
-        dbHelper = new DBHelper(this);
-        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
+//        dbHelper = new DBHelper(this);
+//        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
 
         if (pref.isLogin()) {
             try {
-                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
+//                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
 //                JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
 //                showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
@@ -53,10 +53,10 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
                 Intent in = new Intent(this, WelcomeActivity.class);
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
-                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
+//                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
 
             } catch (Exception e) {
-                AlarmLogTable.insertLogData("Error in fcm fun", "try catch data parsing");
+//                AlarmLogTable.insertLogData("Error in fcm fun", "try catch data parsing");
 
                 e.printStackTrace();
 //                showNoti("Text", "New status!");
@@ -131,7 +131,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         }
         mNotificationManager.notify(reqid, notificationBuilder.build());
 
-        AlarmLogTable.insertLogData("Step 2: Notification shown", title);
+//        AlarmLogTable.insertLogData("Step 2: Notification shown", title);
     }
 
     public void handleIntent(Intent intent) {

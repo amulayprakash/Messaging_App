@@ -38,7 +38,16 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                accessPermission();
+
+//                accessPermission();
+                if (preferences.isLogin()) {
+                    Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
+                    startActivity(in);
+                } else {
+                    Intent in = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(in);
+                }
+                finish();
 
             }
         }, 1000);

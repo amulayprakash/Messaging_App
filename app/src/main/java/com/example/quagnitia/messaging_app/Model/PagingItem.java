@@ -5,15 +5,23 @@ package com.example.quagnitia.messaging_app.Model;
  */
 
 public class PagingItem {
-    public String getUserID() {
-        return userID;
+//    public String getUserID() {
+//        return userID;
+//    }
+//
+//    public void setUserID(String userID) {
+//        this.userID = userID;
+//    }
+
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    String userID = "";
+    String userId = "";
     String page = "";
 
 
