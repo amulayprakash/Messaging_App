@@ -5,15 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,26 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Model.Data;
-
 import com.example.quagnitia.messaging_app.Model.PagingItem;
 import com.example.quagnitia.messaging_app.Model.Req;
-import com.example.quagnitia.messaging_app.Model.Text;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
-import com.example.quagnitia.messaging_app.Preferences.AlarmLogTable;
-import com.example.quagnitia.messaging_app.Preferences.DBHelper;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -183,120 +170,120 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    private Animation inFromRightAnimation() {
-
-        Animation inFromRight = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, +1.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f);
-        inFromRight.setDuration(800);
-        inFromRight.setInterpolator(new AccelerateInterpolator());
-        return inFromRight;
-    }
-
-
-    private void setdata() {
+//    private Animation inFromRightAnimation() {
 //
-////        txtmsgname.setText("Name : " + preferences.getString("name"));
-//        txtmsg.setText("" + preferences.getString("msg").toString().trim());
-////        txtmsglast.setText("" + preferences.getString("msglast").toString().trim());
-//        String ll = "";
-//        if (!preferences.getString("level").toString().isEmpty()) {
-//            int value = Integer.parseInt(preferences.getString("level"));
-//
-////            if (value >= 1 || value <= 3) {//low
-////                ll = "low";
-////                lin2.setBackgroundResource((R.drawable.bgcorner)); // color green
-////            } else if (value >= 4 || value <= 6) {//moderate
-////                ll = "moderate";
+//        Animation inFromRight = new TranslateAnimation(
+//                Animation.RELATIVE_TO_PARENT, +1.0f,
+//                Animation.RELATIVE_TO_PARENT, 0.0f,
+//                Animation.RELATIVE_TO_PARENT, 0.0f,
+//                Animation.RELATIVE_TO_PARENT, 0.0f);
+//        inFromRight.setDuration(800);
+//        inFromRight.setInterpolator(new AccelerateInterpolator());
+//        return inFromRight;
+//    }
+
+
+//    private void setdata() {
+////
+//////        txtmsgname.setText("Name : " + preferences.getString("name"));
+////        txtmsg.setText("" + preferences.getString("msg").toString().trim());
+//////        txtmsglast.setText("" + preferences.getString("msglast").toString().trim());
+////        String ll = "";
+////        if (!preferences.getString("level").toString().isEmpty()) {
+////            int value = Integer.parseInt(preferences.getString("level"));
+////
+//////            if (value >= 1 || value <= 3) {//low
+//////                ll = "low";
+//////                lin2.setBackgroundResource((R.drawable.bgcorner)); // color green
+//////            } else if (value >= 4 || value <= 6) {//moderate
+//////                ll = "moderate";
+//////                lin2.setBackgroundResource((R.drawable.bgcorner2)); // color orange
+//////            } else if (value >= 7 || value <= 9) {//high
+//////                lin2.setBackgroundResource((R.drawable.bgcorner3)); // color dark red
+//////                ll = "high";
+//////            } else if (value >= 10 || value <= 12) {//very high
+//////                ll = "very high";
+//////                lin2.setBackgroundResource((R.drawable.bgcorner4)); // color dark brown
+//////            } else {//serious
+//////                ll = "serious";
+//////                lin2.setBackgroundResource(R.drawable.bgcorner5); // color black
+//////            }
+////
+////            if (value == 1) {//low
+////                ll = "Low";
+////                lin2.setBackgroundResource((R.drawable.bgcorner));// color green
+////            } else if (value == 2) {//moderate
+////                ll = "Moderate";
 ////                lin2.setBackgroundResource((R.drawable.bgcorner2)); // color orange
-////            } else if (value >= 7 || value <= 9) {//high
-////                lin2.setBackgroundResource((R.drawable.bgcorner3)); // color dark red
-////                ll = "high";
-////            } else if (value >= 10 || value <= 12) {//very high
-////                ll = "very high";
-////                lin2.setBackgroundResource((R.drawable.bgcorner4)); // color dark brown
+////            } else if (value == 3) {//high
+////                lin2.setBackgroundResource((R.drawable.bgcorner3));// color dark red
+////                ll = "High";
 ////            } else {//serious
 ////                ll = "serious";
-////                lin2.setBackgroundResource(R.drawable.bgcorner5); // color black
+////                lin2.setBackgroundResource(R.drawable.bgcorner4);// color dark brown
 ////            }
-//
-//            if (value == 1) {//low
-//                ll = "Low";
-//                lin2.setBackgroundResource((R.drawable.bgcorner));// color green
-//            } else if (value == 2) {//moderate
-//                ll = "Moderate";
-//                lin2.setBackgroundResource((R.drawable.bgcorner2)); // color orange
-//            } else if (value == 3) {//high
-//                lin2.setBackgroundResource((R.drawable.bgcorner3));// color dark red
-//                ll = "High";
-//            } else {//serious
-//                ll = "serious";
-//                lin2.setBackgroundResource(R.drawable.bgcorner4);// color dark brown
-//            }
-//
-//        }
-//        txtlevel.setText("Current Level : " + ll);// + preferences.getString("level") + " (" + ll + ")");
-//
-//        String lllast = "";
-//        if (!preferences.getString("levellast").toString().isEmpty()) {
-//            int value = Integer.parseInt(preferences.getString("levellast"));
-//            if (value == 1) {//low
-//                lllast = "Low";
-//                lin3.setBackgroundResource((R.drawable.bgcorner));
-//            } else if (value == 2) {//moderate
-//                lllast = "Moderate";
-//                lin3.setBackgroundResource((R.drawable.bgcorner2));
-//            } else if (value == 3) {//high
-//                lin3.setBackgroundResource((R.drawable.bgcorner3));
-//                lllast = "High";
-//            } else {//serious
-//                lllast = "serious";
-//                lin3.setBackgroundResource(R.drawable.bgcorner4);
-//            }
-//
-//        }
-//        txtlevellast.setText("Last Level : " + lllast);// + preferences.getString("levellast") + " (" + lllast + ")");
-//
-//        try {
-//            txttime.setText(parseDate(preferences.getString("date")));
-//            txttimelast.setText(parseDate(preferences.getString("datelast")));
-//        } catch (Exception ex) {
-//            txttime.setVisibility(View.GONE);
-//            txttimelast.setVisibility(View.GONE);
-//            ex.printStackTrace();
-//        }
-//
-//        lin2.setAnimation(inFromRightAnimation());
-//        lin2.setVisibility(View.VISIBLE);
-//        lin3.setAnimation(inFromRightAnimation());
-//        lin3.setVisibility(View.VISIBLE);
-        txtschool.setText(preferences.getString("subject"));
-        String summary = (preferences.getString("body"));
-        txtbody.loadData(summary, "text/html", "utf-8");
-        txtbody.setAnimation(inFromRightAnimation());
-        txtbody.setVisibility(View.VISIBLE);
-    }
+////
+////        }
+////        txtlevel.setText("Current Level : " + ll);// + preferences.getString("level") + " (" + ll + ")");
+////
+////        String lllast = "";
+////        if (!preferences.getString("levellast").toString().isEmpty()) {
+////            int value = Integer.parseInt(preferences.getString("levellast"));
+////            if (value == 1) {//low
+////                lllast = "Low";
+////                lin3.setBackgroundResource((R.drawable.bgcorner));
+////            } else if (value == 2) {//moderate
+////                lllast = "Moderate";
+////                lin3.setBackgroundResource((R.drawable.bgcorner2));
+////            } else if (value == 3) {//high
+////                lin3.setBackgroundResource((R.drawable.bgcorner3));
+////                lllast = "High";
+////            } else {//serious
+////                lllast = "serious";
+////                lin3.setBackgroundResource(R.drawable.bgcorner4);
+////            }
+////
+////        }
+////        txtlevellast.setText("Last Level : " + lllast);// + preferences.getString("levellast") + " (" + lllast + ")");
+////
+////        try {
+////            txttime.setText(parseDate(preferences.getString("date")));
+////            txttimelast.setText(parseDate(preferences.getString("datelast")));
+////        } catch (Exception ex) {
+////            txttime.setVisibility(View.GONE);
+////            txttimelast.setVisibility(View.GONE);
+////            ex.printStackTrace();
+////        }
+////
+////        lin2.setAnimation(inFromRightAnimation());
+////        lin2.setVisibility(View.VISIBLE);
+////        lin3.setAnimation(inFromRightAnimation());
+////        lin3.setVisibility(View.VISIBLE);
+//        txtschool.setText(preferences.getString("subject"));
+//        String summary = (preferences.getString("body"));
+//        txtbody.loadData(summary, "text/html", "utf-8");
+//        txtbody.setAnimation(inFromRightAnimation());
+//        txtbody.setVisibility(View.VISIBLE);
+//    }
 
-    private String parseDate(String givenDateString) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date dates = format.parse(givenDateString);
-            Calendar cal = Calendar.getInstance(Locale.getDefault());
-            cal.setTimeInMillis(dates.getTime());
-            String date = android.text.format.DateFormat.format("yyyy-MM-dd HH:mm:ss", cal).toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            Date dateObj = sdf.parse(date);
-            PrettyTime p = new PrettyTime();
-            return p.format(dateObj);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
+//    private String parseDate(String givenDateString) {
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        try {
+//            Date dates = format.parse(givenDateString);
+//            Calendar cal = Calendar.getInstance(Locale.getDefault());
+//            cal.setTimeInMillis(dates.getTime());
+//            String date = android.text.format.DateFormat.format("yyyy-MM-dd HH:mm:ss", cal).toString();
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//            Date dateObj = sdf.parse(date);
+//            PrettyTime p = new PrettyTime();
+//            return p.format(dateObj);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "";
+//    }
 
     private String getToken() {
         String token = FirebaseInstanceId.getInstance().getToken();
@@ -326,7 +313,7 @@ public class WelcomeActivity extends AppCompatActivity {
 //    }
 
     private void callMessageWS(final String type) {
-        txtbody.setVisibility(View.VISIBLE);
+        txtbody.setVisibility(View.GONE);
         pd.show();
 //        final ProgressDialog progressDialog = new ProgressDialog(this);
 //        progressDialog.setMessage(getResources().getString(R.string.loading));
@@ -419,19 +406,52 @@ public class WelcomeActivity extends AppCompatActivity {
                                 txtschool.setText(msg.getSubject());
                                 String summary = (msg.getBody());
                                 txtbody.loadData(summary, "text/html", "utf-8");
-                                txtbody.setAnimation(inFromRightAnimation());
+//                                txtbody.setAnimation(inFromRightAnimation());
                                 txtbody.setVisibility(View.VISIBLE);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                    }
+                                }, 200);
+                            } else {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                    }
+                                }, 200);
                             }
 
 
+                        } else {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            }, 200);
                         }
                     } else if (userResponse.getError().equalsIgnoreCase("1")) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                pd.dismiss();
+                            }
+                        }, 200);
 //                        Toast.makeText(WelcomeActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pd.dismiss();
+                        }
+                    }, 200);
 //                    Toast.makeText(MainActivity.this, "Please register your account", Toast.LENGTH_SHORT).show();
                 }
-                pd.dismiss();
+
+
             }
 
 //            @Override
