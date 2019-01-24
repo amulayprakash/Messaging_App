@@ -16,5 +16,7 @@
     <string name="severNotResponding">Server Not Responding</string>
     <string name="nointernetconnection">No Internet Connection</string>
 
+    <string name="enableautoinfo"><![CDATA[
+    The <b>Autostart</b> feature needs to be enable for <b>WatchOverMe</b> to function property. You would be navigated to your phone <b>settings</b> now.]]></string>
 
 </resources>
