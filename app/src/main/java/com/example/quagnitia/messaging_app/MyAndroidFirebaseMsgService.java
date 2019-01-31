@@ -15,8 +15,6 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.example.quagnitia.messaging_app.Activity.WelcomeActivity;
-import com.example.quagnitia.messaging_app.Preferences.AlarmLogTable;
-import com.example.quagnitia.messaging_app.Preferences.DBHelper;
 import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -44,14 +42,10 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         if (pref.isLogin()) {
             try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
-
-//                JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-//                showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
-                showNoti( remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
-
-
+                showNoti(remoteMessage);
                 Intent in = new Intent(this, WelcomeActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                in.putExtra("FROM_NOTI", true);
+                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
 //                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
 
@@ -68,17 +62,18 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
     }
 
-    private void showNoti(String title, String msg) {
+    private void showNoti(RemoteMessage rr) {
 
 //        new Preferences(this).setSomeVariable(1);//nikita
 //        Intent i = new Intent("com.quagnitia.zapfin.RECEIVE_BADGES").putExtra("some_msg", "NEW NOTIFICATION");
 //        this.sendBroadcast(i);//nikita
 
-        String messageBody = Html.fromHtml(msg).toString().replace("\n"," ");
+        String messageBody = Html.fromHtml(rr.getNotification().getBody().toString()).toString().replace("\n"," ");
         Intent intent = new Intent(this, WelcomeActivity.class);
 
         //nikita
         intent.setAction(UUID.randomUUID().toString());
+        intent.putExtra("FROM_NOTI", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); // Intent.FLAG_ACTIVITY_SINGLE_TOP or
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -90,9 +85,9 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         long[] vibrate = {0, 100, 200, 300};
         ///**For vibrate**/ assignmentNotification.vibrate = vibrate;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_btn_speak_now)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setLargeIcon(bitmap)
-                .setContentTitle(title)
+                .setContentTitle(rr.getNotification().getTitle().toString())
                 .setTicker(messageBody)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody))
                 .setContentText(messageBody)
