@@ -19,7 +19,6 @@ import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
 
 import java.io.File;
-import java.io.IOException;
 
 public class SplashActivity extends AppCompatActivity {
     com.example.quagnitia.messaging_app.Preferences.Preferences preferences;

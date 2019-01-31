@@ -43,8 +43,9 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
             try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
-//                JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-//                showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+ //               JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
+  //              showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+
                 showNoti( remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
 
