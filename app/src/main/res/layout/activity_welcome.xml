@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/colorWhite"
-    android:layout_height="match_parent">
+
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
@@ -70,13 +68,25 @@
         android:textColor="@color/colorBlack"
         android:textStyle="normal" />
 
+    <View
+        android:layout_below="@+id/txtschool"
+        android:id="@+id/vw"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimension3dp"
+        android:background="@color/colorPrimaryDark"/>
+
+    <ScrollView
+        android:layout_above="@+id/rlbtm"
+        android:layout_below="@+id/vw"
+        android:layout_width="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_height="match_parent">
         <WebView
-            android:visibility="gone"
+            android:layout_height="match_parent"
             android:id="@+id/txtbody"
-            android:layout_below="@+id/txtschool"
             android:layout_marginBottom="@dimen/dimension10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:visibility="gone"
             android:gravity="left"
             android:textSize="@dimen/dimension15dp"
             android:layout_margin="@dimen/dimension10dp"
@@ -84,7 +94,7 @@
             android:text=""
             android:textColor="@color/colorBlack"
             android:textStyle="normal" />
-
+    </ScrollView>
 
 
         <LinearLayout
@@ -92,7 +102,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtbody">
+            android:layout_below="@+id/txtschool">
 
             <LinearLayout
                 android:gravity="center"
@@ -239,5 +249,39 @@
             </LinearLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_margin="@dimen/dimension10dp"
+            android:id="@+id/rlbtm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/dimension10dp">
+
+            <Button
+                android:textSize="14sp"
+                android:id="@+id/btnprev"
+                android:layout_width="@dimen/dimension80dp"
+                android:layout_height="@dimen/dimension40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/dimension10dp"
+                android:background="@drawable/login_bor"
+                android:text="Prev"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <Button
+                android:textSize="14sp"
+                android:id="@+id/btnnext"
+                android:layout_width="@dimen/dimension80dp"
+                android:layout_height="@dimen/dimension40dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dimension10dp"
+                android:background="@drawable/login_bor"
+                android:text="Next"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
     </RelativeLayout>
-</ScrollView>

@@ -3,7 +3,6 @@ package com.example.quagnitia.messaging_app.Model;
 import java.io.Serializable;
 
 
-
 public class UserResponse implements Serializable {
 
     private String error = "";
@@ -55,5 +54,15 @@ public class UserResponse implements Serializable {
     }
 
     private Data prev = new Data();
+
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
+    }
+
+    private Text text = new Text();
 
 }
