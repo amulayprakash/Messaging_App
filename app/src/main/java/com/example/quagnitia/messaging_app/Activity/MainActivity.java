@@ -133,9 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             preferences1.saveSchool(MainActivity.this,userlog.getSchoolName());
                         }
                         String name = etEmail.getText().toString().trim();
-                        Intent loginIntent = new Intent(context, WelcomeActivity.class);
-                        loginIntent.putExtra("name", name);
-                        startActivity(loginIntent);
+
+                        Intent i = new Intent(context, AutostartActivity.class);
+                        i.putExtra("AUTOSTART", true);
+                        i.putExtra("name", name);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(i);
                         clearData();
                         finish();
                     } else if (userResponse.getError().equalsIgnoreCase("1")) {
