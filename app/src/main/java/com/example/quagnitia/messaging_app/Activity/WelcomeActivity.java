@@ -194,7 +194,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                     finish();
                 }
-            }, 120000);
+            }, 1500);
         }
     }
 
@@ -210,7 +210,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 mMediaPlayer.setDataSource(this, alarmTone);
                 mMediaPlayer.prepare();
-                mMediaPlayer.setLooping(true);
+                mMediaPlayer.setLooping(false);
                 mMediaPlayer.start();
 
 

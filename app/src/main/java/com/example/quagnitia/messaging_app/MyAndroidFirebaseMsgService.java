@@ -99,6 +99,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         notificationBuilder.setSound(notificationSoundUri);
         notificationBuilder.setVibrate(vibrate);
 
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -110,12 +111,12 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
             if (notificationSoundUri != null) {
                 // Changing Default mode of notification
-                notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+               notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
                 // Creating an Audio Attribute
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setUsage(AudioAttributes.USAGE_UNKNOWN)
                         .build();
 
                 // Creating Channel
