@@ -115,7 +115,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
                         txtbody.setVisibility(View.GONE);
-                        count = count + 1;
+                        if (count == 0) {
+                            count = 2;
+                        } else {
+                            count = count + 1;
+                        }
                         callMessageWS("" + count);
                     } else {
                         Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
@@ -192,9 +196,17 @@ public class WelcomeActivity extends AppCompatActivity {
                     if (mMediaPlayer != null) {//nikita
                         mMediaPlayer.stop();
                     }
+                }
+            }, 15000);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
                     finish();
                 }
-            }, 120000);
+            }, 60000);
+
         }
     }
 
@@ -207,7 +219,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     .getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mMediaPlayer.setDataSource(this, alarmTone);
                 mMediaPlayer.prepare();
                 mMediaPlayer.setLooping(true);
