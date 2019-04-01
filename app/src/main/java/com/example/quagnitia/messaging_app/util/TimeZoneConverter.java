@@ -1,4 +1,4 @@
-package com.example.quagnitia.messaging_app;
+package com.example.quagnitia.messaging_app.util;
 
 import android.support.annotation.NonNull;
 

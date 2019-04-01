@@ -11,8 +11,12 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 
-import com.example.quagnitia.messaging_app.AutoStartHelper;
+import com.example.quagnitia.messaging_app.util.AutoStartHelper;
 import com.example.quagnitia.messaging_app.R;
+
+/*
+- created by nikita
+ */
 
 
 public class AutostartActivity extends AppCompatActivity {
@@ -27,8 +31,6 @@ public class AutostartActivity extends AppCompatActivity {
 
         if (getIntent().getExtras().containsKey("AUTOSTART")) {
             checkPermission();
-
-
         }
     }
 

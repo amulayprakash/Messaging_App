@@ -15,7 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.example.quagnitia.messaging_app.Activity.WelcomeActivity;
-import com.example.quagnitia.messaging_app.Preferences.Preferences;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

@@ -1,4 +1,4 @@
-package com.example.quagnitia.messaging_app;
+package com.example.quagnitia.messaging_app.util;
 
 import android.content.ComponentName;
 import android.content.Context;

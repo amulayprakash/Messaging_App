@@ -15,13 +15,13 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.example.quagnitia.messaging_app.Preferences.Preferences;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.example.quagnitia.messaging_app.R;
 
 import java.io.File;
 
 public class SplashActivity extends AppCompatActivity {
-    com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
+    com.example.quagnitia.messaging_app.Storage.Preferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

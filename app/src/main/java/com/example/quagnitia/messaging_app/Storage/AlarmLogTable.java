@@ -1,4 +1,4 @@
-package com.example.quagnitia.messaging_app.Preferences;
+package com.example.quagnitia.messaging_app.Storage;
 
 import android.content.ContentValues;
 import android.content.Context;

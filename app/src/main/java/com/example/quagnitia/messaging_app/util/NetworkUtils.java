@@ -1,12 +1,9 @@
-package com.example.quagnitia.messaging_app.Activity;
+package com.example.quagnitia.messaging_app.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by V@iBh@V on 12/8/2018.
- */
 public class NetworkUtils {
 
     public static final  Boolean checkNetworkConnection(Context context) {
