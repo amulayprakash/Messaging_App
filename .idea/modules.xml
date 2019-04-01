@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Messaging_App.iml" filepath="$PROJECT_DIR$/Messaging_App.iml" />
+      <module fileurl="file://D:\MsgApp\Messaging_App\Messaging_App\MsgApp_GitClone.iml" filepath="D:\MsgApp\Messaging_App\Messaging_App\MsgApp_GitClone.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/messaging app clone.iml" filepath="$PROJECT_DIR$/messaging app clone.iml" />
     </modules>
   </component>
 </project>

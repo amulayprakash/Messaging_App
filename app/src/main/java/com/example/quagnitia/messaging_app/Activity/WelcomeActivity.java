@@ -2,8 +2,13 @@ package com.example.quagnitia.messaging_app.Activity;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -30,6 +35,7 @@ import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -48,6 +54,15 @@ public class WelcomeActivity extends AppCompatActivity {
     int totalPage = 0;
     int count = 0;
     View view;
+    private MediaPlayer mMediaPlayer;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mMediaPlayer != null) {//nikita
+            mMediaPlayer.stop();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +115,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!NetworkUtils.checkNetworkConnection(WelcomeActivity.this)) {
                         txtbody.setVisibility(View.GONE);
-                        count = count + 1;
+                        if (count == 0) {
+                            count = 2;
+                        } else {
+                            count = count + 1;
+                        }
                         callMessageWS("" + count);
                     } else {
                         Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
@@ -168,7 +187,75 @@ public class WelcomeActivity extends AppCompatActivity {
 //            AlarmLogTable.insertLogData("Error in Landing screen", "try catch error Landing activity");
             ex.printStackTrace();
         }
+
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("FROM_NOTI")) {
+            playSound();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mMediaPlayer != null) {//nikita
+                        mMediaPlayer.stop();
+                    }
+                }
+            }, 15000);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    finish();
+                }
+            }, 60000);
+
+        }
     }
+
+    private void playSound() {
+
+        mMediaPlayer = new MediaPlayer();
+        try {
+//                mMediaPlayer.setDataSource(context, alert);
+            final AudioManager audioManager = (AudioManager) this
+                    .getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mMediaPlayer.setDataSource(this, alarmTone);
+                mMediaPlayer.prepare();
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.start();
+
+
+            }
+        } catch (IOException e) {
+            System.out.println("OOPS");
+        }
+//        }
+    }
+
+    //Get an alarm sound. Try for an alarm. If none set, try notification,
+//Otherwise, ringtone.
+    private Uri getAlarmUri() {
+        Uri alert;
+//        String uri = preferences.getString(PrefConstants.ALARM_RINGTONE);
+//        if (uri == null || uri.equalsIgnoreCase("")) {
+        alert = RingtoneManager
+                .getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alert == null) {
+            alert = RingtoneManager
+                    .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            if (alert == null) {
+                alert = RingtoneManager
+                        .getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            }
+        }
+//        } else {
+//            alert = Uri.parse(uri);
+//        }
+        return alert;
+    }
+
+
 
 //    private Animation inFromRightAnimation() {
 //

@@ -2,7 +2,6 @@ package com.example.quagnitia.messaging_app.Activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,10 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.quagnitia.messaging_app.AutoStartHelper;
 import com.example.quagnitia.messaging_app.R;
@@ -43,13 +38,13 @@ public class AutostartActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            if (!Settings.canDrawOverlays(this)) {
-                // You don't have permission
-                checkPermission();
-            } else {
-                // Do as per your logic
+//            if (!Settings.canDrawOverlays(this)) {
+//                // You don't have permission
+//                checkPermission();
+//            } else {
+//                // Do as per your logic
                 showDialogEnableAlarms();
-            }
+//            }
 
         }
 
