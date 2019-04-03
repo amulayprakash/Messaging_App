@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
-
 import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -41,31 +40,33 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
 
         if (pref.isLogin()) {
-            try {
+            if (!pref.getString("UT").equalsIgnoreCase("admin")) {
+
+                try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
- //               JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-  //              showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+                    //               JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
+                    //              showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
 
-                showNoti( remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
+                    showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
 
-                Intent in = new Intent(this, MessageListActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(in);
+                    Intent in = new Intent(this, MessageListActivity.class);
+                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(in);
 //                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 //                AlarmLogTable.insertLogData("Error in fcm fun", "try catch data parsing");
 
-                e.printStackTrace();
+                    e.printStackTrace();
 //                showNoti("Text", "New status!");
 //                Intent in = new Intent(this, WelcomeActivity.class);
 //                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(in);
+                }
             }
         }
-
     }
 
     private void showNoti(String title, String msg) {
