@@ -14,7 +14,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
-import com.example.quagnitia.messaging_app.Activity.WelcomeActivity;
+
+import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -49,7 +50,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
                 showNoti( remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
 
-                Intent in = new Intent(this, WelcomeActivity.class);
+                Intent in = new Intent(this, MessageListActivity.class);
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
 //                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
@@ -74,7 +75,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        this.sendBroadcast(i);//nikita
 
         String messageBody = Html.fromHtml(msg).toString().replace("\n"," ");
-        Intent intent = new Intent(this, WelcomeActivity.class);
+        Intent intent = new Intent(this, MessageListActivity.class);
 
         //nikita
         intent.setAction(UUID.randomUUID().toString());

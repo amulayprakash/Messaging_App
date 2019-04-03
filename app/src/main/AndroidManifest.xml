@@ -3,13 +3,13 @@
     package="com.example.quagnitia.messaging_app">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,21 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--android:roundIcon="@mipmap/ic_launcher_round"-->
-
+        <!-- android:roundIcon="@mipmap/ic_launcher_round" -->
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".Activity.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            >
-        </activity>
+        <activity
+            android:name=".Activity.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".Activity.WelcomeActivity" />
-        <activity android:name=".Activity.ForgetPassword"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
+        <activity
+            android:name=".Activity.ForgetPassword"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,8 +52,9 @@
 
         <activity
             android:name=".Activity.AutostartActivity"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.SchoolActivity" />
+        <activity android:name=".Activity.MessageListActivity"></activity>
     </application>
 
 </manifest>

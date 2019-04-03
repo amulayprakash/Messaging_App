@@ -7,6 +7,25 @@ public class UserResponse implements Serializable {
 
     private String error = "";
 
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    private String userType="";
+    private String userId="";
+
 
     public String getError() {
         return error;

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginRight="@dimen/dimension5dp"
+    android:layout_marginLeft="@dimen/dimension5dp"
+    android:layout_marginTop="@dimen/dimension10dp"
+    android:background="@color/colorWhite"
+    android:layout_marginBottom="@dimen/dimension10dp"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimension50dp"
+        android:padding="@dimen/dimension5dp">
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:id="@+id/txtdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="date"
+            android:layout_toLeftOf="@+id/txtmsg"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="normal" />
+
+        <WebView
+            android:scrollbars="none"
+            android:layout_centerVertical="true"
+            android:id="@+id/txtmsg"
+            android:layout_width="@dimen/dimension80dp"
+            android:layout_height="@dimen/dimension30dp"
+            android:layout_toLeftOf="@+id/imgarrow"
+            android:text="msg"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimension10dp"
+            android:id="@+id/imgarrow"
+            android:layout_width="@dimen/dimension20dp"
+            android:layout_height="@dimen/dimension20dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/drop_down" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/lindetail"
+        android:layout_margin="@dimen/dimension5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimension210dp">
+        <View
+            android:background="@color/colorLightGray"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <WebView
+            android:scrollbars="none"
+            android:layout_marginTop="@dimen/dimension5dp"
+            android:id="@+id/txtmsgdetail"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimension200dp"
+            android:layout_alignParentLeft="true"
+            android:text="detail"
+            android:layout_marginBottom="@dimen/dimension5dp"
+            android:layout_toLeftOf="@+id/txtmsg"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="normal" />
+    </LinearLayout>
+    <View
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

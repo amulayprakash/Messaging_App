@@ -11,8 +11,9 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 
-import com.example.quagnitia.messaging_app.util.AutoStartHelper;
 import com.example.quagnitia.messaging_app.R;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
+import com.example.quagnitia.messaging_app.util.AutoStartHelper;
 
 /*
 - created by nikita
@@ -101,11 +102,20 @@ public class AutostartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (i == 1) {
-            Intent i = new Intent(this, WelcomeActivity.class);
-            i.putExtra("FromLogin", true);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(i);
-            finish();
+            if(new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+                Intent i = new Intent(this, SchoolActivity.class);
+                i.putExtra("FromLogin", true);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
+                finish();
+            }else {
+                Intent i = new Intent(this, MessageListActivity.class);
+                i.putExtra("FromLogin", true);
+                i.putExtra("schoolId",getIntent().getStringExtra("schoolId")+"");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
+                finish();
+            }
         }
     }
 }

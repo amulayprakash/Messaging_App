@@ -29,8 +29,9 @@ import com.example.quagnitia.messaging_app.Model.Data;
 import com.example.quagnitia.messaging_app.Model.PagingItem;
 import com.example.quagnitia.messaging_app.Model.Req;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
-import com.example.quagnitia.messaging_app.Preferences.Preferences;
 import com.example.quagnitia.messaging_app.R;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
+import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -47,7 +48,7 @@ public class WelcomeActivity extends AppCompatActivity {
     RelativeLayout head;
     WebView txtbody;
     LinearLayout lin2, lin3;
-    com.example.quagnitia.messaging_app.Preferences.Preferences preferences;
+    com.example.quagnitia.messaging_app.Storage.Preferences preferences;
 //    DBHelper dbHelper;
     Button btnprev, btnnext;
     ProgressDialog pd;
@@ -157,7 +158,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
 
-                            new com.example.quagnitia.messaging_app.Preferences.Preferences(WelcomeActivity.this).clearPreferences();
+                            new com.example.quagnitia.messaging_app.Storage.Preferences(WelcomeActivity.this).clearPreferences();
                             Intent newIntent = new Intent(WelcomeActivity.this, MainActivity.class);
                             newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

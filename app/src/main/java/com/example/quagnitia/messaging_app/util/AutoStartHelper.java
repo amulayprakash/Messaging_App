@@ -9,9 +9,12 @@ import android.os.Build;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Activity.AutostartActivity;
-import com.example.quagnitia.messaging_app.Activity.WelcomeActivity;
+import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
 
 import java.util.List;
+
+//import com.example.quagnitia.messaging_app.Activity.WelcomeActivity;
 
 /**
  * Created by Niki on 22-01-2019.
@@ -118,11 +121,13 @@ public final class AutoStartHelper {
 
             default:
                 Toast.makeText(context, "Unable to locate Autostart feature on this device.", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(context, WelcomeActivity.class);
+                Intent i = new Intent(context, MessageListActivity.class);
                 i.putExtra("FromLogin", true);
+                i.putExtra("schoolId", new Preferences(context).getString("schoolId"));
+
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(i);
-                ((AutostartActivity) context).finish();
+                ((AutostartActivity)context).finish();
                 break;
         }
 

@@ -5,6 +5,24 @@ package com.example.quagnitia.messaging_app.Model;
  */
 
 public class Data {
+    public String getAqiSchoolID() {
+        return aqiSchoolID;
+    }
+
+    public void setAqiSchoolID(String aqiSchoolID) {
+        this.aqiSchoolID = aqiSchoolID;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    String aqiSchoolID = "",
+            schoolName = "";
 
     private String subject = "";
     private String body = "";
@@ -24,8 +42,6 @@ public class Data {
     public void setBody(String body) {
         this.body = body;
     }
-
-
 
     /**/
     public String getMessageID() {
@@ -74,5 +90,16 @@ public class Data {
     }
 
     String aqiDateTime = "";
+
+    public boolean isIs_open() {
+        return is_open;
+    }
+
+    public void setIs_open(boolean is_open) {
+        this.is_open = is_open;
+    }
+
+    boolean is_open =false;
+
 
 }

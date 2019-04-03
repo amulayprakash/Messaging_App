@@ -11,4 +11,6 @@ public class ConstatntsApi {
     static final String FORGOT_URL="forgotpassword";
     static final String SHOWMESSAGE="ShowMessage";
     static final String SHOWMESSAGE2="ShowMessage2";
+    static final String SchoolList="SchoolList";
+    static final String MessageList="MessageList";
 }

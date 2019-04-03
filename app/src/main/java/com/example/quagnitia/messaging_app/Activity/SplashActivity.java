@@ -40,8 +40,15 @@ public class SplashActivity extends AppCompatActivity {
 
 //                accessPermission();
                 if (preferences.isLogin()) {
-                    Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
-                    startActivity(in);
+                    if(new Preferences(SplashActivity.this).getString("UT").equalsIgnoreCase("admin")) {
+                        Intent in = new Intent(SplashActivity.this, SchoolActivity.class);
+                        startActivity(in);
+                    }else {
+                        Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                        in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
+                        startActivity(in);
+                    }
+
                 } else {
                     Intent in = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(in);
@@ -113,7 +120,8 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             if (preferences.isLogin()) {
-                Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
+                Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
                 startActivity(in);
             } else {
                 Intent in = new Intent(SplashActivity.this, MainActivity.class);
@@ -154,7 +162,8 @@ public class SplashActivity extends AppCompatActivity {
                     }
 
                     if (preferences.isLogin()) {
-                        Intent in = new Intent(SplashActivity.this, WelcomeActivity.class);
+                        Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                        in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
                         startActivity(in);
                     } else {
                         Intent in = new Intent(SplashActivity.this, MainActivity.class);

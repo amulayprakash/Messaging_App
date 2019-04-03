@@ -35,5 +35,4 @@ dependencies {
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     compile 'com.android.support:multidex:1.0.1'
 }
-apply plugin:'com.google.gms.google-services'
-
+apply plugin: 'com.google.gms.google-services'

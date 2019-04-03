@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.example.quagnitia.messaging_app.Model.User;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
 import com.example.quagnitia.messaging_app.R;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
@@ -124,10 +126,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // preferences.setLOGIN(true);
                         Toast.makeText(MainActivity.this, "Login Successfull..!!!", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        com.example.quagnitia.messaging_app.Storage.Preferences preferences1 = new com.example.quagnitia.messaging_app.Storage.Preferences(MainActivity.this);
 
+                        if(userResponse.getUserType()!=null && !userResponse.getUserType().isEmpty()){
+                            preferences1.putString("UT",userResponse.getUserType());
+                        }
                         User userlog = userResponse.getUser();
                         if(userlog!=null){
-                            com.example.quagnitia.messaging_app.Preferences.Preferences preferences1 = new com.example.quagnitia.messaging_app.Preferences.Preferences(MainActivity.this);
+                            preferences1.putString("schoolId",userlog.getSchoolID());
                             preferences1.setLogin(true);
                             preferences1.saveAgentName(MainActivity.this,(userlog.getName()));
                             preferences1.saveAgentId(MainActivity.this,userlog.getUserID());
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Intent i = new Intent(context, AutostartActivity.class);
                         i.putExtra("AUTOSTART", true);
                         i.putExtra("name", name);
+                        i.putExtra("schoolId",userlog.getSchoolID());
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                         clearData();
@@ -171,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user.setEmail(etEmail.getText().toString().trim());
         user.setPassword(etPass.getText().toString().trim());
         user.setLogin_type("0");
+        String deviceId = Settings.Secure.getString(this.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        user.setDeviceId(deviceId);
         user.setFcmTokenId(getToken());
         return user;
     }
