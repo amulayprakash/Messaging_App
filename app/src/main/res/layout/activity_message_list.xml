@@ -14,12 +14,23 @@
         android:padding="@dimen/dimension3dp">
 
         <ImageView
+            android:visibility="visible"
+            android:layout_centerVertical="true"
             android:id="@+id/imgBack"
+            android:layout_width="@dimen/dimension30dp"
+            android:layout_height="@dimen/dimension30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dimension5dp"
+           android:src="@drawable/ic_back"
+            android:tint="@color/colorWhite" />
+
+        <ImageView
+            android:id="@+id/imgico"
             android:layout_width="@dimen/dimension40dp"
             android:layout_height="@dimen/dimension40dp"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/dimension10dp"
+            android:layout_toRightOf="@+id/imgBack"
             android:src="@drawable/aqi"
             android:visibility="visible"
 
@@ -30,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/txtLogOut"
-            android:layout_toRightOf="@+id/imgBack"
+            android:layout_toRightOf="@+id/imgico"
             android:orientation="vertical">
 
             <TextView
@@ -86,18 +97,18 @@
 
 
     <RelativeLayout
-        android:background="@color/colorPrimaryDark"
         android:id="@+id/reldt"
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtschool">
+        android:layout_below="@+id/txtschool"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal">
 
         <TextView
-            android:layout_centerVertical="true"
             android:id="@+id/txtfrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="@dimen/dimension5dp"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
@@ -107,29 +118,29 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/dimension5dp"
-            android:layout_toRightOf="@+id/txtfrom"
             android:id="@+id/txtfromshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dimension5dp"
             android:layout_marginBottom="@dimen/dimension5dp"
+            android:layout_toRightOf="@+id/txtfrom"
+            android:background="@color/colorWhite"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
             android:text="01/01/2019"
-            android:background="@color/colorWhite"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/dimension15dp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_marginLeft="@dimen/dimension10dp"
-            android:layout_centerVertical="true"
             android:id="@+id/txtto"
-            android:layout_toRightOf="@+id/txtfromshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimension10dp"
             android:layout_marginBottom="@dimen/dimension5dp"
+            android:layout_toRightOf="@+id/txtfromshow"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
             android:text="To : "
@@ -138,34 +149,34 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/dimension5dp"
-            android:layout_toRightOf="@+id/txtto"
             android:id="@+id/txttoshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dimension5dp"
+            android:layout_marginRight="@dimen/dimension10dp"
             android:layout_marginBottom="@dimen/dimension5dp"
+            android:layout_toRightOf="@+id/txtto"
+            android:background="@color/colorWhite"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
             android:text="01/01/2019"
-            android:layout_marginRight="@dimen/dimension10dp"
-            android:background="@color/colorWhite"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/dimension15dp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/dimension5dp"
-            android:layout_toRightOf="@+id/txttoshow"
             android:id="@+id/txtreset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dimension5dp"
             android:layout_marginBottom="@dimen/dimension5dp"
+            android:layout_toRightOf="@+id/txttoshow"
+            android:background="@color/color2"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
             android:text="Search"
-            android:background="@color/color2"
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/dimension10dp"

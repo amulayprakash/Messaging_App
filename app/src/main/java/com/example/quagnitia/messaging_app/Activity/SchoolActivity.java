@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class SchoolActivity extends AppCompatActivity {
     ArrayList<Data> activepicupList = new ArrayList<>();
     RelativeLayout relLoad;
     int loadType = 0;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SchoolActivity extends AppCompatActivity {
 
         preferences = new Preferences(SchoolActivity.this);
 
+        imgBack = findViewById(R.id.imgBack);
         txtLogOut = findViewById(R.id.txtLogOut);
         txtname = findViewById(R.id.txtname);
         rvlist = findViewById(R.id.rvlist);
@@ -63,6 +66,13 @@ public class SchoolActivity extends AppCompatActivity {
         txtname.setText("" + preferences.getAgentName(this) + "");
         txttitle = findViewById(R.id.txttitle);
         txttitle.setText("School List");
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         txtLogOut.setOnClickListener(new View.OnClickListener() {
             @Override

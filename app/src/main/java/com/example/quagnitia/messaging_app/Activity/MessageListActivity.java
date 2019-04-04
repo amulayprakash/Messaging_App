@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,6 @@ import com.example.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +63,7 @@ public class MessageListActivity
     private MediaPlayer mMediaPlayer;
     String fromdate = null, todate = null;
     Date from, to;
+    ImageView imgBack;
 
     @Override
     protected void onDestroy() {
@@ -76,245 +77,266 @@ public class MessageListActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
-
-        preferences = new Preferences(MessageListActivity.this);
-        final Window win = getWindow();
-        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
-        txtreset = findViewById(R.id.txtreset);
-        txtfromshow = findViewById(R.id.txtfromshow);
-        txttoshow = findViewById(R.id.txttoshow);
-        txtschool = findViewById(R.id.txtschool);
-        txtLogOut = findViewById(R.id.txtLogOut);
-        txtname = findViewById(R.id.txtname);
-        rvlist = findViewById(R.id.rvlist);
-        relLoad = findViewById(R.id.relLoad);
-        relLoad.setVisibility(View.GONE);
-        txtname.setText("" + preferences.getAgentName(this) + "");
-        txtschool.setText("" + preferences.getSchool(this) + "");
-        txttitle = findViewById(R.id.txttitle);
-        txttitle.setText("Message List");
-
         try {
-            Date c = Calendar.getInstance().getTime();
-            System.out.println("Current time => " + c);
+            preferences = new Preferences(MessageListActivity.this);
+            final Window win = getWindow();
+            win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            String formattedDate = df.format(c);
+            imgBack = findViewById(R.id.imgBack);
+            txtreset = findViewById(R.id.txtreset);
+            txtfromshow = findViewById(R.id.txtfromshow);
+            txttoshow = findViewById(R.id.txttoshow);
+            txtschool = findViewById(R.id.txtschool);
+            txtLogOut = findViewById(R.id.txtLogOut);
+            txtname = findViewById(R.id.txtname);
+            rvlist = findViewById(R.id.rvlist);
+            relLoad = findViewById(R.id.relLoad);
+            relLoad.setVisibility(View.GONE);
+            txtname.setText("" + preferences.getAgentName(this) + "");
+            txtschool.setText("" + preferences.getSchool(this) + "");
+            txttitle = findViewById(R.id.txttitle);
+            txttitle.setText("Message List");
 
-            txtfromshow.setText("01/01/2019");
-            txttoshow.setText(formattedDate + "");
-
-            String dateStr = "01/01/2019";
-
-            SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
-            Date dateObj = curFormater.parse(dateStr);
-            Date dateObj2 = curFormater.parse(formattedDate);
-            from = dateObj;
-            to = dateObj2;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        txtreset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (txtreset.getText().toString().equalsIgnoreCase("clear")) {
-                    try {
-                        Date c = Calendar.getInstance().getTime();
-                        System.out.println("Current time => " + c);
-
-                        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                        String formattedDate = df.format(c);
-
-                        txtfromshow.setText("01/01/2019");
-                        txttoshow.setText(formattedDate + "");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    txtreset.setText("Search");
-                    fromdate = null;
-                    todate = null;
-                } else {
-                    txtreset.setText("Clear");
-                    fromdate = txtfromshow.getText().toString();
-                    todate = txttoshow.getText().toString();
+            imgBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
                 }
-                isLastPage = false;
-                isLoading = false;
-                loadType = 0;
-                activepicupList.clear();
-                loadFirstPage();
+            });
+
+            try {
+                Date c = Calendar.getInstance().getTime();
+                System.out.println("Current time => " + c);
+
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = df.format(c);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(c);
+                calendar.add(Calendar.DAY_OF_YEAR, -15);
+                Date newDate = calendar.getTime();
+                String dateStr = df.format(newDate);
+
+                txtfromshow.setText(dateStr + "");
+                txttoshow.setText(formattedDate + "");
+
+                SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateObj = curFormater.parse(dateStr);
+                Date dateObj2 = curFormater.parse(formattedDate);
+                from = dateObj;
+                to = dateObj2;
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        });
 
-        txtfromshow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar newDate = Calendar.getInstance();
-                        newDate.set(year, month, dayOfMonth);
-                        long selectedMilli = newDate.getTimeInMillis();
+            txtreset.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (txtreset.getText().toString().equalsIgnoreCase("clear")) {
+                        try {
+                            Date c = Calendar.getInstance().getTime();
+                            System.out.println("Current time => " + c);
 
-                        Date datePickerDate = new Date(selectedMilli);
+                            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                            String formattedDate = df.format(c);
 
-                        String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(c);
+                            calendar.add(Calendar.DAY_OF_YEAR, -15);
+                            Date newDate = calendar.getTime();
+                            String dateStr = df.format(newDate);
 
-                        if (to.before(datePickerDate)) {
-                            Toast.makeText(MessageListActivity.this, "Select date less than to date.", Toast.LENGTH_SHORT).show();
-
-                            txtfromshow.setText("  /  /    ");
-                        } else {
-                            txtfromshow.setText(reportDate);
+                            txtfromshow.setText(dateStr + "");
+                            txttoshow.setText(formattedDate + "");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-
-
+                        txtreset.setText("Search");
+                        fromdate = null;
+                        todate = null;
+                    } else {
+                        txtreset.setText("Clear");
+                        fromdate = txtfromshow.getText().toString();
+                        todate = txttoshow.getText().toString();
                     }
-                }, year, month, day);
-                dpd.show();
-            }
-        });
+                    isLastPage = false;
+                    isLoading = false;
+                    loadType = 0;
+                    activepicupList.clear();
+                    loadFirstPage();
+                }
+            });
 
-        txttoshow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar newDate = Calendar.getInstance();
-                        newDate.set(year, month, dayOfMonth);
-                        long selectedMilli = newDate.getTimeInMillis();
+            txtfromshow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Calendar newDate = Calendar.getInstance();
+                            newDate.set(year, month, dayOfMonth);
+                            long selectedMilli = newDate.getTimeInMillis();
 
-                        Date datePickerDate = new Date(selectedMilli);
+                            Date datePickerDate = new Date(selectedMilli);
 
-                        String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
+                            String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
 
-                        if (from.after(datePickerDate)) {
-                            Toast.makeText(MessageListActivity.this, "Select date grater than from date.", Toast.LENGTH_SHORT).show();
-                            txttoshow.setText("  /  /    ");
-                        } else {
-                            txttoshow.setText(reportDate);
+                            if (to == datePickerDate || to.before(datePickerDate)) {
+                                Toast.makeText(MessageListActivity.this, "Select date less than to date.", Toast.LENGTH_SHORT).show();
+
+                                txtfromshow.setText("  /  /    ");
+                            } else {
+                                txtfromshow.setText(reportDate);
+                            }
+
+
                         }
+                    }, year, month, day);
+                    dpd.show();
+                }
+            });
+
+            txttoshow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Calendar newDate = Calendar.getInstance();
+                            newDate.set(year, month, dayOfMonth);
+                            long selectedMilli = newDate.getTimeInMillis();
+
+                            Date datePickerDate = new Date(selectedMilli);
+
+                            String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
+
+                            if (from == datePickerDate || from.after(datePickerDate)) {
+                                Toast.makeText(MessageListActivity.this, "Select date grater than from date.", Toast.LENGTH_SHORT).show();
+                                txttoshow.setText("  /  /    ");
+                            } else {
+                                txttoshow.setText(reportDate);
+                            }
 
 
-                    }
-                }, year, month, day);
-                dpd.show();
-            }
-        });
+                        }
+                    }, year, month, day);
+                    dpd.show();
+                }
+            });
 
-        txtLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            txtLogOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                final Dialog dialog = new Dialog(MessageListActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_alert);
-                TextView txtYes = dialog.findViewById(R.id.txtYes);
-                TextView txtNo = dialog.findViewById(R.id.txtNo);
+                    final Dialog dialog = new Dialog(MessageListActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_alert);
+                    TextView txtYes = dialog.findViewById(R.id.txtYes);
+                    TextView txtNo = dialog.findViewById(R.id.txtNo);
 
-                txtYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    txtYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-                        new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
-                        Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(newIntent);
+                            new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
+                            Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
 //                        Toast.makeText(WelcomeActivity.this, "Sign Out...", Toast.LENGTH_SHORT).show();
-                        finish();
+                            finish();
+                        }
+                    });
+                    txtNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+
+                        }
+                    });
+
+                    dialog.show();
+
+                }
+            });
+
+            linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            rvlist.setLayoutManager(linearLayoutManager);
+            MessageAdaptor sd = new MessageAdaptor(MessageListActivity.this, activepicupList);
+            rvlist.setAdapter(sd);
+            rvlist.setItemAnimator(new DefaultItemAnimator());
+
+            rvlist.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+                @Override
+                protected void loadMoreItems() {
+                    isLoading = true;
+                    currentPage += 1;
+
+                    // mocking network delay for API call
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadNextPage();
+                        }
+                    }, 500);
+                }
+
+                @Override
+                public int getTotalPageCount() {
+                    if (loadType == 0) {
+                        loadType = 1;
+                        return TOTAL_PAGES;
+                    } else {
+                        return 1;
                     }
-                });
-                txtNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
+                }
 
-                    }
-                });
+                @Override
+                public boolean isLastPage() {
+                    return isLastPage;
+                }
 
-                dialog.show();
+                @Override
+                public boolean isLoading() {
+                    return isLoading;
+                }
+            });
+            loadFirstPage();
 
-            }
-        });
-
-        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvlist.setLayoutManager(linearLayoutManager);
-        MessageAdaptor sd = new MessageAdaptor(MessageListActivity.this, activepicupList);
-        rvlist.setAdapter(sd);
-        rvlist.setItemAnimator(new DefaultItemAnimator());
-
-        rvlist.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                currentPage += 1;
-
-                // mocking network delay for API call
+            if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("FROM_NOTI")) {
+                playSound();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        loadNextPage();
+                        if (mMediaPlayer != null) {//nikita
+                            mMediaPlayer.stop();
+                        }
                     }
-                }, 500);
-            }
+                }, 15000);
 
-            @Override
-            public int getTotalPageCount() {
-                if (loadType == 0) {
-                    loadType = 1;
-                    return TOTAL_PAGES;
-                } else {
-                    return 1;
-                }
-            }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
-        loadFirstPage();
-
-        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("FROM_NOTI")) {
-            playSound();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mMediaPlayer != null) {//nikita
-                        mMediaPlayer.stop();
+                        finish();
                     }
-                }
-            }, 15000);
+                }, 60000);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    finish();
-                }
-            }, 60000);
-
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -323,7 +345,7 @@ public class MessageListActivity
         mMediaPlayer = new MediaPlayer();
         try {
 //                mMediaPlayer.setDataSource(context, alert);
-            final AudioManager audioManager = (AudioManager) this
+            final AudioManager audioManager = (AudioManager)this
                     .getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
@@ -335,7 +357,7 @@ public class MessageListActivity
 
 
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("OOPS");
         }
 //        }
@@ -343,129 +365,137 @@ public class MessageListActivity
 
 
     private void loadFirstPage() {//nikita
-
-        if (!NetworkUtils.checkNetworkConnection(this)) {
-            callPickupWS("start");
-        } else {
-            Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+        try {
+            if (!NetworkUtils.checkNetworkConnection(this)) {
+                callPickupWS("start");
+            } else {
+                Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
 
     private void loadNextPage() {//nikita
-
-        if (!NetworkUtils.checkNetworkConnection(this)) {
-            if (pickups.getNext_page_url() != null && !pickups.getNext_page_url().equals("") && !pickups.getNext_page_url().equalsIgnoreCase("null")) {
-                String[] arr = pickups.getNext_page_url().split("=");
-                String page = "";
-                if (arr != null) {
-                    if (arr.length == 2) {
-                        page = arr[1];
-                    }
-                    if (!page.isEmpty()) {
-                        callPickupWS(page);
-                    } else {
+        try {
+            if (!NetworkUtils.checkNetworkConnection(this)) {
+                if (pickups.getNext_page_url() != null && !pickups.getNext_page_url().equals("") && !pickups.getNext_page_url().equalsIgnoreCase("null")) {
+                    String[] arr = pickups.getNext_page_url().split("=");
+                    String page = "";
+                    if (arr != null) {
+                        if (arr.length == 2) {
+                            page = arr[1];
+                        }
+                        if (!page.isEmpty()) {
+                            callPickupWS(page);
+                        } else {
 //                        Toast.makeText(this, "No more data available.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
+            } else {
+                Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this, "No internet connetion!", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     private void callPickupWS(final String LoadType) {//nikita
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("loading...");
-        pd.setCanceledOnTouchOutside(false);
+        try {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setMessage("loading...");
+            pd.setCanceledOnTouchOutside(false);
 
 
-        ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
+            ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
 
-        Call<UserResponse> call;//nikita
-        if (LoadType.equalsIgnoreCase("start")) {
-            relLoad.setVisibility(View.GONE);
-            pd.show();
-            call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
-        } else {
-            relLoad.setVisibility(View.VISIBLE);
+            Call<UserResponse> call;//nikita
+            if (LoadType.equalsIgnoreCase("start")) {
+                relLoad.setVisibility(View.GONE);
+                pd.show();
+                call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
+            } else {
+                relLoad.setVisibility(View.VISIBLE);
 //
 //            PagingItem pagingItem = new PagingItem();
 //            pagingItem.setPage(LoadType);
 //            pagingItem.setAgentId(new Preferences(getActivity()).getAgentId(getActivity()));
-            call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
-        }
-        Log.i("@nikita", "Url:" + call.request().url().toString());
-        call.enqueue(new Callback<UserResponse>() {
-            @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                try {
-                    Log.i("@nikita", "Resp" + response);
-                    pd.dismiss();
-                    if (response.body() != null && response.body().getError().equals("0")) {
-                        if (!response.body().getMessage().isEmpty()) {
-                            Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                        relLoad.setVisibility(View.GONE);
+                call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
+            }
+            Log.i("@nikita", "Url:" + call.request().url().toString());
+            call.enqueue(new Callback<UserResponse>() {
+                @Override
+                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                    try {
+                        Log.i("@nikita", "Resp" + response);
+                        pd.dismiss();
+                        if (response.body() != null && response.body().getError().equals("0")) {
+                            if (!response.body().getMessage().isEmpty()) {
+                                Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                            relLoad.setVisibility(View.GONE);
 
-                        pickups = response.body().getText();
-                        if (pickups.getData() == null || pickups.getData().isEmpty()) {
-                            isLastPage = true;
-                        } else {
-                            isLastPage = false;
-                        }
-                        activepicupList.addAll(pickups.getData());
-                        setData();
+                            pickups = response.body().getText();
+                            if (pickups.getData() == null || pickups.getData().isEmpty()) {
+                                isLastPage = true;
+                            } else {
+                                isLastPage = false;
+                            }
+                            activepicupList.addAll(pickups.getData());
+                            setData();
 
-                        //nikita
-                        if (pickups.getLast_page() != 0) {
-                            TOTAL_PAGES = pickups.getLast_page();
-                        }
-                        isLoading = false;
-                        if (LoadType.equalsIgnoreCase("start")) {
+                            //nikita
+                            if (pickups.getLast_page() != 0) {
+                                TOTAL_PAGES = pickups.getLast_page();
+                            }
+                            isLoading = false;
+                            if (LoadType.equalsIgnoreCase("start")) {
 
-                            if (currentPage <= TOTAL_PAGES) {
+                                if (currentPage <= TOTAL_PAGES) {
 //                                    notificationAdapter.addLoadingFooter();
-                            } else isLastPage = true;
+                                } else isLastPage = true;
 
-                        } else {
-                            if (activepicupList.size() > 11) {
-                                rvlist.scrollToPosition(activepicupList.size() - (10));
+                            } else {
+                                if (activepicupList.size() > 11) {
+                                    rvlist.scrollToPosition(activepicupList.size() - (10));
+                                }
+
+
+                                if (currentPage != TOTAL_PAGES) {
+//                                    notificationAdapter.addLoadingFooter();
+                                } else isLastPage = true;
+
                             }
 
 
-                            if (currentPage != TOTAL_PAGES) {
-//                                    notificationAdapter.addLoadingFooter();
-                            } else isLastPage = true;
-
-                        }
-
-
-                    } else if (response.body() != null && response.body().getError().equals("1")) {
-                        if (!response.body().getMessage().isEmpty()) {
-                            if (!activepicupList.isEmpty()) {
-                                setData();
+                        } else if (response.body() != null && response.body().getError().equals("1")) {
+                            if (!response.body().getMessage().isEmpty()) {
+                                if (!activepicupList.isEmpty()) {
+                                    setData();
+                                }
+                                Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception ex) {
+                        if (!activepicupList.isEmpty()) {
+                            setData();
                         }
                     }
-                } catch (Exception ex) {
+                }
+
+                @Override
+                public void onFailure(Call<UserResponse> call, Throwable t) {
+                    Log.i("@nikita", "Error" + t);
                     if (!activepicupList.isEmpty()) {
                         setData();
                     }
                 }
-            }
+            });
 
-            @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                Log.i("@nikita", "Error" + t);
-                if (!activepicupList.isEmpty()) {
-                    setData();
-                }
-            }
-        });
-
-
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void setData() {

@@ -9,6 +9,7 @@ public class Preferences {
     SharedPreferences.Editor editor;
     Context mContext;
     private String LOGIN="LOGIN";
+    private String BadgeCount="BadgeCount";
     private  String REGISTERED = "REGISTERED";
     public static final String KEY_AGENT_ID = "agentId";
     private static final String PICKUP_ID = "pickupId";
@@ -16,22 +17,22 @@ public class Preferences {
     private static final String PREFS_STORE_PROFILE = "STORE_PROFILE";
   //  String username = getString(PrefConstants.USER_NAME);
 
-//    public int getSomeVariable() {
-//        return preferences.getInt(PrefConstants.BADGECAOUNT, 0);
-//    }
-//
-//    public void setSomeVariable(int someVariablebb) {
-//        int someVariable = getSomeVariable();
-//
-//        if (someVariablebb > 0) {
-//            someVariable = someVariable + someVariablebb;
-//        } else {
-//            someVariable = 0;
-//        }
-//
-//        editor.putInt(PrefConstants.BADGECAOUNT, someVariable);
-//        editor.commit();
-//    }
+    public int getBadgeCount() {
+        return preferences.getInt(BadgeCount, 0);
+    }
+
+    public void setBadgeCount(int someVariablebb) {
+        int someVariable = getBadgeCount();
+
+        if (someVariablebb > 0) {
+            someVariable = someVariable + someVariablebb;
+        } else {
+            someVariable = 0;
+        }
+
+        editor.putInt(BadgeCount, someVariable);
+        editor.commit();
+    }
 
     public Preferences() {
 

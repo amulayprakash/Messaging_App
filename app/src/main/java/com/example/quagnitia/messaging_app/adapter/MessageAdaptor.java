@@ -96,11 +96,12 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         switch (getItemViewType(position)) {
             case ITEM:
-                final MessageAdaptor.MovieVH holders = (MessageAdaptor.MovieVH)holder;
+                try {
+                    final MessageAdaptor.MovieVH holders = (MessageAdaptor.MovieVH)holder;
 
-                holders.txtdate.setText(activePickupList.get(position).getAqiDateTime());
-                holders.txtmsg.loadData(activePickupList.get(position).getMessageName(), "text/html", "utf-8");
-                holders.txtmsgdetail.loadData(activePickupList.get(position).getMessage(), "text/html", "utf-8");
+                    holders.txtdate.setText(activePickupList.get(position).getAqiDateTime());
+                    holders.txtmsg.loadData(activePickupList.get(position).getMessageName(), "text/html", "utf-8");
+                    holders.txtmsgdetail.loadData(activePickupList.get(position).getMessage(), "text/html", "utf-8");
 
 //                if (activePickupList.get(position).isIs_open()) {
 //                    holders.imgarrow.setImageResource(R.drawable.dropup);
@@ -110,24 +111,26 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    holders.imgarrow.setImageResource(R.drawable.drop_down);
 //                }
 
-                //nikita
-                holders.imgarrow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (activePickupList.get(position).isIs_open()) {
-                            holders.imgarrow.setImageResource(R.drawable.drop_down);
-                            holders.lindetail.setVisibility(View.GONE);
-                            activePickupList.get(position).setIs_open(false);
-                        } else {
-                            holders.lindetail.setVisibility(View.VISIBLE);
-                            holders.imgarrow.setImageResource(R.drawable.dropup);
-                            activePickupList.get(position).setIs_open(true);
-                        }
+                    //nikita
+                    holders.imgarrow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (activePickupList.get(position).isIs_open()) {
+                                holders.imgarrow.setImageResource(R.drawable.drop_down);
+                                holders.lindetail.setVisibility(View.GONE);
+                                activePickupList.get(position).setIs_open(false);
+                            } else {
+                                holders.lindetail.setVisibility(View.VISIBLE);
+                                holders.imgarrow.setImageResource(R.drawable.dropup);
+                                activePickupList.get(position).setIs_open(true);
+                            }
 //                        notifyDataSetChanged();
-                    }
-                });
+                        }
+                    });
 
-
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
                 break;
             case LOADING:
 //                Do nothing

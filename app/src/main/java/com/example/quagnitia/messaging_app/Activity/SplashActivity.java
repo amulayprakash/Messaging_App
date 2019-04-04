@@ -15,10 +15,12 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.example.quagnitia.messaging_app.R;
+import com.example.quagnitia.messaging_app.Storage.Preferences;
 
 import java.io.File;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class SplashActivity extends AppCompatActivity {
     com.example.quagnitia.messaging_app.Storage.Preferences preferences;
@@ -27,6 +29,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ShortcutBadger.removeCount(this);
 
         TextView txt = findViewById(R.id.txt);
 

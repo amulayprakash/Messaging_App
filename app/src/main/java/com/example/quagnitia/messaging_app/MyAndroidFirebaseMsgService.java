@@ -21,6 +21,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.UUID;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 
 public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
     private static final String CHANNEL_ID = "1";
@@ -40,7 +42,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        AlarmLogTable alogger = new AlarmLogTable(this, dbHelper);
 
         if (pref.isLogin()) {
-            if (!pref.getString("UT").equalsIgnoreCase("admin")) {
+//            if (!pref.getString("UT").equalsIgnoreCase("admin")) {
 
                 try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
@@ -50,10 +52,14 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
                     showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
+                    pref.setBadgeCount(1);
+                    ShortcutBadger.applyCount(this, 1);
+//                    ShortcutBadger.with(getApplicationContext()).count(badgeCount); //for 1.1.3
+//                    Intent in = new Intent(this, MessageListActivity.class);
+//                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(in);
 
-                    Intent in = new Intent(this, MessageListActivity.class);
-                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(in);
+
 //                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
 
                 } catch (Exception e) {
@@ -66,7 +72,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //                startActivity(in);
                 }
             }
-        }
+//        }
     }
 
     private void showNoti(String title, String msg) {
