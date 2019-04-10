@@ -111,7 +111,7 @@ public class AutostartActivity extends AppCompatActivity {
             }else {
                 Intent i = new Intent(this, MessageListActivity.class);
                 i.putExtra("FromLogin", true);
-                i.putExtra("schoolId",getIntent().getStringExtra("schoolId")+"");
+//                i.putExtra("schoolId",getIntent().getStringExtra("schoolId")+"");
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(i);
                 finish();

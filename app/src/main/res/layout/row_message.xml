@@ -10,32 +10,36 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_marginBottom="@dimen/dimension5dp"
+        android:id="@+id/relhead"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimension50dp"
         android:padding="@dimen/dimension5dp">
 
         <TextView
+            android:padding="@dimen/dimension5dp"
             android:layout_centerVertical="true"
             android:id="@+id/txtdate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="date"
+            android:textColor="@color/colorBlack"
             android:layout_toLeftOf="@+id/txtmsg"
             android:textSize="@dimen/dimension15dp"
-            android:textStyle="normal" />
+            android:textStyle="bold" />
 
-        <WebView
+        <TextView
+            android:textColor="@color/colorBlack"
+            android:padding="@dimen/dimension5dp"
             android:scrollbars="none"
             android:layout_centerVertical="true"
             android:id="@+id/txtmsg"
-            android:layout_width="@dimen/dimension80dp"
-            android:layout_height="@dimen/dimension30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgarrow"
             android:text="msg"
             android:textSize="@dimen/dimension15dp"
-            android:textStyle="normal" />
+            android:textStyle="bold" />
 
         <ImageView
             android:layout_centerVertical="true"
@@ -53,7 +57,7 @@
         android:layout_margin="@dimen/dimension5dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimension210dp">
+        android:layout_height="wrap_content">
         <View
             android:background="@color/colorLightGray"
             android:layout_width="match_parent"
@@ -63,12 +67,12 @@
             android:layout_marginTop="@dimen/dimension5dp"
             android:id="@+id/txtmsgdetail"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimension200dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="detail"
             android:layout_marginBottom="@dimen/dimension5dp"
             android:layout_toLeftOf="@+id/txtmsg"
-            android:textSize="@dimen/dimension15dp"
+            android:textSize="@dimen/dimension10dp"
             android:textStyle="normal" />
     </LinearLayout>
     <View

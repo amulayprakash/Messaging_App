@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Intent i = new Intent(context, AutostartActivity.class);
                         i.putExtra("AUTOSTART", true);
                         i.putExtra("name", name);
-                        i.putExtra("schoolId",userlog.getSchoolID());
+//                        i.putExtra("schoolId",userlog.getSchoolID());
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                         clearData();

@@ -104,7 +104,8 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     public void onClick(View v) {
                         new Preferences(context).saveSchool(context,activePickupList.get(position).getSchoolName());
                         Intent in = new Intent(context,MessageListActivity.class);
-                        in.putExtra("schoolId",activePickupList.get(position).getAqiSchoolID());
+                        new Preferences(context).putString("schoolId",activePickupList.get(position).getAqiSchoolID());
+//                        in.putExtra("schoolId",activePickupList.get(position).getAqiSchoolID());
                         context.startActivity(in);
                     }
                 });

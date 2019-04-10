@@ -100,6 +100,12 @@ public class MessageListActivity
             txttitle = findViewById(R.id.txttitle);
             txttitle.setText("Message List");
 
+            if (new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+                imgBack.setVisibility(View.VISIBLE);
+            } else {
+                imgBack.setVisibility(View.GONE);
+            }
+
             imgBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -111,7 +117,7 @@ public class MessageListActivity
                 Date c = Calendar.getInstance().getTime();
                 System.out.println("Current time => " + c);
 
-                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String formattedDate = df.format(c);
 
                 Calendar calendar = Calendar.getInstance();
@@ -123,7 +129,7 @@ public class MessageListActivity
                 txtfromshow.setText(dateStr + "");
                 txttoshow.setText(formattedDate + "");
 
-                SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
                 Date dateObj = curFormater.parse(dateStr);
                 Date dateObj2 = curFormater.parse(formattedDate);
                 from = dateObj;
@@ -141,7 +147,7 @@ public class MessageListActivity
                             Date c = Calendar.getInstance().getTime();
                             System.out.println("Current time => " + c);
 
-                            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             String formattedDate = df.format(c);
 
                             Calendar calendar = Calendar.getInstance();
@@ -181,23 +187,37 @@ public class MessageListActivity
                     DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            Calendar newDate = Calendar.getInstance();
-                            newDate.set(year, month, dayOfMonth);
-                            long selectedMilli = newDate.getTimeInMillis();
+                            try {
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, month, dayOfMonth);
+                                long selectedMilli = newDate.getTimeInMillis();
 
-                            Date datePickerDate = new Date(selectedMilli);
+                                Date datePickerDate = new Date(selectedMilli);
 
-                            String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
+                                String reportDate = new SimpleDateFormat("yyyy-MM-dd").format(datePickerDate);
 
-                            if (to == datePickerDate || to.before(datePickerDate)) {
-                                Toast.makeText(MessageListActivity.this, "Select date less than to date.", Toast.LENGTH_SHORT).show();
+                                if (txttoshow.getText().toString().equalsIgnoreCase(reportDate)) {
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date dateObj = curFormater.parse(reportDate);
+                                    from = dateObj;
+                                    txtfromshow.setText(reportDate);
+                                    txtreset.setText("Search");
+                                    searchbydate();
+                                } else if (to.before(datePickerDate)) {
+                                    Toast.makeText(MessageListActivity.this, "Select date less than to date.", Toast.LENGTH_SHORT).show();
+                                    txtfromshow.setText("  -  -    ");
+                                } else {
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date dateObj = curFormater.parse(reportDate);
+                                    from = dateObj;
+                                    txtfromshow.setText(reportDate);
+                                    txtreset.setText("Search");
+                                    searchbydate();
+                                }
 
-                                txtfromshow.setText("  /  /    ");
-                            } else {
-                                txtfromshow.setText(reportDate);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-
-
                         }
                     }, year, month, day);
                     dpd.show();
@@ -214,21 +234,35 @@ public class MessageListActivity
                     DatePickerDialog dpd = new DatePickerDialog(MessageListActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            Calendar newDate = Calendar.getInstance();
-                            newDate.set(year, month, dayOfMonth);
-                            long selectedMilli = newDate.getTimeInMillis();
+                            try {
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, month, dayOfMonth);
+                                long selectedMilli = newDate.getTimeInMillis();
 
-                            Date datePickerDate = new Date(selectedMilli);
+                                Date datePickerDate = new Date(selectedMilli);
 
-                            String reportDate = new SimpleDateFormat("dd/MM/yyyy").format(datePickerDate);
+                                String reportDate = new SimpleDateFormat("yyyy-MM-dd").format(datePickerDate);
 
-                            if (from == datePickerDate || from.after(datePickerDate)) {
-                                Toast.makeText(MessageListActivity.this, "Select date grater than from date.", Toast.LENGTH_SHORT).show();
-                                txttoshow.setText("  /  /    ");
-                            } else {
-                                txttoshow.setText(reportDate);
+                                if (txtfromshow.getText().toString().equalsIgnoreCase(reportDate)) {
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date dateObj = curFormater.parse(reportDate);
+                                    to = dateObj;
+                                    txttoshow.setText(reportDate);
+                                    txtreset.setText("Search");
+                                    searchbydate();
+                                } else if (from.after(datePickerDate)) {
+                                    Toast.makeText(MessageListActivity.this, "Select date grater than from date.", Toast.LENGTH_SHORT).show();
+                                    txttoshow.setText("  -  -    ");
+                                } else {
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date dateObj = curFormater.parse(reportDate);
+                                    to = dateObj;
+                                    txttoshow.setText(reportDate);
+                                    searchbydate();
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-
 
                         }
                     }, year, month, day);
@@ -340,6 +374,16 @@ public class MessageListActivity
         }
     }
 
+    private void searchbydate() {
+        fromdate = txtfromshow.getText().toString();
+        todate = txttoshow.getText().toString();
+        isLastPage = false;
+        isLoading = false;
+        loadType = 0;
+        activepicupList.clear();
+        loadFirstPage();
+    }
+
     private void playSound() {
 
         mMediaPlayer = new MediaPlayer();
@@ -414,14 +458,14 @@ public class MessageListActivity
             if (LoadType.equalsIgnoreCase("start")) {
                 relLoad.setVisibility(View.GONE);
                 pd.show();
-                call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
+                call = apiService.getSchoolMessage(new Preferences(this).getString("schoolId"), fromdate, todate);
             } else {
                 relLoad.setVisibility(View.VISIBLE);
 //
 //            PagingItem pagingItem = new PagingItem();
 //            pagingItem.setPage(LoadType);
 //            pagingItem.setAgentId(new Preferences(getActivity()).getAgentId(getActivity()));
-                call = apiService.getSchoolMessage(getIntent().getStringExtra("schoolId"), fromdate, todate);
+                call = apiService.getSchoolMessage(new Preferences(this).getString("schoolId"), fromdate, todate);
             }
             Log.i("@nikita", "Url:" + call.request().url().toString());
             call.enqueue(new Callback<UserResponse>() {
@@ -442,6 +486,7 @@ public class MessageListActivity
                             } else {
                                 isLastPage = false;
                             }
+                            int postomove = activepicupList.size();
                             activepicupList.addAll(pickups.getData());
                             setData();
 
@@ -457,8 +502,8 @@ public class MessageListActivity
                                 } else isLastPage = true;
 
                             } else {
-                                if (activepicupList.size() > 11) {
-                                    rvlist.scrollToPosition(activepicupList.size() - (10));
+                                if (activepicupList.size() > 21) {
+                                    rvlist.scrollToPosition(postomove - 1);
                                 }
 
 

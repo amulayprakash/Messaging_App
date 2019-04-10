@@ -70,7 +70,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/dimension15dp"
+            android:layout_marginRight="@dimen/dimension10dp"
             android:drawableRight="@drawable/ic_logout"
             android:drawableTint="@color/colorWhite"
             android:gravity="right"
@@ -97,12 +97,14 @@
 
 
     <RelativeLayout
+        android:padding="@dimen/dimension5dp"
         android:id="@+id/reldt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtschool"
+        android:gravity="center_horizontal"
         android:background="@color/colorPrimaryDark"
-        android:gravity="center_horizontal">
+        >
 
         <TextView
             android:id="@+id/txtfrom"
@@ -138,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimension10dp"
+            android:layout_marginLeft="@dimen/dimension5dp"
             android:layout_marginBottom="@dimen/dimension5dp"
             android:layout_toRightOf="@+id/txtfromshow"
             android:padding="@dimen/dimension5dp"
@@ -154,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/dimension5dp"
-            android:layout_marginRight="@dimen/dimension10dp"
+            android:layout_marginRight="@dimen/dimension5dp"
             android:layout_marginBottom="@dimen/dimension5dp"
             android:layout_toRightOf="@+id/txtto"
             android:background="@color/colorWhite"
@@ -166,20 +168,21 @@
             android:textStyle="bold" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/txtreset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/dimension5dp"
             android:layout_marginBottom="@dimen/dimension5dp"
-            android:layout_toRightOf="@+id/txttoshow"
-            android:background="@color/color2"
+            android:layout_alignParentRight="true"
+            android:background="@color/color3"
             android:padding="@dimen/dimension5dp"
             android:singleLine="true"
             android:text="Search"
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/dimension10dp"
+            android:textSize="@dimen/dimension15dp"
             android:textStyle="bold" />
     </RelativeLayout>
 

@@ -91,6 +91,34 @@ public class Data {
 
     String aqiDateTime = "";
 
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getAlert() {
+        return alert;
+    }
+
+    public void setAlert(String alert) {
+        this.alert = alert;
+    }
+
+    String datetime="";
+    String color="";
+    String alert="";
+
     public boolean isIs_open() {
         return is_open;
     }

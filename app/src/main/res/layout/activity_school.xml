@@ -14,7 +14,7 @@
         android:padding="@dimen/dimension3dp">
 
         <ImageView
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:id="@+id/imgBack"
             android:layout_width="@dimen/dimension30dp"
@@ -70,7 +70,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/dimension15dp"
+            android:layout_marginRight="@dimen/dimension10dp"
             android:drawableRight="@drawable/ic_logout"
             android:drawableTint="@color/colorWhite"
             android:gravity="right"

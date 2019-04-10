@@ -1,6 +1,7 @@
 package com.example.quagnitia.messaging_app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.quagnitia.messaging_app.Model.Data;
@@ -67,13 +69,15 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * Main list's content ViewHolder
      */
     protected class MovieVH extends RecyclerView.ViewHolder {
-        TextView txtdate;
-        WebView txtmsg, txtmsgdetail;
+        TextView txtdate, txtmsg;
+        WebView txtmsgdetail;
         ImageView imgarrow;
         LinearLayout lindetail;
+        RelativeLayout relhead;
 
         public MovieVH(View convertView) {
             super(convertView);
+            relhead = convertView.findViewById(R.id.relhead);
             txtmsgdetail = convertView.findViewById(R.id.txtmsgdetail);
             txtdate = convertView.findViewById(R.id.txtdate);
             txtmsg = convertView.findViewById(R.id.txtmsg);
@@ -99,17 +103,22 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 try {
                     final MessageAdaptor.MovieVH holders = (MessageAdaptor.MovieVH)holder;
 
-                    holders.txtdate.setText(activePickupList.get(position).getAqiDateTime());
-                    holders.txtmsg.loadData(activePickupList.get(position).getMessageName(), "text/html", "utf-8");
-                    holders.txtmsgdetail.loadData(activePickupList.get(position).getMessage(), "text/html", "utf-8");
+                    holders.txtdate.setText(activePickupList.get(position).getDatetime());
+                    holders.txtmsg.setText(activePickupList.get(position).getAlert());
+                    holders.txtmsgdetail.loadData(activePickupList.get(position).getBody(), "text/html", "utf-8");
 
-//                if (activePickupList.get(position).isIs_open()) {
-//                    holders.imgarrow.setImageResource(R.drawable.dropup);
-//                    holders.lindetail.setVisibility(View.VISIBLE);
-//                } else {
-//                    holders.lindetail.setVisibility(View.GONE);
-//                    holders.imgarrow.setImageResource(R.drawable.drop_down);
-//                }
+                    if (activePickupList.get(position).isIs_open()) {
+                        holders.imgarrow.setImageResource(R.drawable.dropup);
+                        holders.lindetail.setVisibility(View.VISIBLE);
+                    } else {
+                        holders.lindetail.setVisibility(View.GONE);
+                        holders.imgarrow.setImageResource(R.drawable.drop_down);
+                    }
+                    if (activePickupList.get(position).getColor() != null && !activePickupList.get(position).getColor().isEmpty()) {
+                        int red = Color.parseColor("" + activePickupList.get(position).getColor());
+                        holders.relhead.setBackgroundColor(red);
+
+                    }
 
                     //nikita
                     holders.imgarrow.setOnClickListener(new View.OnClickListener() {
@@ -120,15 +129,20 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 holders.lindetail.setVisibility(View.GONE);
                                 activePickupList.get(position).setIs_open(false);
                             } else {
+                                for (int i = 0; i < activePickupList.size(); i++) {
+                                    if (i != position) {
+                                        activePickupList.get(i).setIs_open(false);
+                                    }
+                                }
                                 holders.lindetail.setVisibility(View.VISIBLE);
                                 holders.imgarrow.setImageResource(R.drawable.dropup);
                                 activePickupList.get(position).setIs_open(true);
                             }
-//                        notifyDataSetChanged();
+                            notifyDataSetChanged();
                         }
                     });
 
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
