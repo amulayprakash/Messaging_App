@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i("@Rahul", "LoginResp: " + response);
                 UserResponse userResponse = response.body();
                 if (userResponse != null) {
-                    if (userResponse.getError().equals("0")) {
+                    if (response.code() == 200) {// success
                         // preferences.setLOGIN(true);
                         Toast.makeText(MainActivity.this, "Login Successfull..!!!", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -150,12 +150,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(i);
                         clearData();
                         finish();
-                    } else if (userResponse.getError().equalsIgnoreCase("1")) {
+                    } else {
                         Toast.makeText(MainActivity.this, "Login Failed..!!!", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "Please register your account", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Login Failed..!!!", Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }

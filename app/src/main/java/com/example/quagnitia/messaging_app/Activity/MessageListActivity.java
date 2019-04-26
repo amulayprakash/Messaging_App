@@ -486,10 +486,10 @@ public class MessageListActivity
                         Log.i("@nikita", "Resp" + response);
                         pd.dismiss();
                         if (response.code() == 200) {// success
-                            if (response.body() != null && response.body().getError().equals("0") && response.body().getIsSessionValid().equalsIgnoreCase("true")) {
-                                if (!response.body().getMessage().isEmpty()) {
-                                    Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                            if (response.body() != null  && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
+//                                if (!response.body().getMessage().isEmpty()) {
+//                                    Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                                }
                                 relLoad.setVisibility(View.GONE);
 
                                 pickups = response.body().getText();
@@ -526,11 +526,11 @@ public class MessageListActivity
                                 }
 
 
-                            } else if (response.body() != null && response.body().getError().equals("1")) {
+                            } else if (response.body() != null ) {//&& response.body().getError().equals("1")
                                 if(response.body().getIsSessionValid().equalsIgnoreCase("false")){
-                                    if (!response.body().getMessage().isEmpty()) {
-                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
+//                                    if (!response.body().getMessage().isEmpty()) {
+                                        Toast.makeText(MessageListActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
+//                                    }
                                     new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
                                     Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
                                     newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -538,9 +538,9 @@ public class MessageListActivity
                                     startActivity(newIntent);
                                     finish();
                                 }else {
-                                    if (!response.body().getMessage().isEmpty()) {
-                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
+//                                    if (!response.body().getMessage().isEmpty()) {
+//                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                                    }
                                     if (!activepicupList.isEmpty()) {
                                         setData();
                                     }
@@ -555,10 +555,10 @@ public class MessageListActivity
                                     if (!activepicupList.isEmpty()) {
                                         setData();
                                     }
-                                    Toast.makeText(MessageListActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(MessageListActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    Toast.makeText(MessageListActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MessageListActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
                                     new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
                                     Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
                                     newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

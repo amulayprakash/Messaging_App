@@ -223,10 +223,10 @@ public class SchoolActivity extends AppCompatActivity {
                     Log.i("@nikita", "Resp" + response);
                     pd.dismiss();
                     if (response.code() == 200) {// success
-                        if (response.body() != null && response.body().getError().equals("0") && response.body().getIsSessionValid().equalsIgnoreCase("true")) {
-                            if (!response.body().getMessage().isEmpty()) {
-                                Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                        if (response.body() != null  && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
+//                            if (!response.body().getMessage().isEmpty()) {
+//                                Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
                             relLoad.setVisibility(View.GONE);
 
                             pickups = response.body().getText();
@@ -260,11 +260,11 @@ public class SchoolActivity extends AppCompatActivity {
                                 }
 
                             }
-                        } else if (response.body() != null && response.body().getError().equals("1")) {
+                        } else if (response.body() != null ) {//&& response.body().getError().equals("1")
                             if (response.body().getIsSessionValid().equalsIgnoreCase("false")) {
-                                if (!response.body().getMessage().isEmpty()) {
-                                    Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+//                                if (!response.body().getMessage().isEmpty()) {
+                                    Toast.makeText(SchoolActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
+//                                }
                                 new com.example.quagnitia.messaging_app.Storage.Preferences(SchoolActivity.this).clearPreferences();
                                 Intent newIntent = new Intent(SchoolActivity.this, MainActivity.class);
                                 newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -288,9 +288,9 @@ public class SchoolActivity extends AppCompatActivity {
                                 if (!activepicupList.isEmpty()) {
                                     setData();
                                 }
-                                Toast.makeText(SchoolActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SchoolActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(SchoolActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SchoolActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
                                 new com.example.quagnitia.messaging_app.Storage.Preferences(SchoolActivity.this).clearPreferences();
                                 Intent newIntent = new Intent(SchoolActivity.this, MainActivity.class);
                                 newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

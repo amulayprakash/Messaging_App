@@ -31,8 +31,8 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
     ImageView imgBack;
     RelativeLayout rlForgetMain;
     EditText etEmail;
-    TextView txtResetPassword,txtCancel,txtLogin;
-    Context context=this;
+    TextView txtResetPassword, txtCancel, txtLogin;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +54,12 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
     }
 
     private void init() {
-        imgBack=findViewById(R.id.imgBack);
-        rlForgetMain=findViewById(R.id.rlForgetMain);
-        etEmail=findViewById(R.id.etEmail);
-        txtCancel=findViewById(R.id.txtCancel);
-        txtResetPassword=findViewById(R.id.txtResetPassword);
-        txtLogin=findViewById(R.id.txtLogin);
+        imgBack = findViewById(R.id.imgBack);
+        rlForgetMain = findViewById(R.id.rlForgetMain);
+        etEmail = findViewById(R.id.etEmail);
+        txtCancel = findViewById(R.id.txtCancel);
+        txtResetPassword = findViewById(R.id.txtResetPassword);
+        txtLogin = findViewById(R.id.txtLogin);
 
     }
 
@@ -70,16 +70,15 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch(view.getId())
-        {
+        switch (view.getId()) {
             case R.id.rlForgetMain:
                 hideSoftKeyboard();
                 break;
             case R.id.etEmail:
-                 validation();
+                validation();
                 break;
             case R.id.txtCancel:
-                 finish();
+                finish();
                 break;
             case R.id.imgBack:
                 finish();
@@ -93,7 +92,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                         //   Toast.makeText(context, "Validation for Registration successfull..!!", Toast.LENGTH_SHORT).show();
                         callForgetPass();
                     } else {
-                        Toast.makeText(context, getResources().getString(R.string.nointernetconnection) , LENGTH_SHORT).show();
+                        Toast.makeText(context, getResources().getString(R.string.nointernetconnection), LENGTH_SHORT).show();
                     }
                 }
 
@@ -126,15 +125,14 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                             clearData();
                         }
                     }
-                    if (response.body() != null && response.body().getError().equals("0")) {
+                    if (response.body() != null && response.code() == 200) {
 
-                        Toast.makeText(ForgetPassword.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        // finish();
-                    } else if (response.body().getError().equals("1")) {
-                        Toast.makeText(ForgetPassword.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetPassword.this, "Password reset link sent on mail.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(ForgetPassword.this, "Falied...", Toast.LENGTH_SHORT).show();
                     }
-                    Log.v("@RESPONSE", response.body().getError());
-                    Log.v("@RESPONSE", response.body().getMessage());
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     Toast.makeText(ForgetPassword.this, getResources().getString(R.string.severNotResponding) + "", LENGTH_SHORT).show();
@@ -161,12 +159,10 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
         if (etEmail.getText().toString().trim().equals("")) {
             Toast.makeText(context, "Please enter email", Toast.LENGTH_SHORT).show();
             etEmail.setError("Enter email");
-        }
-        else if (!etEmail.getText().toString().trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+        } else if (!etEmail.getText().toString().trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
             Toast.makeText(context, "Please enter valid email", Toast.LENGTH_SHORT).show();
             etEmail.setError("Enter valid email");
-        }
-        else
+        } else
             flag = true;
 
 
