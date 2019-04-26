@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
+import com.example.quagnitia.messaging_app.Activity.SchoolActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -37,7 +38,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         if (pref.isLogin()) {
 //            if (!pref.getString("UT").equalsIgnoreCase("admin")) {
 
-                try {
+            try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
 //                    JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
@@ -45,10 +46,10 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //                    ArrayList<String> ar = pref.getListString("SCH");
 //                    ar.add()
 //                    pref.putListString();
-                    showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
+                showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
-                    pref.setBadgeCount(1);
-                    ShortcutBadger.applyCount(this, 1);
+                pref.setBadgeCount(1);
+                ShortcutBadger.applyCount(this, 1);
 //                    ShortcutBadger.with(getApplicationContext()).count(badgeCount); //for 1.1.3
 //                    Intent in = new Intent(this, MessageListActivity.class);
 //                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -57,16 +58,16 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
 //                AlarmLogTable.insertLogData("Step 3: In fun to open Ok activity", remoteMessage.getNotification().getTitle().toString());
 
-                } catch (Exception e) {
+            } catch (Exception e) {
 //                AlarmLogTable.insertLogData("Error in fcm fun", "try catch data parsing");
 
-                    e.printStackTrace();
+                e.printStackTrace();
 //                showNoti("Text", "New status!");
 //                Intent in = new Intent(this, WelcomeActivity.class);
 //                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(in);
-                }
             }
+        }
 //        }
     }
 
@@ -76,9 +77,14 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        Intent i = new Intent("com.quagnitia.zapfin.RECEIVE_BADGES").putExtra("some_msg", "NEW NOTIFICATION");
 //        this.sendBroadcast(i);//nikita
 
-        String messageBody = Html.fromHtml(msg).toString().replace("\n"," ");
-        Intent intent = new Intent(this, MessageListActivity.class);
+        String messageBody = Html.fromHtml(msg).toString().replace("\n", " ");
+        Intent intent;
 
+        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+            intent = new Intent(this, MessageListActivity.class);
+        } else {
+            intent = new Intent(this, SchoolActivity.class);
+        }
         //nikita
         intent.setAction(UUID.randomUUID().toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); // Intent.FLAG_ACTIVITY_SINGLE_TOP or
@@ -108,17 +114,17 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 
 
         NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
 //        notificationManager.notify(reqid++ /* ID of notification */, notificationBuilder.build());
 
         NotificationManager mNotificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
             if (notificationSoundUri != null) {
                 // Changing Default mode of notification
-               notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
                 // Creating an Audio Attribute
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
