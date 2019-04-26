@@ -7,6 +7,16 @@ public class UserResponse implements Serializable {
 
     private String error = "";
 
+    public String getIsSessionValid() {
+        return isSessionValid;
+    }
+
+    public void setIsSessionValid(String isSessionValid) {
+        this.isSessionValid = isSessionValid;
+    }
+
+    private String isSessionValid="";
+
     public String getUserType() {
         return userType;
     }
@@ -23,8 +33,18 @@ public class UserResponse implements Serializable {
         this.userId = userId;
     }
 
-    private String userType="";
-    private String userId="";
+    private String userType = "";
+    private String userId = "";
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    private String sessionId = "";
 
 
     public String getError() {

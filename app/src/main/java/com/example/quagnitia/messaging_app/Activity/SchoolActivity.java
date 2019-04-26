@@ -27,6 +27,9 @@ import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -35,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SchoolActivity extends AppCompatActivity {
-    TextView txtLogOut, txtname,txttitle;
+    TextView txtLogOut, txtname, txttitle;
     RecyclerView rvlist;
     Preferences preferences;
     private boolean isLoading = false;
@@ -186,6 +189,15 @@ public class SchoolActivity extends AppCompatActivity {
         }
     }
 
+    private String getToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log and toast
+        //  Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+        String msg = "Instance ID Token: " + token;
+//        Log.v("TOKENS",token);
+        return token;
+    }
+
     private void callPickupWS(final String LoadType) {//nikita
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("loading...");
@@ -198,14 +210,10 @@ public class SchoolActivity extends AppCompatActivity {
         if (LoadType.equalsIgnoreCase("start")) {
             relLoad.setVisibility(View.GONE);
             pd.show();
-            call = apiService.getSchhollist(preferences.getAgentId(SchoolActivity.this),"1");
+            call = apiService.getSchhollist(preferences.getAgentId(SchoolActivity.this), "1", new Preferences(this).getString("SI"), getToken());
         } else {
             relLoad.setVisibility(View.VISIBLE);
-//
-//            PagingItem pagingItem = new PagingItem();
-//            pagingItem.setPage(LoadType);
-//            pagingItem.setAgentId(new Preferences(getActivity()).getAgentId(getActivity()));
-            call = apiService.getSchhollist(preferences.getAgentId(SchoolActivity.this),LoadType);
+            call = apiService.getSchhollist(preferences.getAgentId(SchoolActivity.this), LoadType, new Preferences(this).getString("SI"), getToken());
         }
         Log.i("@nikita", "Url:" + call.request().url().toString());
         call.enqueue(new Callback<UserResponse>() {
@@ -214,50 +222,82 @@ public class SchoolActivity extends AppCompatActivity {
                 try {
                     Log.i("@nikita", "Resp" + response);
                     pd.dismiss();
-                    if (response.body() != null && response.body().getError().equals("0")) {
-                        if (!response.body().getMessage().isEmpty()) {
-                            Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                        relLoad.setVisibility(View.GONE);
-
-                        pickups = response.body().getText();
-                        if (pickups.getData() == null || pickups.getData().isEmpty()) {
-                            isLastPage = true;
-                        }else {
-                            isLastPage = false;
-                        }
-                        activepicupList.addAll(pickups.getData());
-                        setData();
-
-                        //nikita
-                        if (pickups.getLast_page()!=0) {
-                            TOTAL_PAGES = pickups.getLast_page();
-                        }
-                        isLoading = false;
-                        if (LoadType.equalsIgnoreCase("start")) {
-
-                            if (currentPage <= TOTAL_PAGES) {
-//                                    notificationAdapter.addLoadingFooter();
+                    if (response.code() == 200) {// success
+                        if (response.body() != null && response.body().getError().equals("0") && response.body().getIsSessionValid().equalsIgnoreCase("true")) {
+                            if (!response.body().getMessage().isEmpty()) {
+                                Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             }
+                            relLoad.setVisibility(View.GONE);
+
+                            pickups = response.body().getText();
+                            if (pickups.getData() == null || pickups.getData().isEmpty()) {
+                                isLastPage = true;
+                            } else {
+                                isLastPage = false;
+                            }
+                            activepicupList.addAll(pickups.getData());
+                            setData();
+
+                            //nikita
+                            if (pickups.getLast_page() != 0) {
+                                TOTAL_PAGES = pickups.getLast_page();
+                            }
+                            isLoading = false;
+                            if (LoadType.equalsIgnoreCase("start")) {
+
+                                if (currentPage <= TOTAL_PAGES) {
+//                                    notificationAdapter.addLoadingFooter();
+                                }
 //                            else isLastPage = true;
 
-                        } else {
-                            if (activepicupList.size() > 11 ) {
-                                rvlist.scrollToPosition(activepicupList.size() - (10 ));
+                            } else {
+                                if (activepicupList.size() > 11) {
+                                    rvlist.scrollToPosition(activepicupList.size() - (10));
+                                }
+
+
+                                if (currentPage != TOTAL_PAGES) {
+                                }
+
                             }
-
-
-
-                            if (currentPage != TOTAL_PAGES) {
+                        } else if (response.body() != null && response.body().getError().equals("1")) {
+                            if (response.body().getIsSessionValid().equalsIgnoreCase("false")) {
+                                if (!response.body().getMessage().isEmpty()) {
+                                    Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                                new com.example.quagnitia.messaging_app.Storage.Preferences(SchoolActivity.this).clearPreferences();
+                                Intent newIntent = new Intent(SchoolActivity.this, MainActivity.class);
+                                newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(newIntent);
+                                finish();
+                            } else {
+                                if (!response.body().getMessage().isEmpty()) {
+                                    Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                                if (!activepicupList.isEmpty()) {
+                                    setData();
+                                }
                             }
-
                         }
-                    } else if (response.body() != null && response.body().getError().equals("1")) {
-                        if (!response.body().getMessage().isEmpty()) {
-                            if (!activepicupList.isEmpty()) {
-                                setData();
+                    } else if (response.code() == 401) {// invalid
+                        if (response.errorBody() != null) {
+                            JSONObject jos = new JSONObject(response.errorBody().string().trim());
+
+                            if (jos.optString("isSessionValid").equalsIgnoreCase("true")) {
+                                if (!activepicupList.isEmpty()) {
+                                    setData();
+                                }
+                                Toast.makeText(SchoolActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SchoolActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+                                new com.example.quagnitia.messaging_app.Storage.Preferences(SchoolActivity.this).clearPreferences();
+                                Intent newIntent = new Intent(SchoolActivity.this, MainActivity.class);
+                                newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(newIntent);
+                                finish();
                             }
-                            Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception ex) {

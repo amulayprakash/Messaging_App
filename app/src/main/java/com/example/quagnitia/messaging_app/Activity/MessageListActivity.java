@@ -35,6 +35,9 @@ import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
 import com.example.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,6 +131,9 @@ public class MessageListActivity
 
                 txtfromshow.setText(dateStr + "");
                 txttoshow.setText(formattedDate + "");
+
+                fromdate = txtfromshow.getText().toString();
+                todate = txttoshow.getText().toString();
 
                 SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
                 Date dateObj = curFormater.parse(dateStr);
@@ -445,12 +451,20 @@ public class MessageListActivity
         }
     }
 
+    private String getToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        // Log and toast
+        //  Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+        String msg = "Instance ID Token: " + token;
+//        Log.v("TOKENS",token);
+        return token;
+    }
+
     private void callPickupWS(final String LoadType) {//nikita
         try {
             final ProgressDialog pd = new ProgressDialog(this);
             pd.setMessage("loading...");
             pd.setCanceledOnTouchOutside(false);
-
 
             ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
 
@@ -458,15 +472,12 @@ public class MessageListActivity
             if (LoadType.equalsIgnoreCase("start")) {
                 relLoad.setVisibility(View.GONE);
                 pd.show();
-                call = apiService.getSchoolMessage(new Preferences(this).getString("schoolId"), fromdate, todate);
+                call = apiService.getSchoolMessage(preferences.getAgentId(MessageListActivity.this), null, new Preferences(this).getString("schoolId"), fromdate, todate, new Preferences(this).getString("SI"), getToken());
             } else {
                 relLoad.setVisibility(View.VISIBLE);
-//
-//            PagingItem pagingItem = new PagingItem();
-//            pagingItem.setPage(LoadType);
-//            pagingItem.setAgentId(new Preferences(getActivity()).getAgentId(getActivity()));
-                call = apiService.getSchoolMessage(new Preferences(this).getString("schoolId"), fromdate, todate);
+                call = apiService.getSchoolMessage(preferences.getAgentId(MessageListActivity.this), LoadType, new Preferences(this).getString("schoolId"), fromdate, todate, new Preferences(this).getString("SI"), getToken());
             }
+
             Log.i("@nikita", "Url:" + call.request().url().toString());
             call.enqueue(new Callback<UserResponse>() {
                 @Override
@@ -474,52 +485,87 @@ public class MessageListActivity
                     try {
                         Log.i("@nikita", "Resp" + response);
                         pd.dismiss();
-                        if (response.body() != null && response.body().getError().equals("0")) {
-                            if (!response.body().getMessage().isEmpty()) {
-                                Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                            relLoad.setVisibility(View.GONE);
+                        if (response.code() == 200) {// success
+                            if (response.body() != null && response.body().getError().equals("0") && response.body().getIsSessionValid().equalsIgnoreCase("true")) {
+                                if (!response.body().getMessage().isEmpty()) {
+                                    Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                                relLoad.setVisibility(View.GONE);
 
-                            pickups = response.body().getText();
-                            if (pickups.getData() == null || pickups.getData().isEmpty()) {
-                                isLastPage = true;
-                            } else {
-                                isLastPage = false;
-                            }
-                            int postomove = activepicupList.size();
-                            activepicupList.addAll(pickups.getData());
-                            setData();
+                                pickups = response.body().getText();
+                                if (pickups.getData() == null || pickups.getData().isEmpty()) {
+                                    isLastPage = true;
+                                } else {
+                                    isLastPage = false;
+                                }
+                                int postomove = activepicupList.size();
+                                activepicupList.addAll(pickups.getData());
+                                setData();
 
-                            //nikita
-                            if (pickups.getLast_page() != 0) {
-                                TOTAL_PAGES = pickups.getLast_page();
-                            }
-                            isLoading = false;
-                            if (LoadType.equalsIgnoreCase("start")) {
+                                //nikita
+                                if (pickups.getLast_page() != 0) {
+                                    TOTAL_PAGES = pickups.getLast_page();
+                                }
+                                isLoading = false;
+                                if (LoadType.equalsIgnoreCase("start")) {
 
-                                if (currentPage <= TOTAL_PAGES) {
+                                    if (currentPage <= TOTAL_PAGES) {
 //                                    notificationAdapter.addLoadingFooter();
-                                } else isLastPage = true;
+                                    } else isLastPage = true;
 
-                            } else {
-                                if (activepicupList.size() > 21) {
-                                    rvlist.scrollToPosition(postomove - 1);
+                                } else {
+                                    if (activepicupList.size() > 21) {
+                                        rvlist.scrollToPosition(postomove - 1);
+                                    }
+
+
+                                    if (currentPage != TOTAL_PAGES) {
+//                                    notificationAdapter.addLoadingFooter();
+                                    } else isLastPage = true;
+
                                 }
 
 
-                                if (currentPage != TOTAL_PAGES) {
-//                                    notificationAdapter.addLoadingFooter();
-                                } else isLastPage = true;
-
-                            }
-
-
-                        } else if (response.body() != null && response.body().getError().equals("1")) {
-                            if (!response.body().getMessage().isEmpty()) {
-                                if (!activepicupList.isEmpty()) {
-                                    setData();
+                            } else if (response.body() != null && response.body().getError().equals("1")) {
+                                if(response.body().getIsSessionValid().equalsIgnoreCase("false")){
+                                    if (!response.body().getMessage().isEmpty()) {
+                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                    new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
+                                    Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
+                                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(newIntent);
+                                    finish();
+                                }else {
+                                    if (!response.body().getMessage().isEmpty()) {
+                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (!activepicupList.isEmpty()) {
+                                        setData();
+                                    }
                                 }
-                                Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (response.code() == 401) {// invalid
+                            if (response.errorBody() != null) {
+                                JSONObject jos = new JSONObject(response.errorBody().string().trim());
+
+                                if (jos.optString("isSessionValid").equalsIgnoreCase("true")) {
+
+                                    if (!activepicupList.isEmpty()) {
+                                        setData();
+                                    }
+                                    Toast.makeText(MessageListActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(MessageListActivity.this, jos.optString("message"), Toast.LENGTH_SHORT).show();
+                                    new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
+                                    Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
+                                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(newIntent);
+                                    finish();
+                                }
                             }
                         }
                     } catch (Exception ex) {

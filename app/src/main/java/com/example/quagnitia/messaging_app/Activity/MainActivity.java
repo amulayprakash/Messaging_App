@@ -84,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.llLogin:
                 if (validation()) {
-                    if(!NetworkUtils.checkNetworkConnection(this)) {
+                    if (!NetworkUtils.checkNetworkConnection(this)) {
                         callLoginWS();
-                    }else{
+                    } else {
                         Toast.makeText(MainActivity.this, getResources().getString(R.string.nointernetconnection), Toast.LENGTH_SHORT).show();
                     }
 
@@ -96,9 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 hideSoftKeyboard();
                 break;
             case R.id.forget:
-                Intent forgetIntent=new Intent(context,ForgetPassword.class);
+                Intent forgetIntent = new Intent(context, ForgetPassword.class);
                 startActivity(forgetIntent);
-              //  Toast.makeText(context, R.string.inProgress, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(context, R.string.inProgress, Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -128,16 +128,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                        Toast.makeText(MainActivity.this, userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         com.example.quagnitia.messaging_app.Storage.Preferences preferences1 = new com.example.quagnitia.messaging_app.Storage.Preferences(MainActivity.this);
 
-                        if(userResponse.getUserType()!=null && !userResponse.getUserType().isEmpty()){
-                            preferences1.putString("UT",userResponse.getUserType());
+                        if (userResponse.getUserType() != null && !userResponse.getUserType().isEmpty()) {
+                            preferences1.putString("UT", userResponse.getUserType());
                         }
+                        preferences1.putString("SI", userResponse.getSessionId());//session id
                         User userlog = userResponse.getUser();
-                        if(userlog!=null){
-                            preferences1.putString("schoolId",userlog.getSchoolID());
+                        if (userlog != null) {
+                            preferences1.putString("schoolId", userlog.getSchoolID());
                             preferences1.setLogin(true);
-                            preferences1.saveAgentName(MainActivity.this,(userlog.getName()));
-                            preferences1.saveAgentId(MainActivity.this,userlog.getUserID());
-                            preferences1.saveSchool(MainActivity.this,userlog.getSchoolName());
+                            preferences1.saveAgentName(MainActivity.this, (userlog.getName()));
+                            preferences1.saveAgentId(MainActivity.this, userlog.getUserID());
+                            preferences1.saveSchool(MainActivity.this, userlog.getSchoolName());
                         }
                         String name = etEmail.getText().toString().trim();
 
@@ -199,8 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (etEmail.getText().toString().trim().equals("")) {
             Toast.makeText(context, "Please enter email", Toast.LENGTH_SHORT).show();
             etEmail.setError("Enter email");
-        }
-        else if (!etEmail.getText().toString().trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+        } else if (!etEmail.getText().toString().trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
             Toast.makeText(context, "Please enter valid email", Toast.LENGTH_SHORT).show();
             etEmail.setError("Enter valid email");
 //        } else if (etPass.getText().length() < 6) {

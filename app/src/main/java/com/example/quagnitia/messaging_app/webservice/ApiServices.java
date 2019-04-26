@@ -34,12 +34,15 @@ public interface ApiServices {
 
     @FormUrlEncoded
     @POST(ConstatntsApi.SchoolList)
-    Call<UserResponse> getSchhollist(@Field("userId") String id, @Field("page") String page);
+    Call<UserResponse> getSchhollist(@Field("userId") String id,
+                                     @Field("page") String page
+            , @Field("sessionId") String sessionId
+            , @Field("fcmTokenId") String fcmTokenId);
 
     @FormUrlEncoded
     @POST(ConstatntsApi.MessageList)
-    Call<UserResponse> getSchoolMessage(@Field("aqiSchoolID") String id, @Field("fromDate") String fromDate,
-                                        @Field("toDate") String toDate);
+    Call<UserResponse> getSchoolMessage(@Field("userId") String id,@Field("page") String page, @Field("aqiSchoolID") String scid, @Field("fromDate") String fromDate,
+                                        @Field("toDate") String toDate, @Field("sessionId") String sessionId, @Field("fcmTokenId") String fcmTokenId);
 
     @POST(ConstatntsApi.SHOWMESSAGE2)
     Call<UserResponse> showNextMessage2(@Body PagingItem pagingItem);//@Query("next_page_url") String next_page_url);

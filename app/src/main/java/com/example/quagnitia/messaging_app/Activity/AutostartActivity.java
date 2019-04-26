@@ -41,14 +41,7 @@ public class AutostartActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-//            if (!Settings.canDrawOverlays(this)) {
-//                // You don't have permission
-//                checkPermission();
-//            } else {
-//                // Do as per your logic
                 showDialogEnableAlarms();
-//            }
-
         }
 
     }

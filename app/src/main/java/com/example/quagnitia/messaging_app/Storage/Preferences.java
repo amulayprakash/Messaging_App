@@ -3,6 +3,10 @@ package com.example.quagnitia.messaging_app.Storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Preferences {
     SharedPreferences preferences;
@@ -16,6 +20,36 @@ public class Preferences {
     public static final String DOC_TYPE = "type";
     private static final String PREFS_STORE_PROFILE = "STORE_PROFILE";
   //  String username = getString(PrefConstants.USER_NAME);
+
+    /**
+     * Get parsed ArrayList of String from SharedPreferences at 'key'
+     * @param key SharedPreferences key
+     * @return ArrayList of String
+     */
+    public ArrayList<String> getListString(String key) {
+        return new ArrayList<String>(Arrays.asList(TextUtils.split(preferences.getString(key, ""), "‚‗‚")));
+    }
+
+    /**
+     * Put ArrayList of String into SharedPreferences with 'key' and save
+     * @param key SharedPreferences key
+     * @param stringList ArrayList of String to be added
+     */
+    public void putListString(String key, ArrayList<String> stringList) {
+        checkForNullKey(key);
+        String[] myStringList = stringList.toArray(new String[stringList.size()]);
+        preferences.edit().putString(key, TextUtils.join("‚‗‚", myStringList)).apply();
+    }
+
+    /**
+     * null keys would corrupt the shared pref file and make them unreadable this is a preventive measure
+
+     */
+    public void checkForNullKey(String key){
+        if (key == null){
+            throw new NullPointerException();
+        }
+    }
 
     public int getBadgeCount() {
         return preferences.getInt(BadgeCount, 0);

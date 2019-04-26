@@ -25,17 +25,10 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
-    private static final String CHANNEL_ID = "1";
+
     static int reqid;
-    //    DBHelper dbHelper;
-    int currentHour = 0, currentMin = 0, currentZone = 0;
-    boolean isCorrect = false;
-//    DBHelper dbHelper;
 
     public void onMessageReceived(RemoteMessage remoteMessage) {
-//        Log.v("GOTMSG", remoteMessage.toString());
-//        Log.v("GOTMSG", remoteMessage.getNotification().getBody().toString());
-//        Log.v("GOTMSG", remoteMessage.getData().toString());
 
         Preferences pref = new Preferences(this);
 //        dbHelper = new DBHelper(this);
@@ -47,9 +40,11 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
                 try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
-                    //               JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-                    //              showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
-
+//                    JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
+//                    showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+//                    ArrayList<String> ar = pref.getListString("SCH");
+//                    ar.add()
+//                    pref.putListString();
                     showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
                     pref.setBadgeCount(1);
