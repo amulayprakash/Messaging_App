@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
@@ -46,7 +47,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //                    ArrayList<String> ar = pref.getListString("SCH");
 //                    ar.add()
 //                    pref.putListString();
-                showNoti(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
+                sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
                 pref.setBadgeCount(1);
                 ShortcutBadger.applyCount(this, 1);
@@ -69,6 +70,53 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
             }
         }
 //        }
+    }
+
+    private void sendNotification(String title, String messageBody)
+    {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "st123");
+        Intent intent;
+
+        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+            intent = new Intent(this, MessageListActivity.class);
+        } else {
+            intent = new Intent(this, SchoolActivity.class);
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ///**For sound**/ assignmentNotification.defaults |= Notification.DEFAULT_SOUND;
+        long[] vibrate = {0, 100, 200, 300};
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText(title);
+        bigText.setBigContentTitle(messageBody);
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.drawable.aqi);
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(messageBody);
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setAutoCancel(true);
+        mBuilder.setStyle(bigText);
+        mBuilder.setShowWhen(true);
+        mBuilder.setSound(notificationSoundUri);
+        mBuilder.setVibrate(vibrate);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("st123", "st456", NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
     }
 
     private void showNoti(String title, String msg) {
@@ -98,7 +146,6 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         long[] vibrate = {0, 100, 200, 300};
         ///**For vibrate**/ assignmentNotification.vibrate = vibrate;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_btn_speak_now)
                 .setLargeIcon(bitmap)
                 .setContentTitle(title)
                 .setTicker(messageBody)
