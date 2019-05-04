@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -82,11 +81,11 @@ public class MessageListActivity
         setContentView(R.layout.activity_message_list);
         try {
             preferences = new Preferences(MessageListActivity.this);
-            final Window win = getWindow();
-            win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+//            final Window win = getWindow();
+//            win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+//                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+//            win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+//                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
             imgBack = findViewById(R.id.imgBack);
             txtreset = findViewById(R.id.txtreset);
