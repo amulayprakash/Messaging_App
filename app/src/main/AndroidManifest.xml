@@ -55,6 +55,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.SchoolActivity" />
         <activity android:name=".Activity.MessageListActivity"></activity>
+        <activity android:name=".Activity.MessageTabActivity"></activity>
     </application>
 
 </manifest>

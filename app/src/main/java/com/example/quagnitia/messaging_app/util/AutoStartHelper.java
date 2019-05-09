@@ -9,7 +9,8 @@ import android.os.Build;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Activity.AutostartActivity;
-import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
+import com.example.quagnitia.messaging_app.Activity.MessageTabActivity;
+import com.example.quagnitia.messaging_app.Activity.SchoolActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 
 import java.util.List;
@@ -121,13 +122,27 @@ public final class AutoStartHelper {
 
             default:
                 Toast.makeText(context, "Unable to locate Autostart feature on this device.", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(context, MessageListActivity.class);
-                i.putExtra("FromLogin", true);
-                i.putExtra("schoolId", new Preferences(context).getString("schoolId"));
-
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(i);
-                ((AutostartActivity)context).finish();
+                if(new Preferences(context).getString("UT").equalsIgnoreCase("admin")) {
+                    Intent i = new Intent(context, SchoolActivity.class);
+                    i.putExtra("FromLogin", true);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(i);
+                    ((AutostartActivity)context).finish();
+                }else {
+                    Intent i = new Intent(context, MessageTabActivity.class);
+                    i.putExtra("FromLogin", true);
+//                i.putExtra("schoolId",getIntent().getStringExtra("schoolId")+"");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(i);
+                    ((AutostartActivity)context).finish();
+                }
+//                Intent i = new Intent(context, MessageListActivity.class);
+//                i.putExtra("FromLogin", true);
+//                i.putExtra("schoolId", new Preferences(context).getString("schoolId"));
+//
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                context.startActivity(i);
+//                ((AutostartActivity)context).finish();
                 break;
         }
 

@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
                         Intent in = new Intent(SplashActivity.this, SchoolActivity.class);
                         startActivity(in);
                     }else {
-                        Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                        Intent in = new Intent(SplashActivity.this, MessageTabActivity.class);
                         in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
                         startActivity(in);
                     }
@@ -128,7 +128,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent in = new Intent(SplashActivity.this, SchoolActivity.class);
                     startActivity(in);
                 }else {
-                    Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                    Intent in = new Intent(SplashActivity.this, MessageTabActivity.class);
                     in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
                     startActivity(in);
                 }
@@ -175,7 +175,7 @@ public class SplashActivity extends AppCompatActivity {
                             Intent in = new Intent(SplashActivity.this, SchoolActivity.class);
                             startActivity(in);
                         }else {
-                            Intent in = new Intent(SplashActivity.this, MessageListActivity.class);
+                            Intent in = new Intent(SplashActivity.this, MessageTabActivity.class);
                             in.putExtra("schoolId",new Preferences(SplashActivity.this).getString("schoolId"));
                             startActivity(in);
                         }

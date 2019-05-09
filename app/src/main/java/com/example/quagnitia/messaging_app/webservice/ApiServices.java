@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -36,13 +37,14 @@ public interface ApiServices {
     @POST(ConstatntsApi.SchoolList)
     Call<UserResponse> getSchhollist(@Field("userId") String id,
                                      @Field("page") String page
-            , @Field("sessionId") String sessionId
+            , @Header("sessionId") String sessionId
             , @Field("fcmTokenId") String fcmTokenId);
 
     @FormUrlEncoded
     @POST(ConstatntsApi.MessageList)
-    Call<UserResponse> getSchoolMessage(@Field("userId") String id,@Field("page") String page, @Field("aqiSchoolID") String scid, @Field("fromDate") String fromDate,
-                                        @Field("toDate") String toDate, @Field("sessionId") String sessionId, @Field("fcmTokenId") String fcmTokenId);
+    Call<UserResponse> getSchoolMessage(@Field("userId") String id, @Field("page") String page, @Field("aqiSchoolID") String scid, @Field("fromDate") String fromDate,
+                                        @Field("toDate") String toDate, @Header("sessionId") String sessionId, @Field("fcmTokenId") String fcmTokenId);
+
 
     @POST(ConstatntsApi.SHOWMESSAGE2)
     Call<UserResponse> showNextMessage2(@Body PagingItem pagingItem);//@Query("next_page_url") String next_page_url);

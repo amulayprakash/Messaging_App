@@ -38,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SchoolActivity extends AppCompatActivity {
-    TextView txtLogOut, txtname, txttitle;
+    TextView txtLogOut, txtname, txttitle, txtother;
     RecyclerView rvlist;
     Preferences preferences;
     private boolean isLoading = false;
@@ -60,6 +60,7 @@ public class SchoolActivity extends AppCompatActivity {
 
         preferences = new Preferences(SchoolActivity.this);
 
+        txtother = findViewById(R.id.txtother);
         imgBack = findViewById(R.id.imgBack);
         txtLogOut = findViewById(R.id.txtLogOut);
         txtname = findViewById(R.id.txtname);
@@ -69,6 +70,14 @@ public class SchoolActivity extends AppCompatActivity {
         txtname.setText("" + preferences.getAgentName(this) + "");
         txttitle = findViewById(R.id.txttitle);
         txttitle.setText("School List");
+
+        txtother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(SchoolActivity.this, OthersMessageListActivity.class);
+                startActivity(in);
+            }
+        });
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +232,7 @@ public class SchoolActivity extends AppCompatActivity {
                     Log.i("@nikita", "Resp" + response);
                     pd.dismiss();
                     if (response.code() == 200) {// success
-                        if (response.body() != null  && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
+                        if (response.body() != null && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
 //                            if (!response.body().getMessage().isEmpty()) {
 //                                Toast.makeText(SchoolActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 //                            }
@@ -260,10 +269,10 @@ public class SchoolActivity extends AppCompatActivity {
                                 }
 
                             }
-                        } else if (response.body() != null ) {//&& response.body().getError().equals("1")
+                        } else if (response.body() != null) {//&& response.body().getError().equals("1")
                             if (response.body().getIsSessionValid().equalsIgnoreCase("false")) {
 //                                if (!response.body().getMessage().isEmpty()) {
-                                    Toast.makeText(SchoolActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SchoolActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
 //                                }
                                 new com.example.quagnitia.messaging_app.Storage.Preferences(SchoolActivity.this).clearPreferences();
                                 Intent newIntent = new Intent(SchoolActivity.this, MainActivity.class);
