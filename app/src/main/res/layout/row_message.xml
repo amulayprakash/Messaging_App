@@ -16,6 +16,7 @@
         android:padding="@dimen/dimension5dp">
 
         <TextView
+            android:singleLine="true"
             android:padding="@dimen/dimension5dp"
             android:layout_centerVertical="true"
             android:id="@+id/txtdate"

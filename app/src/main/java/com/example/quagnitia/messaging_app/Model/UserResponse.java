@@ -104,4 +104,25 @@ public class UserResponse implements Serializable {
 
     private Text text = new Text();
 
+    public int getOtherNotificationCount() {
+        return otherNotificationCount;
+    }
+
+    public void setOtherNotificationCount(int otherNotificationCount) {
+        this.otherNotificationCount = otherNotificationCount;
+    }
+
+    int otherNotificationCount=0;
+
+
+    public MessageList getMessageList() {
+        return messageList;
+    }
+
+    public void setMessageList(MessageList messageList) {
+        this.messageList = messageList;
+    }
+
+    private MessageList messageList = new MessageList();
+
 }

@@ -25,11 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Model.Data;
-import com.example.quagnitia.messaging_app.Model.Text;
+import com.example.quagnitia.messaging_app.Model.MessageList;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.example.quagnitia.messaging_app.adapter.MessageAdaptor;
+import com.example.quagnitia.messaging_app.adapter.OtherMessageAdaptor;
 import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
@@ -58,7 +59,7 @@ public class OthersMessageListActivity
     private int currentPage = PAGE_START;
     private static final int PAGE_START = 0;
     LinearLayoutManager linearLayoutManager;
-    Text pickups;
+    MessageList pickups;
     ArrayList<Data> activepicupList = new ArrayList<>();
     RelativeLayout relLoad;
     int loadType = 0;
@@ -101,7 +102,7 @@ public class OthersMessageListActivity
             txtschool.setText("" + preferences.getSchool(this) + "");
             txtschool.setVisibility(View.GONE);
             txttitle = findViewById(R.id.txttitle);
-            txttitle.setText("Message List");
+            txttitle.setText("Other Messages");
 
             if (new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
                 imgBack.setVisibility(View.VISIBLE);
@@ -492,7 +493,7 @@ public class OthersMessageListActivity
 //                                }
                                 relLoad.setVisibility(View.GONE);
 
-                                pickups = response.body().getText();
+                                pickups = response.body().getMessageList();
                                 if (pickups.getData() == null || pickups.getData().isEmpty()) {
                                     isLastPage = true;
                                 } else {
@@ -591,7 +592,7 @@ public class OthersMessageListActivity
 
     private void setData() {
         try {
-            MessageAdaptor sd = new MessageAdaptor(this, activepicupList);
+            OtherMessageAdaptor sd = new OtherMessageAdaptor(this, activepicupList);
             rvlist.setAdapter(sd);
         } catch (Exception ex) {
             ex.printStackTrace();

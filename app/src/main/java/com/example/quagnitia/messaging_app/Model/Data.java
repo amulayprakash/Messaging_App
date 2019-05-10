@@ -91,6 +91,16 @@ public class Data {
 
     String aqiDateTime = "";
 
+    public int getNotificationCount() {
+        return notificationCount;
+    }
+
+    public void setNotificationCount(int notificationCount) {
+        this.notificationCount = notificationCount;
+    }
+
+    int notificationCount=0;
+
     public String getDatetime() {
         return datetime;
     }

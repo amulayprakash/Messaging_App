@@ -14,15 +14,15 @@
         android:padding="@dimen/dimension3dp">
 
         <ImageView
-            android:visibility="gone"
-            android:layout_centerVertical="true"
             android:id="@+id/imgBack"
             android:layout_width="@dimen/dimension30dp"
             android:layout_height="@dimen/dimension30dp"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dimension5dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/colorWhite" />
+            android:tint="@color/colorWhite"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imgico"
@@ -80,26 +80,54 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:background="@drawable/bgcorner2"
-        android:layout_margin="@dimen/dimension10dp"
-        android:padding="@dimen/dimension10dp"
-        android:gravity="center"
-        android:id="@+id/txtother"
-        android:textSize="@dimen/dimension15dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"
-        android:textAllCaps="true"
-        android:layout_below="@+id/head"
+    <RelativeLayout
+        android:id="@+id/relother"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Other Messages"/>
+        android:layout_below="@+id/head"
+        android:layout_marginRight="@dimen/dimension5dp"
+        android:layout_marginLeft="@dimen/dimension5dp"
+        android:layout_marginTop="@dimen/dimension10dp"
+        android:layout_marginBottom="@dimen/dimension10dp"
+        android:background="@drawable/bgcorner2">
+
+        <TextView
+            android:id="@+id/txtother"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/txtbadge"
+            android:gravity="center"
+            android:padding="@dimen/dimension10dp"
+            android:text="Other Messages"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txtbadge"
+            android:textSize="@dimen/dimension10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/dimension8dp"
+            android:background="@drawable/bgcorner3"
+            android:layout_margin="@dimen/dimension10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:singleLine="true"
+            android:layout_width="@dimen/dimension35dp"
+            android:layout_height="@dimen/dimension35dp"
+            android:gravity="center"
+            android:text="" />
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/txtother"
+        android:layout_below="@+id/relother"
         android:paddingLeft="@dimen/dimension5dp"
         android:paddingTop="@dimen/dimension5dp"
         android:paddingRight="@dimen/dimension5dp"></android.support.v7.widget.RecyclerView>

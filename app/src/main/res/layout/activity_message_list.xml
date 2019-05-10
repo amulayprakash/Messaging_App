@@ -97,6 +97,7 @@
 
 
     <RelativeLayout
+        android:layout_marginTop="@dimen/dimension5dp"
         android:padding="@dimen/dimension5dp"
         android:id="@+id/reldt"
         android:layout_width="match_parent"

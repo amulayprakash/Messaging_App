@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtJobName"
-        android:textStyle="bold"
-        android:textSize="@dimen/dimension20dp"
-        android:padding="@dimen/dimension10dp"
-        android:gravity="center"
-        android:layout_gravity="center"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="school"/>
+        >
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/txtJobName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimension10dp"
+            android:gravity="center"
+            android:text="school"
+            android:layout_toLeftOf="@+id/txtbadge2"
+            android:textSize="@dimen/dimension20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:visibility="visible"
+            android:id="@+id/txtbadge2"
+            android:textSize="@dimen/dimension10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/dimension8dp"
+            android:background="@drawable/bgcorner3"
+            android:layout_margin="@dimen/dimension10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:singleLine="true"
+            android:layout_width="@dimen/dimension35dp"
+            android:layout_height="@dimen/dimension35dp"
+            android:gravity="center"
+            android:text="" />
+    </RelativeLayout>
+
     <View
-        android:background="@color/colorDarkGray"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="@color/colorDarkGray" />
 </LinearLayout>

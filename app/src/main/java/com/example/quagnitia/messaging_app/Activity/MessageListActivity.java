@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Model.Data;
-import com.example.quagnitia.messaging_app.Model.Text;
+import com.example.quagnitia.messaging_app.Model.MessageList;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
@@ -58,7 +58,7 @@ public class MessageListActivity
     private int currentPage = PAGE_START;
     private static final int PAGE_START = 0;
     LinearLayoutManager linearLayoutManager;
-    Text pickups;
+    MessageList pickups;
     ArrayList<Data> activepicupList = new ArrayList<>();
     RelativeLayout relLoad;
     int loadType = 0;
@@ -491,7 +491,7 @@ public class MessageListActivity
 //                                }
                                 relLoad.setVisibility(View.GONE);
 
-                                pickups = response.body().getText();
+                                pickups = response.body().getMessageList();
                                 if (pickups.getData() == null || pickups.getData().isEmpty()) {
                                     isLastPage = true;
                                 } else {

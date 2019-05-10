@@ -116,6 +116,7 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
 
         txttitle = findViewById(R.id.txttitle);
         txttitle.setText("Message List");
+        txtname.setText("" + new Preferences(this).getAgentName(this) + "");
 
         if (new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
             imgBack.setVisibility(View.VISIBLE);

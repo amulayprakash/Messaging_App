@@ -38,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SchoolActivity extends AppCompatActivity {
-    TextView txtLogOut, txtname, txttitle, txtother;
+    TextView txtLogOut, txtname, txttitle, txtother, txtbadge;
     RecyclerView rvlist;
     Preferences preferences;
     private boolean isLoading = false;
@@ -60,6 +60,7 @@ public class SchoolActivity extends AppCompatActivity {
 
         preferences = new Preferences(SchoolActivity.this);
 
+        txtbadge = findViewById(R.id.txtbadge);
         txtother = findViewById(R.id.txtother);
         imgBack = findViewById(R.id.imgBack);
         txtLogOut = findViewById(R.id.txtLogOut);
@@ -163,6 +164,17 @@ public class SchoolActivity extends AppCompatActivity {
                 return isLoading;
             }
         });
+//        loadFirstPage();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activepicupList.clear();
+        setData();
+        isLastPage = false;
+        isLoading = false;
+        loadType = 0;
         loadFirstPage();
     }
 
@@ -246,6 +258,13 @@ public class SchoolActivity extends AppCompatActivity {
                             }
                             activepicupList.addAll(pickups.getData());
                             setData();
+
+                            if (response.body().getOtherNotificationCount() > 0) {
+                                txtbadge.setVisibility(View.VISIBLE);
+                                txtbadge.setText(response.body().getOtherNotificationCount());
+                            } else {
+                                txtbadge.setVisibility(View.GONE);
+                            }
 
                             //nikita
                             if (pickups.getLast_page() != 0) {

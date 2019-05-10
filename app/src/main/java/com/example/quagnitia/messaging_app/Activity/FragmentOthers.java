@@ -22,11 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quagnitia.messaging_app.Model.Data;
-import com.example.quagnitia.messaging_app.Model.Text;
+import com.example.quagnitia.messaging_app.Model.MessageList;
 import com.example.quagnitia.messaging_app.Model.UserResponse;
 import com.example.quagnitia.messaging_app.R;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.example.quagnitia.messaging_app.adapter.MessageAdaptor;
+import com.example.quagnitia.messaging_app.adapter.OtherMessageAdaptor;
 import com.example.quagnitia.messaging_app.util.NetworkUtils;
 import com.example.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.example.quagnitia.messaging_app.webservice.ApiServices;
@@ -55,7 +56,7 @@ public class FragmentOthers extends Fragment {
     private int currentPage = PAGE_START;
     private static final int PAGE_START = 0;
     LinearLayoutManager linearLayoutManager;
-    Text pickups;
+    MessageList pickups;
     ArrayList<Data> activepicupList = new ArrayList<>();
     RelativeLayout relLoad;
     int loadType = 0;
@@ -413,7 +414,7 @@ public class FragmentOthers extends Fragment {
 //                                }
                                 relLoad.setVisibility(View.GONE);
 
-                                pickups = response.body().getText();
+                                pickups = response.body().getMessageList();
                                 if (pickups.getData() == null || pickups.getData().isEmpty()) {
                                     isLastPage = true;
                                 } else {
@@ -512,7 +513,7 @@ public class FragmentOthers extends Fragment {
 
     private void setData() {
         try {
-            MessageAdaptor sd = new MessageAdaptor(getActivity(), activepicupList);
+            OtherMessageAdaptor sd = new OtherMessageAdaptor(getActivity(), activepicupList);
             rvlist.setAdapter(sd);
         } catch (Exception ex) {
             ex.printStackTrace();

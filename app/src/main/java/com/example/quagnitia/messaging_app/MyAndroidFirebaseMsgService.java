@@ -16,10 +16,14 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
+import com.example.quagnitia.messaging_app.Activity.MessageTabActivity;
+import com.example.quagnitia.messaging_app.Activity.OthersMessageListActivity;
 import com.example.quagnitia.messaging_app.Activity.SchoolActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -42,13 +46,18 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
             try {
 //                AlarmLogTable.insertLogData("Step 1: FCM received", remoteMessage.getNotification().getTitle().toString());
 
-//                    JSONObject jsonobj = new JSONObject(remoteMessage.getNotification().getBody().toString());
-//                    showNoti(jsonobj.optString("subject"), jsonobj.optString("body"));
+
+//                    showNoti(jsonobj.optString("schoolID"), jsonobj.optString("body"));
 //                    ArrayList<String> ar = pref.getListString("SCH");
 //                    ar.add()
 //                    pref.putListString();
-                sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
 
+                if (pref.getString("UT").equalsIgnoreCase("admin")) {
+                    JSONObject jsonobj = new JSONObject(remoteMessage.getData().toString());
+                    sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString(), jsonobj.optString("schoolID"));
+                } else {
+                    sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
+                }
                 pref.setBadgeCount(1);
                 ShortcutBadger.applyCount(this, 1);
 //                    ShortcutBadger.with(getApplicationContext()).count(badgeCount); //for 1.1.3
@@ -72,13 +81,58 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //        }
     }
 
-    private void sendNotification(String title, String messageBody)
-    {
+    private void sendNotification(String title, String messageBody) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "st123");
         Intent intent;
 
-        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
-            intent = new Intent(this, MessageListActivity.class);
+//        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+            intent = new Intent(this, MessageTabActivity.class);
+//        } else {
+//            intent = new Intent(this, SchoolActivity.class);
+//        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ///**For sound**/ assignmentNotification.defaults |= Notification.DEFAULT_SOUND;
+        long[] vibrate = {0, 100, 200, 300};
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText(title);
+        bigText.setBigContentTitle(messageBody);
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.drawable.aqi);
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(messageBody);
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setAutoCancel(true);
+        mBuilder.setStyle(bigText);
+        mBuilder.setShowWhen(true);
+        mBuilder.setSound(notificationSoundUri);
+        mBuilder.setVibrate(vibrate);
+
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("st123", "st456", NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+
+    private void sendNotification(String title, String messageBody, String school) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "st123");
+        Intent intent;
+
+        if (school == null || school.isEmpty() || school.equals("0")) {
+            intent = new Intent(this, OthersMessageListActivity.class);
         } else {
             intent = new Intent(this, SchoolActivity.class);
         }
@@ -108,10 +162,9 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         mBuilder.setSound(notificationSoundUri);
         mBuilder.setVibrate(vibrate);
 
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("st123", "st456", NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(channel);
         }
@@ -128,11 +181,11 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         String messageBody = Html.fromHtml(msg).toString().replace("\n", " ");
         Intent intent;
 
-        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
-            intent = new Intent(this, MessageListActivity.class);
-        } else {
-            intent = new Intent(this, SchoolActivity.class);
-        }
+//        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+        intent = new Intent(this, MessageListActivity.class);
+//        } else {
+//            intent = new Intent(this, SchoolActivity.class);
+//        }
         //nikita
         intent.setAction(UUID.randomUUID().toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); // Intent.FLAG_ACTIVITY_SINGLE_TOP or

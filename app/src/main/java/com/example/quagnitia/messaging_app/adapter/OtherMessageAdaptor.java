@@ -1,23 +1,25 @@
 package com.example.quagnitia.messaging_app.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
 import com.example.quagnitia.messaging_app.Model.Data;
 import com.example.quagnitia.messaging_app.R;
-import com.example.quagnitia.messaging_app.Storage.Preferences;
 
 import java.util.ArrayList;
 
 //nikita- new changes for pagination
-public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OtherMessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Data> activePickupList;
     Context context;
     LayoutInflater lf;
@@ -26,7 +28,7 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int LOADING = 1;
     private boolean isLoadingAdded = false;
 
-    public ActiveAdaptor(Context activity, ArrayList<Data> activePickupList) {
+    public OtherMessageAdaptor(Context activity, ArrayList<Data> activePickupList) {
         this.context = activity;
         this.activePickupList = activePickupList;
         lf = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -47,10 +49,9 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case ITEM:
                 viewHolder = getViewHolder(parent, inflater);
                 break;
-
             case LOADING:
-                View v1 = inflater.inflate(R.layout.row_active, parent, false);
-                viewHolder = new ActiveAdaptor.LoadingVH(v1);
+                View v2 = inflater.inflate(R.layout.row_active, parent, false);
+                viewHolder = new OtherMessageAdaptor.LoadingVH(v2);
                 break;
         }
         return viewHolder;
@@ -59,8 +60,8 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     private RecyclerView.ViewHolder getViewHolder(ViewGroup parent, LayoutInflater inflater) {
         RecyclerView.ViewHolder viewHolder;
-        View v1 = inflater.inflate(R.layout.row_active, parent, false);
-        viewHolder = new ActiveAdaptor.MovieVH(v1);
+        View v1 = inflater.inflate(R.layout.row_message, parent, false);
+        viewHolder = new OtherMessageAdaptor.MovieVH(v1);
         return viewHolder;
     }
 
@@ -68,12 +69,20 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * Main list's content ViewHolder
      */
     protected class MovieVH extends RecyclerView.ViewHolder {
-        TextView txtJobName,txtbadge;
+        TextView txtdate, txtmsg;
+        WebView txtmsgdetail;
+        ImageView imgarrow;
+        LinearLayout lindetail;
+        RelativeLayout relhead;
 
         public MovieVH(View convertView) {
             super(convertView);
-            txtbadge = convertView.findViewById(R.id.txtbadge2);
-            txtJobName = convertView.findViewById(R.id.txtJobName);
+            relhead = convertView.findViewById(R.id.relhead);
+            txtmsgdetail = convertView.findViewById(R.id.txtmsgdetail);
+            txtdate = convertView.findViewById(R.id.txtdate);
+            txtmsg = convertView.findViewById(R.id.txtmsg);
+            imgarrow = convertView.findViewById(R.id.imgarrow);
+            lindetail = convertView.findViewById(R.id.lindetail);
         }
     }
 
@@ -91,28 +100,51 @@ public class ActiveAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         switch (getItemViewType(position)) {
             case ITEM:
-                ActiveAdaptor.MovieVH holders = (ActiveAdaptor.MovieVH)holder;
+                try {
+                    final OtherMessageAdaptor.MovieVH holders = (OtherMessageAdaptor.MovieVH)holder;
 
-                holders.txtJobName.setText(activePickupList.get(position).getSchoolName());
-                if(activePickupList.get(position).getNotificationCount()>0) {
-                    holders.txtbadge.setText(""+activePickupList.get(position).getNotificationCount());
-                    holders.txtbadge.setVisibility(View.VISIBLE);
-                }else{
-                    holders.txtbadge.setVisibility(View.GONE);
-                }
-                //nikita
-                holders.txtJobName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new Preferences(context).saveSchool(context, activePickupList.get(position).getSchoolName());
-                        Intent in = new Intent(context, MessageListActivity.class);
-                        new Preferences(context).putString("schoolId", activePickupList.get(position).getAqiSchoolID());
-//                        in.putExtra("schoolId",activePickupList.get(position).getAqiSchoolID());
-                        context.startActivity(in);
+                    holders.txtdate.setText(activePickupList.get(position).getSubject());
+                    holders.txtmsg.setText("");
+                    holders.txtmsgdetail.loadData(activePickupList.get(position).getBody(), "text/html", "utf-8");
+
+                    if (activePickupList.get(position).isIs_open()) {
+                        holders.imgarrow.setImageResource(R.drawable.dropup);
+                        holders.lindetail.setVisibility(View.VISIBLE);
+                    } else {
+                        holders.lindetail.setVisibility(View.GONE);
+                        holders.imgarrow.setImageResource(R.drawable.drop_down);
                     }
-                });
+                    if (activePickupList.get(position).getColor() != null && !activePickupList.get(position).getColor().isEmpty()) {
+                        int red = Color.parseColor("" + activePickupList.get(position).getColor());
+                        holders.relhead.setBackgroundColor(red);
 
+                    }
 
+                    //nikita
+                    holders.imgarrow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (activePickupList.get(position).isIs_open()) {
+                                holders.imgarrow.setImageResource(R.drawable.drop_down);
+                                holders.lindetail.setVisibility(View.GONE);
+                                activePickupList.get(position).setIs_open(false);
+                            } else {
+                                for (int i = 0; i < activePickupList.size(); i++) {
+                                    if (i != position) {
+                                        activePickupList.get(i).setIs_open(false);
+                                    }
+                                }
+                                holders.lindetail.setVisibility(View.VISIBLE);
+                                holders.imgarrow.setImageResource(R.drawable.dropup);
+                                activePickupList.get(position).setIs_open(true);
+                            }
+                            notifyDataSetChanged();
+                        }
+                    });
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 break;
             case LOADING:
 //                Do nothing
