@@ -42,8 +42,8 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
     ImageView imgBack;
     public static boolean isLoad = false;
     BroadcastReceiver br;
-
-    TextView txttitle,txtLogOut, txtname;
+    int load = 0;
+    TextView txttitle, txtLogOut, txtname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,16 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
             }
         });
 */
+
+        if (getIntent().hasExtra("IS_OTHER") && getIntent().getBooleanExtra("IS_OTHER", false)) {
+            if (load == 0) {
+                load = 1;
+
+                mViewPager.setCurrentItem(1, true);
+
+
+            }
+        }
     }
 
     private void initListener() {

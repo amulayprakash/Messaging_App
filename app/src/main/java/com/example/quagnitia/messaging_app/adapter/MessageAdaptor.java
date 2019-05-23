@@ -121,7 +121,7 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
 
                     //nikita
-                    holders.imgarrow.setOnClickListener(new View.OnClickListener() {
+                    holders.relhead.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (activePickupList.get(position).isIs_open()) {

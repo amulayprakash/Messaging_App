@@ -138,10 +138,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/colorWhite"
-            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabBackground="@color/colorWhite"
+            app:tabIndicatorColor="@color/color3"
             app:tabIndicatorHeight="5dp"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="@color/colorBlack">
+            app:tabSelectedTextColor="@color/color3"
+            app:tabTextColor="@color/colorPrimary">
 
 
             <android.support.design.widget.TabItem

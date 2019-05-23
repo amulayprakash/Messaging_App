@@ -18,7 +18,6 @@ import android.text.Html;
 import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
 import com.example.quagnitia.messaging_app.Activity.MessageTabActivity;
 import com.example.quagnitia.messaging_app.Activity.OthersMessageListActivity;
-import com.example.quagnitia.messaging_app.Activity.SchoolActivity;
 import com.example.quagnitia.messaging_app.Storage.Preferences;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -52,14 +51,19 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
 //                    ar.add()
 //                    pref.putListString();
 
-                if (pref.getString("UT").equalsIgnoreCase("admin")) {
-                    JSONObject jsonobj = new JSONObject(remoteMessage.getData().toString());
-                    sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString(), jsonobj.optString("schoolID"));
-                } else {
-                    sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
-                }
                 pref.setBadgeCount(1);
-                ShortcutBadger.applyCount(this, 1);
+                ShortcutBadger.removeCount(this);
+                if (pref.getBadgeCount() > 0) {
+                    ShortcutBadger.applyCount(this, pref.getBadgeCount());
+                }
+
+//                if (pref.getString("UT").equalsIgnoreCase("admin")) {
+                JSONObject jsonobj = new JSONObject(remoteMessage.getData().toString());
+                sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString(), jsonobj.optString("schoolID"));
+//                } else {
+//                    sendNotification(remoteMessage.getNotification().getTitle().toString(), remoteMessage.getNotification().getBody().toString());
+//                }
+
 //                    ShortcutBadger.with(getApplicationContext()).count(badgeCount); //for 1.1.3
 //                    Intent in = new Intent(this, MessageListActivity.class);
 //                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -86,7 +90,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         Intent intent;
 
 //        if (!new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
-            intent = new Intent(this, MessageTabActivity.class);
+        intent = new Intent(this, MessageTabActivity.class);
 //        } else {
 //            intent = new Intent(this, SchoolActivity.class);
 //        }
@@ -131,15 +135,25 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "st123");
         Intent intent;
 
-        if (school == null || school.isEmpty() || school.equals("0")) {
-            intent = new Intent(this, OthersMessageListActivity.class);
+        if (new Preferences(this).getString("UT").equalsIgnoreCase("admin")) {
+            if (school == null || school.isEmpty() || school.equals("0")) {
+                intent = new Intent(this, OthersMessageListActivity.class);
+            } else {
+                intent = new Intent(this, MessageListActivity.class);
+                new Preferences(this).putString("schoolId", school);
+            }
         } else {
-            intent = new Intent(this, SchoolActivity.class);
+            intent = new Intent(this, MessageTabActivity.class);
+            if (school == null || school.isEmpty() || school.equals("0")) {
+                intent.putExtra("IS_OTHER", true);
+            } else {
+                intent.putExtra("IS_OTHER", false);
+            }
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 

@@ -261,7 +261,7 @@ public class SchoolActivity extends AppCompatActivity {
 
                             if (response.body().getOtherNotificationCount() > 0) {
                                 txtbadge.setVisibility(View.VISIBLE);
-                                txtbadge.setText(response.body().getOtherNotificationCount());
+                                txtbadge.setText(response.body().getOtherNotificationCount()+"");
                             } else {
                                 txtbadge.setVisibility(View.GONE);
                             }
