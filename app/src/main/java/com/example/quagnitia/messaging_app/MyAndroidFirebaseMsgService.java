@@ -6,14 +6,17 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.util.Log;
 
 import com.example.quagnitia.messaging_app.Activity.MessageListActivity;
 import com.example.quagnitia.messaging_app.Activity.MessageTabActivity;
@@ -151,6 +154,14 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
             }
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean sound = prefs.getBoolean("notifications_new_message", true);
+        boolean vibr = prefs.getBoolean("notifications_new_message_vibrate", true);
+        String ring = prefs.getString("notifications_new_message_ringtone", "");
+
+        Log.d("NIKMAN", "isSound : " + sound + " ring :" + ring + " vib : " + vibr);
+//        Toast.makeText(this, "isSound : " + sound + " ring :" + ring + " vib : " + vibr, Toast.LENGTH_LONG).show();
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 //        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -173,8 +184,18 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
         mBuilder.setAutoCancel(true);
         mBuilder.setStyle(bigText);
         mBuilder.setShowWhen(true);
-        mBuilder.setSound(notificationSoundUri);
-        mBuilder.setVibrate(vibrate);
+        if (sound) {
+            if (ring != null && !ring.isEmpty()) {
+                mBuilder.setSound(Uri.parse(ring));
+            } else {
+                mBuilder.setSound(notificationSoundUri);
+            }
+            if (vibr) {
+                mBuilder.setVibrate(vibrate);
+            }
+        } else {
+            mBuilder.setSound(null);
+        }
 
         NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 

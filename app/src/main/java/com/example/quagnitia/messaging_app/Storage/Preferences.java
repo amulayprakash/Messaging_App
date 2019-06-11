@@ -16,8 +16,9 @@ public class Preferences {
     private String BadgeCount="BadgeCount";
     private  String REGISTERED = "REGISTERED";
     public static final String KEY_AGENT_ID = "agentId";
-    private static final String PICKUP_ID = "pickupId";
-    public static final String DOC_TYPE = "type";
+    public static final String SOUND = "SOUND";
+    public static final String RINGTONE = "RINGTONE";
+    public static final String VIBRATE = "VIBRATE";
     private static final String PREFS_STORE_PROFILE = "STORE_PROFILE";
   //  String username = getString(PrefConstants.USER_NAME);
 
@@ -87,6 +88,39 @@ public class Preferences {
         editor.putBoolean(this.LOGIN, firstTimeCall);
         editor.commit();
     }
+
+    public boolean isSOUND() {
+        return preferences.getBoolean(SOUND, true);
+    }
+
+    public void setSOUND(boolean firstTimeCall) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(this.SOUND, firstTimeCall);
+        editor.commit();
+    }
+
+    public boolean isVIBRATE() {
+        return preferences.getBoolean(VIBRATE, true);
+    }
+
+    public void setVIBRATE(boolean firstTimeCall) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(this.VIBRATE, firstTimeCall);
+        editor.commit();
+    }
+
+    public String getRINGTONE(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_STORE_PROFILE,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(RINGTONE,null);
+    }
+
+    public void setRINGTONE(Context context, String userId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_STORE_PROFILE,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(RINGTONE,userId);
+        editor.commit();
+    }
+
     public  Boolean getREGISTERED() {
         return preferences.getBoolean(REGISTERED, false);
     }

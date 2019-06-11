@@ -40,11 +40,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/txtLogOut"
+            android:layout_toLeftOf="@+id/img_settings"
             android:layout_toRightOf="@+id/imgico"
             android:orientation="vertical">
 
             <TextView
+                android:singleLine="true"
                 android:id="@+id/txttitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,6 +55,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:singleLine="true"
                 android:id="@+id/txtname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,6 +64,19 @@
                 android:textSize="@dimen/dimension16dp"
                 android:textStyle="normal" />
         </LinearLayout>
+
+        <ImageView
+            android:padding="@dimen/dimension5dp"
+            android:id="@+id/img_settings"
+            android:layout_width="@dimen/dimension35dp"
+            android:layout_height="@dimen/dimension35dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/dimension15dp"
+            android:src="@drawable/ico_settings"
+            android:tint="@color/colorWhite"
+            android:layout_toLeftOf="@+id/txtLogOut"
+             />
 
         <TextView
             android:id="@+id/txtLogOut"

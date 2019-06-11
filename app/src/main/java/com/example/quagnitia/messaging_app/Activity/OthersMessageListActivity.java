@@ -66,7 +66,7 @@ public class OthersMessageListActivity
     private MediaPlayer mMediaPlayer;
     String fromdate = null, todate = null;
     Date from, to;
-    ImageView imgBack;
+    ImageView imgBack,img_settings;
 
     @Override
     protected void onDestroy() {
@@ -89,6 +89,14 @@ public class OthersMessageListActivity
 //                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
             imgBack = findViewById(R.id.imgBack);
+            img_settings = findViewById(R.id.img_settings);
+            img_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent in = new Intent(OthersMessageListActivity.this, SettingsActivity.class);
+                    startActivity(in);
+                }
+            });
             txtreset = findViewById(R.id.txtreset);
             txtfromshow = findViewById(R.id.txtfromshow);
             txttoshow = findViewById(R.id.txttoshow);

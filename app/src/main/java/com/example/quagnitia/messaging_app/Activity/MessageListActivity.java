@@ -65,7 +65,7 @@ public class MessageListActivity
     private MediaPlayer mMediaPlayer;
     String fromdate = null, todate = null;
     Date from, to;
-    ImageView imgBack;
+    ImageView imgBack, img_settings;
 
     @Override
     protected void onDestroy() {
@@ -88,6 +88,14 @@ public class MessageListActivity
 //                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
             imgBack = findViewById(R.id.imgBack);
+            img_settings = findViewById(R.id.img_settings);
+            img_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent in = new Intent(MessageListActivity.this, SettingsActivity.class);
+                    startActivity(in);
+                }
+            });
             txtreset = findViewById(R.id.txtreset);
             txtfromshow = findViewById(R.id.txtfromshow);
             txttoshow = findViewById(R.id.txttoshow);
@@ -485,7 +493,7 @@ public class MessageListActivity
                         Log.i("@nikita", "Resp" + response);
                         pd.dismiss();
                         if (response.code() == 200) {// success
-                            if (response.body() != null  && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
+                            if (response.body() != null && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
 //                                if (!response.body().getMessage().isEmpty()) {
 //                                    Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 //                                }
@@ -525,10 +533,10 @@ public class MessageListActivity
                                 }
 
 
-                            } else if (response.body() != null ) {//&& response.body().getError().equals("1")
-                                if(response.body().getIsSessionValid().equalsIgnoreCase("false")){
+                            } else if (response.body() != null) {//&& response.body().getError().equals("1")
+                                if (response.body().getIsSessionValid().equalsIgnoreCase("false")) {
 //                                    if (!response.body().getMessage().isEmpty()) {
-                                        Toast.makeText(MessageListActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MessageListActivity.this, "Invalid session...", Toast.LENGTH_SHORT).show();
 //                                    }
                                     new com.example.quagnitia.messaging_app.Storage.Preferences(MessageListActivity.this).clearPreferences();
                                     Intent newIntent = new Intent(MessageListActivity.this, MainActivity.class);
@@ -536,7 +544,7 @@ public class MessageListActivity
                                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(newIntent);
                                     finish();
-                                }else {
+                                } else {
 //                                    if (!response.body().getMessage().isEmpty()) {
 //                                        Toast.makeText(MessageListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 //                                    }

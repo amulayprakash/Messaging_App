@@ -51,7 +51,7 @@ public class SchoolActivity extends AppCompatActivity {
     ArrayList<Data> activepicupList = new ArrayList<>();
     RelativeLayout relLoad;
     int loadType = 0;
-    ImageView imgBack;
+    ImageView imgBack,img_settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,14 @@ public class SchoolActivity extends AppCompatActivity {
         txtbadge = findViewById(R.id.txtbadge);
         txtother = findViewById(R.id.txtother);
         imgBack = findViewById(R.id.imgBack);
+        img_settings = findViewById(R.id.img_settings);
+        img_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(SchoolActivity.this, SettingsActivity.class);
+                startActivity(in);
+            }
+        });
         txtLogOut = findViewById(R.id.txtLogOut);
         txtname = findViewById(R.id.txtname);
         rvlist = findViewById(R.id.rvlist);

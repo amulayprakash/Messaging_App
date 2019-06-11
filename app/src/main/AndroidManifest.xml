@@ -27,7 +27,7 @@
         <activity
             android:name=".Activity.MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <!--<activity android:name=".Activity.WelcomeActivity" />-->
+        <!-- <activity android:name=".Activity.WelcomeActivity" /> -->
         <activity
             android:name=".Activity.ForgetPassword"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -54,9 +54,13 @@
             android:name=".Activity.AutostartActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.SchoolActivity" />
-        <activity android:name=".Activity.MessageListActivity"></activity>
-        <activity android:name=".Activity.MessageTabActivity"></activity>
-        <activity android:name=".Activity.OthersMessageListActivity"></activity>
+        <activity android:name=".Activity.MessageListActivity" />
+        <activity android:name=".Activity.MessageTabActivity" />
+        <activity android:name=".Activity.OthersMessageListActivity" />
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/DetailTheme"></activity>
     </application>
 
 </manifest>

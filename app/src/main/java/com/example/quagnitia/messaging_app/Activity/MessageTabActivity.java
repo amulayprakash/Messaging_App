@@ -39,7 +39,7 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
     ImageView imgDrawer1;
     Context context = this;
     TextView txtPickupHeader;
-    ImageView imgBack;
+    ImageView imgBack,img_settings;
     public static boolean isLoad = false;
     BroadcastReceiver br;
     int load = 0;
@@ -121,6 +121,14 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
 
     private void initUi() {
         imgBack = findViewById(R.id.imgBack);
+        img_settings = findViewById(R.id.img_settings);
+        img_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(MessageTabActivity.this, SettingsActivity.class);
+                startActivity(in);
+            }
+        });
         txtLogOut = findViewById(R.id.txtLogOut);
         txtname = findViewById(R.id.txtname);
 
