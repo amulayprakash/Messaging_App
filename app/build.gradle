@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.quagnitia.messaging_app"
+        applicationId "com.esf.quagnitia.messaging_app"
         minSdkVersion 17
         targetSdkVersion 27
         versionCode 1

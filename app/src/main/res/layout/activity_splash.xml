@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.quagnitia.messaging_app.Activity.SplashActivity">
+    tools:context="com.esf.quagnitia.messaging_app.Activity.SplashActivity">
 
     <TextView
         android:id="@+id/txt"
