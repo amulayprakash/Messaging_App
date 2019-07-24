@@ -5,8 +5,8 @@ package com.esf.quagnitia.messaging_app.webservice;
  */
 
 public class ConstatntsApi {
-//    static final String BASE_URL = "http://rapidxx.com/aqi/api/public/v1/";//prod
-    static final String BASE_URL = "http://rapidxx.com/aqi/api/public/test/";//test
+    static final String BASE_URL = "http://rapidxx.com/aqi/api/public/v1/";//prod
+//    static final String BASE_URL = "http://rapidxx.com/aqi/api/public/test/";//test
 
     static final String LOGIN_URL = "login";
     static final String FORGOT_URL="forgotpassword";
