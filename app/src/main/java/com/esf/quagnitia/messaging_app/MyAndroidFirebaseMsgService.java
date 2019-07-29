@@ -144,6 +144,8 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
             } else {
                 intent = new Intent(this, MessageListActivity.class);
                 new Preferences(this).putString("schoolId", school);
+                String schID = new Preferences(this).getString("schoolId");
+                Log.v("NIK",schID);
             }
         } else {
             intent = new Intent(this, MessageTabActivity.class);

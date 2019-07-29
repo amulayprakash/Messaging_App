@@ -476,6 +476,9 @@ public class MessageListActivity
             ApiServices apiService = RetrofitClient.getClient().create(ApiServices.class);
 
             Call<UserResponse> call;//nikita
+            String schID = new Preferences(this).getString("schoolId");
+            Log.v("NIK", schID);
+
             if (LoadType.equalsIgnoreCase("start")) {
                 relLoad.setVisibility(View.GONE);
                 pd.show();
@@ -507,6 +510,16 @@ public class MessageListActivity
                                 }
                                 int postomove = activepicupList.size();
                                 activepicupList.addAll(pickups.getData());
+
+                                if (!activepicupList.isEmpty()) {
+                                    if (!activepicupList.get(0).getSubject().isEmpty()) {
+                                        String[] str = activepicupList.get(0).getSubject().split("\\(");
+                                        if (str.length != 0) {
+                                            txtschool.setText("" + str[0]);
+                                        }
+                                    }
+                                }// for mismatch school name in case of admin iser
+
                                 setData();
 
                                 //nikita
