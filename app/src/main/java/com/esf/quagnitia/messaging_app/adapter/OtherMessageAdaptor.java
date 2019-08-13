@@ -117,7 +117,8 @@ public class OtherMessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (activePickupList.get(position).getColor() != null && !activePickupList.get(position).getColor().isEmpty()) {
                         int red = Color.parseColor("" + activePickupList.get(position).getColor());
                         holders.relhead.setBackgroundColor(red);
-
+                        holders.txtdate.setTextColor(context.getResources().getColor(R.color.colorWhite));
+                        holders.txtmsg.setTextColor(context.getResources().getColor(R.color.colorWhite));
                     }
 
                     //nikita
