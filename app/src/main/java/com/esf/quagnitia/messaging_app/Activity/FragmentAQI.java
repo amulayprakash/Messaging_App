@@ -86,6 +86,10 @@ public class FragmentAQI extends Fragment {
             relLoad.setVisibility(View.GONE);
             txtschool.setText("" + preferences.getSchool(getActivity()) + "");
 
+            if(new Preferences(getActivity()).getString("UT").equalsIgnoreCase("admin")) {
+                txtschool.setVisibility(View.GONE);
+            }
+
             try {
                 Date c = Calendar.getInstance().getTime();
                 System.out.println("Current time => " + c);

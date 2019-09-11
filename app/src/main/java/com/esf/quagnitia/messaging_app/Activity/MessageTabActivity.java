@@ -206,6 +206,8 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
                     return new FragmentAQI();
                 case 1:
                     return new FragmentOthers();
+                case 2:
+                    return new FragmentMap();
                 default:
                     return null;
             }
@@ -217,7 +219,7 @@ public class MessageTabActivity extends AppCompatActivity implements View.OnClic
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 2;
+            return 3;
         }
     }
 }

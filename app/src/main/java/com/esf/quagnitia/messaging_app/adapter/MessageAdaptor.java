@@ -116,8 +116,8 @@ public class MessageAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                     if (activePickupList.get(position).getColor() != null && !activePickupList.get(position).getColor().isEmpty()) {
 //                        if(activePickupList.get(position).getColor().equalsIgnoreCase("#000")||activePickupList.get(position).getColor().equalsIgnoreCase("#000000")){
-                            holders.txtdate.setTextColor(context.getResources().getColor(R.color.colorWhite));
-                            holders.txtmsg.setTextColor(context.getResources().getColor(R.color.colorWhite));
+                        holders.txtdate.setTextColor(context.getResources().getColor(R.color.colorWhite));
+                        holders.txtmsg.setTextColor(context.getResources().getColor(R.color.colorWhite));
 //                        }else{
 //                            holders.txtdate.setTextColor(context.getResources().getColor(R.color.colorBlack));
 //                            holders.txtmsg.setTextColor(context.getResources().getColor(R.color.colorBlack));

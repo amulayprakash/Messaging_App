@@ -5,6 +5,16 @@ import java.io.Serializable;
 
 public class UserResponse implements Serializable {
 
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    private School school = new School();
+
     private String error = "";
 
     public String getIsSessionValid() {

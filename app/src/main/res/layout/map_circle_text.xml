@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bed_num_text_view"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_width="@dimen/dimension50dp"
+    android:layout_height="@dimen/dimension50dp"
+    android:background="@drawable/map_circle_pin"
+    android:text="ABC"
+    android:textStyle="bold"
+    android:textSize="@dimen/dimension15dp"
+    android:textColor="#ffffff">
+</TextView>

@@ -13,13 +13,13 @@ public class ConstatntsApi {
 //    Version 1
 //static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v1/";
 //    Version 2
-//static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v2/"; //- Here we are changing test to v2
+static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v2/"; //- Here we are changing test to v2
 
-//    PROD APIs
+    //    PROD APIs
 //    Version 1
 //static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v1/";
 //    Version 2
-static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v2/";
+//    static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v2/";
 
     static final String LOGIN_URL = "login";
     static final String FORGOT_URL="forgotpassword";
@@ -27,4 +27,5 @@ static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v2/";
     static final String SHOWMESSAGE2="ShowMessage2";
     static final String SchoolList="SchoolList";
     static final String MessageList="MessageList";
+    static final String SchoolMap="SchoolMap";
 }

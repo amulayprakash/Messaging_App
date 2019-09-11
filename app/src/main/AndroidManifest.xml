@@ -18,11 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- android:roundIcon="@mipmap/ic_launcher_round" -->
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <!--
+             The API key for Google Maps-based APIs.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+
+        <!-- android:roundIcon="@mipmap/ic_launcher_round" -->
+
 
         <activity
             android:name="com.esf.quagnitia.messaging_app.Activity.MainActivity"

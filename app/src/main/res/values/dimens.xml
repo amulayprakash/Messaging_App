@@ -6,7 +6,7 @@
     <dimen name="splash_logo_wd">160dp</dimen>
 
     <dimen name="dimension0dp">0dp</dimen>
-    <dimen name="dimension0.5dp">0.5dp</dimen>
+    <!--<dimen name="dimension0.5dp">0.5dp</dimen>-->
     <dimen name="dimension1dp">1dp</dimen>
     <dimen name="dimension2dp">2dp</dimen>
     <dimen name="dimension3dp">3dp</dimen>

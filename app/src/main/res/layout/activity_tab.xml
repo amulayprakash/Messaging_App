@@ -174,6 +174,13 @@
                 android:background="@color/colorPrimary"
                 android:text="Others" />
 
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:text="Map" />
+
 
         </android.support.design.widget.TabLayout>
 

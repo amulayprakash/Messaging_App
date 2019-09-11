@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_key">AIzaSyCjvCn-1kDovFk99ynuY6BV_0WFtRn4F0o</string>
     <string name="app_name">ESF AQI</string>
     <string name="userName">User Name</string>
     <string name="password">Password</string>
