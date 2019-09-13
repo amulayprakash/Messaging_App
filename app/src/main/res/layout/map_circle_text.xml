@@ -5,11 +5,25 @@
     android:id="@+id/bed_num_text_view"
     android:gravity="center"
     android:layout_gravity="center"
-    android:layout_width="@dimen/dimension50dp"
-    android:layout_height="@dimen/dimension50dp"
+    android:layout_width="@dimen/dimension30dp"
+    android:layout_height="@dimen/dimension30dp"
     android:background="@drawable/map_circle_pin"
     android:text="ABC"
     android:textStyle="bold"
-    android:textSize="@dimen/dimension15dp"
+    android:textSize="@dimen/dimension10dp"
     android:textColor="#ffffff">
 </TextView>
+<!--<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--android:layout_width="@dimen/dimension35dp"-->
+<!--android:layout_height="@dimen/dimension35dp">-->
+<!--<TextView-->
+
+    <!--android:id="@+id/bed_num"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_width="@dimen/dimension35dp"-->
+    <!--android:layout_height="@dimen/dimension35dp"-->
+    <!--android:background="@drawable/map_circle_pin"-->
+    <!--/>-->
+<!--</FrameLayout>-->

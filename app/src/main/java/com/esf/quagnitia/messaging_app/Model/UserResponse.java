@@ -1,19 +1,20 @@
 package com.esf.quagnitia.messaging_app.Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class UserResponse implements Serializable {
 
-    public School getSchool() {
+    public ArrayList<School>  getSchool() {
         return school;
     }
 
-    public void setSchool(School school) {
+    public void setSchool(ArrayList<School>  school) {
         this.school = school;
     }
 
-    private School school = new School();
+    private ArrayList<School> school = new ArrayList<School> ();
 
     private String error = "";
 

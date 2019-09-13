@@ -13,13 +13,13 @@ public class ConstatntsApi {
 //    Version 1
 //static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v1/";
 //    Version 2
-static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v2/"; //- Here we are changing test to v2
+//static final String BASE_URL =  "http://rapidxx.com/aqi/api/public/v2/"; //- Here we are changing test to v2
 
     //    PROD APIs
 //    Version 1
 //static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v1/";
 //    Version 2
-//    static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v2/";
+    static final String BASE_URL = "https://aqi.esf.edu.hk/api/public/v2/";
 
     static final String LOGIN_URL = "login";
     static final String FORGOT_URL="forgotpassword";

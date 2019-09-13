@@ -40,12 +40,14 @@ import com.esf.quagnitia.messaging_app.util.NetworkUtils;
 import com.esf.quagnitia.messaging_app.util.PaginationScrollListener;
 import com.esf.quagnitia.messaging_app.webservice.ApiServices;
 import com.esf.quagnitia.messaging_app.webservice.RetrofitClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -82,9 +84,9 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
 
-        mGhost = new View(getActivity());
-        mGhost.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
-        mGhost.setVisibility(View.GONE);
+//        mGhost = new View(getActivity());
+//        mGhost.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+//        mGhost.setVisibility(View.GONE);
 
         return rootView;
 
@@ -97,31 +99,45 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         loadSchoolMap();
     }
 
-    private void setMap(final School school) {
+    private void setMap(final ArrayList<School> school) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(Double.parseDouble(school.getLat()), Double.parseDouble(school.getLng()));
 
-        String abb = getFirstLetterFromEachWordInSentence(school.getSchoolName());
-
-        gmap.addMarker(createMarker(getActivity(), sydney, abb, school.getMessage().getBackground()));
-        gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 9));
         gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         gmap.getUiSettings().setZoomControlsEnabled(true);
 
-        // Setting a custom info window adapter for the google map
-        MarkerInfoWindowAdapter markerInfoWindowAdapter = new MarkerInfoWindowAdapter(getActivity(), school);
-        gmap.setInfoWindowAdapter(markerInfoWindowAdapter);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (int i = 0; i < school.size(); i++) {
+            School sch = school.get(i);
+            LatLng sydney = new LatLng(Double.parseDouble(sch.getLat()), Double.parseDouble(sch.getLng()));
 
-        gmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            String abb = getFirstLetterFromEachWordInSentence(sch.getSchoolName());
 
-            @Override
-            public void onInfoWindowClick(Marker marker) {
+            gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getMessage().getBackground()));
 
+            builder.include(sydney);
+//            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 9));
 
-                marker.hideInfoWindow();
-            }
-        });
+        }
+
+        LatLngBounds bounds = builder.build();
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 150, 150, 10);
+        gmap.animateCamera(cu);
+
+//        // Setting a custom info window adapter for the google map
+//        MarkerInfoWindowAdapter markerInfoWindowAdapter = new MarkerInfoWindowAdapter(getActivity(), school);
+//        gmap.setInfoWindowAdapter(markerInfoWindowAdapter);
+//
+//        gmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+//
+//            @Override
+//            public void onInfoWindowClick(Marker marker) {
+//
+//
+//                marker.hideInfoWindow();
+//            }
+//        });
 
 //        gmap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter()
 //        {
@@ -197,7 +213,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public static MarkerOptions createMarker(Context context, LatLng point, String name, String color) {
         MarkerOptions marker = new MarkerOptions();
         marker.position(point);
-        int px = context.getResources().getDimensionPixelSize(R.dimen.dimension50dp);
+        int px = context.getResources().getDimensionPixelSize(R.dimen.dimension35dp);
         View markerView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.map_circle_text, null);
         markerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         markerView.layout(0, 0, px, px);
@@ -239,7 +255,13 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             Call<UserResponse> call;//nikita
 
             pd.show();
-            call = apiService.getSchoolMap(new Preferences(getActivity()).getAgentId(getActivity()), new Preferences(getActivity()).getString("schoolId"), new Preferences(getActivity()).getString("SI"));
+            String Schid = "0";
+            if (new Preferences(getActivity()).getString("UT").equalsIgnoreCase("admin")) {
+                Schid = "0";
+            } else {
+                Schid = new Preferences(getActivity()).getString("schoolId");
+            }
+            call = apiService.getSchoolMap(new Preferences(getActivity()).getAgentId(getActivity()), Schid, new Preferences(getActivity()).getString("SI"));
 
 
             Log.i("@nikita", "Url:" + call.request().url().toString());
@@ -306,52 +328,52 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         super.onResume();
     }
 
-    public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
-        private Context context;
-        private School school;
-
-        public MarkerInfoWindowAdapter(Context context, School school) {
-            this.context = context.getApplicationContext();
-            this.school = school;
-        }
-
-        @Override
-        public View getInfoWindow(Marker arg0) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(final Marker arg0) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View v = inflater.inflate(R.layout.map_marker_info_window, null);
-
-            TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-            TextView tv_AQI = (TextView) v.findViewById(R.id.tv_AQI);
-            TextView tvLng = (TextView) v.findViewById(R.id.txtmsgdetail);
-            tvLat.setText(school.getMessage().getSubject());
-
-
-            String[] str = school.getMessage().getBody().split("<p>");
-
-            String[] str2 = str[1].split("</p>");
-
-            String str3 = str2[0].replace("<br>","\n");
-            tvLng.setText(str3);
-            int red = Color.parseColor("" + school.getMessage().getBackground());
-            tvLng.setBackgroundColor(red);
-
-            tv_AQI.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    arg0.hideInfoWindow();
-                }
-            });
-//            tvLng.getSettings().setJavaScriptEnabled(true);
-//            tvLng.loadData(school.getMessage().getBody().toString(), "text/html; charset=UTF-8;", null);
-//            tvLng.loadData(school.getMessage().getBody(), "text/html", "utf-8");
-
-            return v;
-        }
-    }
+//    public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+//        private Context context;
+//        private School school;
+//
+//        public MarkerInfoWindowAdapter(Context context, School school) {
+//            this.context = context.getApplicationContext();
+//            this.school = school;
+//        }
+//
+//        @Override
+//        public View getInfoWindow(Marker arg0) {
+//            return null;
+//        }
+//
+//        @Override
+//        public View getInfoContents(final Marker arg0) {
+//            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            View v = inflater.inflate(R.layout.map_marker_info_window, null);
+//
+//            TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+//            TextView tv_AQI = (TextView) v.findViewById(R.id.tv_AQI);
+//            TextView tvLng = (TextView) v.findViewById(R.id.txtmsgdetail);
+//            tvLat.setText(school.getMessage().getSubject());
+//
+//
+//            String[] str = school.getMessage().getBody().split("<p>");
+//
+//            String[] str2 = str[1].split("</p>");
+//
+//            String str3 = str2[0].replace("<br>","\n");
+//            tvLng.setText(str3);
+//            int red = Color.parseColor("" + school.getMessage().getBackground());
+//            tvLng.setBackgroundColor(red);
+//
+//            tv_AQI.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    arg0.hideInfoWindow();
+//                }
+//            });
+////            tvLng.getSettings().setJavaScriptEnabled(true);
+////            tvLng.loadData(school.getMessage().getBody().toString(), "text/html; charset=UTF-8;", null);
+////            tvLng.loadData(school.getMessage().getBody(), "text/html", "utf-8");
+//
+//            return v;
+//        }
+//    }
 
 }
