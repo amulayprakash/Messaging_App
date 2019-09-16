@@ -79,7 +79,7 @@ public class OthersMessageListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_list);
+        setContentView(R.layout.other_message_list);
         try {
             preferences = new Preferences(OthersMessageListActivity.this);
 //            final Window win = getWindow();
