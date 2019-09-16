@@ -106,25 +106,36 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         gmap.getUiSettings().setZoomControlsEnabled(true);
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (int i = 0; i < school.size(); i++) {
-            School sch = school.get(i);
+        if (school.size() == 1) {
+            School sch = school.get(0);
             LatLng sydney = new LatLng(Double.parseDouble(sch.getLat()), Double.parseDouble(sch.getLng()));
 
             String abb = getFirstLetterFromEachWordInSentence(sch.getSchoolName());
 
             gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getMessage().getBackground()));
 
-            builder.include(sydney);
+            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 11));
+
+        } else {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (int i = 0; i < school.size(); i++) {
+                School sch = school.get(i);
+                LatLng sydney = new LatLng(Double.parseDouble(sch.getLat()), Double.parseDouble(sch.getLng()));
+
+                String abb = getFirstLetterFromEachWordInSentence(sch.getSchoolName());
+
+                gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getMessage().getBackground()));
+
+                builder.include(sydney);
 //            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 9));
 
+            }
+
+            LatLngBounds bounds = builder.build();
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);//, 150, 150, 10);
+            gmap.animateCamera(cu);
         }
-
-        LatLngBounds bounds = builder.build();
-
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 150, 150, 10);
-        gmap.animateCamera(cu);
-
 //        // Setting a custom info window adapter for the google map
 //        MarkerInfoWindowAdapter markerInfoWindowAdapter = new MarkerInfoWindowAdapter(getActivity(), school);
 //        gmap.setInfoWindowAdapter(markerInfoWindowAdapter);
