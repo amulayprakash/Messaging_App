@@ -109,66 +109,175 @@
         android:textSize="@dimen/dimension18dp"
         android:textStyle="bold" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+    <!--<android.support.design.widget.TabLayout-->
+    <!--android:id="@+id/tabs"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/txtschool"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="@color/colorWhite"-->
+    <!--app:tabBackground="@color/colorWhite"-->
+    <!--app:tabIndicatorColor="@color/color3"-->
+    <!--app:tabIndicatorHeight="5dp"-->
+    <!--app:tabSelectedTextColor="@color/color3"-->
+    <!--app:tabTextColor="@color/colorPrimary">-->
+
+
+    <!--<android.support.design.widget.TabItem-->
+    <!--android:id="@+id/tabActive"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:text="AQI" />-->
+
+
+    <!--<android.support.design.widget.TabItem-->
+    <!--android:id="@+id/tabMap"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:text="Map" />-->
+
+
+    <!--</android.support.design.widget.TabLayout>-->
+
+
+    <!--<android.support.v4.view.ViewPager-->
+    <!--android:layout_below="@+id/tabs"-->
+    <!--android:id="@+id/container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+
+    <RelativeLayout
+        android:id="@+id/reldt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtschool"
-        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dimension5dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/dimension5dp">
+
+    <TextView
+        android:id="@+id/txtfrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:padding="@dimen/dimension5dp"
+        android:singleLine="true"
+        android:text="From :"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/dimension15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtfromshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/dimension5dp"
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:layout_toRightOf="@+id/txtfrom"
         android:background="@color/colorWhite"
-        app:tabBackground="@color/colorWhite"
-        app:tabIndicatorColor="@color/color3"
-        app:tabIndicatorHeight="5dp"
-        app:tabSelectedTextColor="@color/color3"
-        app:tabTextColor="@color/colorPrimary">
+        android:padding="@dimen/dimension5dp"
+        android:singleLine="true"
+        android:text="01/01/2019"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/dimension15dp"
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/txtto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimension5dp"
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:layout_toRightOf="@+id/txtfromshow"
+        android:padding="@dimen/dimension5dp"
+        android:singleLine="true"
+        android:text="To : "
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/dimension15dp"
+        android:textStyle="bold" />
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabActive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="AQI" />
+    <TextView
+        android:id="@+id/txttoshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/dimension5dp"
+        android:layout_marginRight="@dimen/dimension5dp"
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:layout_toRightOf="@+id/txtto"
+        android:background="@color/colorWhite"
+        android:padding="@dimen/dimension5dp"
+        android:singleLine="true"
+        android:text="01/01/2019"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/dimension15dp"
+        android:textStyle="bold" />
 
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="Map" />
-
-
-    </android.support.design.widget.TabLayout>
-
-
-    <android.support.v4.view.ViewPager
-        android:layout_below="@+id/tabs"
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-    <!--<RelativeLayout--><!--android:layout_marginTop="@dimen/dimension5dp"--><!--android:padding="@dimen/dimension5dp"--><!--android:id="@+id/reldt"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_below="@+id/txtschool"--><!--android:gravity="center_horizontal"--><!--android:background="@color/colorPrimaryDark"--><!--&gt;-->
-
-    <!--<TextView--><!--android:id="@+id/txtfrom"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_marginBottom="@dimen/dimension5dp"--><!--android:padding="@dimen/dimension5dp"--><!--android:singleLine="true"--><!--android:text="From :"--><!--android:textColor="@color/colorWhite"--><!--android:textSize="@dimen/dimension15dp"--><!--android:textStyle="bold" />-->
-
-    <!--<TextView--><!--android:id="@+id/txtfromshow"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_margin="@dimen/dimension5dp"--><!--android:layout_marginBottom="@dimen/dimension5dp"--><!--android:layout_toRightOf="@+id/txtfrom"--><!--android:background="@color/colorWhite"--><!--android:padding="@dimen/dimension5dp"--><!--android:singleLine="true"--><!--android:text="01/01/2019"--><!--android:textColor="@color/colorBlack"--><!--android:textSize="@dimen/dimension15dp"--><!--android:textStyle="bold" />-->
-
-    <!--<TextView--><!--android:id="@+id/txtto"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_marginLeft="@dimen/dimension5dp"--><!--android:layout_marginBottom="@dimen/dimension5dp"--><!--android:layout_toRightOf="@+id/txtfromshow"--><!--android:padding="@dimen/dimension5dp"--><!--android:singleLine="true"--><!--android:text="To : "--><!--android:textColor="@color/colorWhite"--><!--android:textSize="@dimen/dimension15dp"--><!--android:textStyle="bold" />-->
-
-    <!--<TextView--><!--android:id="@+id/txttoshow"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_margin="@dimen/dimension5dp"--><!--android:layout_marginRight="@dimen/dimension5dp"--><!--android:layout_marginBottom="@dimen/dimension5dp"--><!--android:layout_toRightOf="@+id/txtto"--><!--android:background="@color/colorWhite"--><!--android:padding="@dimen/dimension5dp"--><!--android:singleLine="true"--><!--android:text="01/01/2019"--><!--android:textColor="@color/colorBlack"--><!--android:textSize="@dimen/dimension15dp"--><!--android:textStyle="bold" />-->
-
-    <!--<TextView--><!--android:visibility="gone"--><!--android:id="@+id/txtreset"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_margin="@dimen/dimension5dp"--><!--android:layout_marginBottom="@dimen/dimension5dp"--><!--android:layout_alignParentRight="true"--><!--android:background="@color/color3"--><!--android:padding="@dimen/dimension5dp"--><!--android:singleLine="true"--><!--android:text="Search"--><!--android:textAllCaps="true"--><!--android:textColor="@color/colorWhite"--><!--android:textSize="@dimen/dimension15dp"--><!--android:textStyle="bold" />--><!--</RelativeLayout>-->
-
-
-    <!--<android.support.v7.widget.RecyclerView--><!--android:id="@+id/rvlist"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:layout_below="@+id/reldt"--><!--android:paddingLeft="@dimen/dimension5dp"--><!--android:paddingTop="@dimen/dimension3dp"--><!--android:paddingRight="@dimen/dimension5dp"></android.support.v7.widget.RecyclerView>-->
-
-    <!--<RelativeLayout--><!--android:id="@+id/relLoad"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:background="@color/colorPrimary"--><!--android:gravity="center"--><!--android:padding="@dimen/dimension10dp"--><!--android:visibility="visible">-->
-
-    <!--<ProgressBar--><!--android:id="@+id/pb"--><!--android:layout_width="@dimen/dimension20dp"--><!--android:layout_height="@dimen/dimension20dp"--><!--android:layout_centerVertical="true"--><!--android:backgroundTint="@color/colorWhite"--><!--android:foregroundTint="@color/colorWhite" />-->
-
-    <!--<TextView--><!--android:id="@+id/txtloads"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerVertical="true"--><!--android:layout_marginLeft="@dimen/dimension10dp"--><!--android:layout_toRightOf="@id/pb"--><!--android:text="Load more..."--><!--android:textColor="@color/colorWhite"--><!--android:textSize="20sp" />--><!--</RelativeLayout>-->
-
+    <TextView
+        android:id="@+id/txtreset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/dimension5dp"
+        android:layout_marginBottom="@dimen/dimension5dp"
+        android:background="@color/color3"
+        android:padding="@dimen/dimension5dp"
+        android:singleLine="true"
+        android:text="Search"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/dimension15dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 </RelativeLayout>
+
+
+<android.support.v7.widget.RecyclerView
+android:id="@+id/rvlist"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_below="@+id/reldt"
+android:paddingLeft="@dimen/dimension5dp"
+android:paddingTop="@dimen/dimension3dp"
+android:paddingRight="@dimen/dimension5dp"></android.support.v7.widget.RecyclerView>
+
+<RelativeLayout
+android:id="@+id/relLoad"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:background="@color/colorPrimary"
+android:gravity="center"
+android:padding="@dimen/dimension10dp"
+android:visibility="visible">
+
+<ProgressBar
+    android:id="@+id/pb"
+    android:layout_width="@dimen/dimension20dp"
+    android:layout_height="@dimen/dimension20dp"
+    android:layout_centerVertical="true"
+    android:backgroundTint="@color/colorWhite"
+    android:foregroundTint="@color/colorWhite" />
+
+<TextView
+    android:id="@+id/txtloads"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/dimension10dp"
+    android:layout_toRightOf="@id/pb"
+    android:text="Load more..."
+    android:textColor="@color/colorWhite"
+    android:textSize="20sp" />
+</RelativeLayout>
+
+    </RelativeLayout>

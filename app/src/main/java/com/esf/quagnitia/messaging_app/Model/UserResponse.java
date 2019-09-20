@@ -47,6 +47,16 @@ public class UserResponse implements Serializable {
     private String userType = "";
     private String userId = "";
 
+    public String getLevels() {
+        return levels;
+    }
+
+    public void setLevels(String levels) {
+        this.levels = levels;
+    }
+
+    private String levels="";
+
     public String getSessionId() {
         return sessionId;
     }

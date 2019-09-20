@@ -7,14 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +52,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -70,7 +77,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
     View rootView;
     GoogleMap gmap;
-    private View mGhost;
+    TextView tv_AQI;
+    WebView txtmsgdetail;
 
     @Nullable
     @Override
@@ -79,14 +87,28 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         Log.d("check", "onCreateView");
         // Inflate the layout for this fragment
         rootView = lf.inflate(R.layout.fragment_map, container, false);
+
+        tv_AQI = rootView.findViewById(R.id.tv_AQI);
+        txtmsgdetail = rootView.findViewById(R.id.txtmsgdetail);
+        txtmsgdetail.setVisibility(View.GONE);
+
+        tv_AQI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (txtmsgdetail.getVisibility() == View.GONE) {
+                    txtmsgdetail.setVisibility(View.VISIBLE);
+                    tv_AQI.setText("AQI Explained (hide)");
+                } else {
+                    txtmsgdetail.setVisibility(View.GONE);
+                    tv_AQI.setText("AQI Explained (show)");
+                }
+            }
+        });
+
         // Gets the MapView from the XML layout and creates it
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
-
-//        mGhost = new View(getActivity());
-//        mGhost.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
-//        mGhost.setVisibility(View.GONE);
 
         return rootView;
 
@@ -99,22 +121,29 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         loadSchoolMap();
     }
 
-    private void setMap(final ArrayList<School> school) {
+    private void setMap(final ArrayList<School> school, String levels) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
 
-        gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        gmap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         gmap.getUiSettings().setZoomControlsEnabled(true);
+        gmap.getUiSettings().setCompassEnabled(false);
+        gmap.getUiSettings().setIndoorLevelPickerEnabled(false);
+        gmap.getUiSettings().setMapToolbarEnabled(false);
+        gmap.getUiSettings().setMyLocationButtonEnabled(false);
+        gmap.getUiSettings().setTiltGesturesEnabled(false);
+        gmap.getUiSettings().setRotateGesturesEnabled(false);
+
 
         if (school.size() == 1) {
             School sch = school.get(0);
             LatLng sydney = new LatLng(Double.parseDouble(sch.getLat()), Double.parseDouble(sch.getLng()));
 
-            String abb = getFirstLetterFromEachWordInSentence(sch.getSchoolName());
+            String abb = sch.getSchoolNameShort();
 
-            gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getMessage().getBackground()));
+            gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getBackground()));
 
-            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 11));
+            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 11.5f));
 
         } else {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -122,19 +151,27 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                 School sch = school.get(i);
                 LatLng sydney = new LatLng(Double.parseDouble(sch.getLat()), Double.parseDouble(sch.getLng()));
 
-                String abb = getFirstLetterFromEachWordInSentence(sch.getSchoolName());
+                String abb = sch.getSchoolNameShort();
 
-                gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getMessage().getBackground()));
+                gmap.addMarker(createMarker(getActivity(), sydney, abb, sch.getBackground()));
 
                 builder.include(sydney);
-//            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 9));
 
             }
 
             LatLngBounds bounds = builder.build();
+            LatLng center = bounds.getCenter();
+            builder.include(new LatLng(center.latitude-0.001f,center.longitude-0.001f));
+            builder.include(new LatLng(center.latitude+0.001f,center.longitude+0.001f));
+            bounds = builder.build();
 
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);//, 150, 150, 10);
-            gmap.animateCamera(cu);
+            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 11.5f));
+
+            if (levels.contains("<html><body style='margin:0;padding:0;'>")) {
+                txtmsgdetail.loadData(levels, "text/html", "utf-8");
+            } else {
+                txtmsgdetail.loadData("<html><body style='margin:0;padding:0;'>" + levels + "</body></html>", "text/html", "utf-8");
+            }
         }
 //        // Setting a custom info window adapter for the google map
 //        MarkerInfoWindowAdapter markerInfoWindowAdapter = new MarkerInfoWindowAdapter(getActivity(), school);
@@ -201,45 +238,51 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 //        });
     }
 
-    /**
-     * Gets the first character of every word in the sentence.
-     *
-     * @param string
-     * @return
-     */
-    public static String getFirstLetterFromEachWordInSentence(final String string) {
-        if (string == null) {
-            return null;
-        }
-        String res = "";
-        String[] myName = string.split(" ");
-        for (int i = 0; i < myName.length; i++) {
-            if (!myName[i].isEmpty()) {
-                res = res + myName[i].charAt(0);
-            }
-        }
-        return res;
-    }
 
     public static MarkerOptions createMarker(Context context, LatLng point, String name, String color) {
         MarkerOptions marker = new MarkerOptions();
         marker.position(point);
-        int px = context.getResources().getDimensionPixelSize(R.dimen.dimension35dp);
-        View markerView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.map_circle_text, null);
-        markerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        markerView.layout(0, 0, px, px);
-        markerView.buildDrawingCache();
-        TextView bedNumberTextView = (TextView) markerView.findViewById(R.id.bed_num_text_view);
-        Bitmap mDotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mDotMarkerBitmap);
-        bedNumberTextView.setText("\n" + name);
-        if (color.isEmpty()) {
-            bedNumberTextView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.color1)));
-        } else {
-            bedNumberTextView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
-        }
-        markerView.draw(canvas);
-        marker.icon(BitmapDescriptorFactory.fromBitmap(mDotMarkerBitmap));
+        int px = context.getResources().getDimensionPixelSize(R.dimen.dimension18dp);
+
+        // circle
+        int diameter = px + 4;
+        Bitmap bm = Bitmap.createBitmap(diameter+2, diameter+2, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bm);
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.FILL);
+        p.setStrokeWidth(1);
+        p.setAntiAlias(true);
+        p.setStrokeCap(Paint.Cap.BUTT);
+        p.setColor(Color.BLACK);
+        canvas.drawCircle(diameter / 2, diameter / 2, diameter / 2, p);
+
+        Paint p2 = new Paint();
+        p2.setStyle(Paint.Style.FILL);
+        p2.setStrokeWidth(1);
+        p2.setAntiAlias(true);
+        p2.setStrokeCap(Paint.Cap.BUTT);
+        p2.setColor(Color.parseColor(color));
+        canvas.drawCircle(diameter / 2, diameter / 2, px / 2, p2);
+
+//        // border
+//        p2.setStyle(Paint.Style.STROKE);
+//        p2.setColor(Color.parseColor(color));
+//        p2.setStrokeWidth(1);
+//        canvas.drawCircle(diameter / 2, diameter / 2, px / 2, p);
+
+        Paint p3 = new Paint();
+        p3.setColor(Color.WHITE);
+        p3.setTextSize(17f);
+        p3.setAntiAlias(true);
+        p3.setTextAlign(Paint.Align.CENTER);
+
+        Rect bounds = new Rect();
+        p3.getTextBounds(name, 0, name.length(), bounds);
+        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+        canvas.drawText(name, diameter / 2, (diameter / 2) + 5, p3);
+
+        marker.icon(BitmapDescriptorFactory.fromBitmap(bm));
         return marker;
     }
 
@@ -270,7 +313,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             if (new Preferences(getActivity()).getString("UT").equalsIgnoreCase("admin")) {
                 Schid = "0";
             } else {
-                Schid = new Preferences(getActivity()).getString("schoolId");
+                Schid = "0";//new Preferences(getActivity()).getString("schoolId");
             }
             call = apiService.getSchoolMap(new Preferences(getActivity()).getAgentId(getActivity()), Schid, new Preferences(getActivity()).getString("SI"));
 
@@ -285,7 +328,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                         if (response.code() == 200) {// success
                             if (response.body() != null && response.body().getIsSessionValid().equalsIgnoreCase("true")) {//&& response.body().getError().equals("0")
 //
-                                setMap(response.body().getSchool());
+                                setMap(response.body().getSchool(), response.body().getLevels());
                             } else if (response.body() != null) {//&& response.body().getError().equals("1")
                                 if (response.body().getIsSessionValid().equalsIgnoreCase("false")) {
 //                                    if (!response.body().getMessage().isEmpty()) {

@@ -5,10 +5,29 @@ package com.esf.quagnitia.messaging_app.Model;
  */
 
 public class School {
-    String aqiSchoolID = "",
-            schoolName = "",
-            lat = "",
-            lng = "";
+    String aqiSchoolID = "";
+    String schoolName = "";
+    String lat = "";
+    String lng = "";
+
+    public String getSchoolNameShort() {
+        return schoolNameShort;
+    }
+
+    public void setSchoolNameShort(String schoolNameShort) {
+        this.schoolNameShort = schoolNameShort;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
+    String schoolNameShort="";
+    String background="";
 
     public String getAqiSchoolID() {
         return aqiSchoolID;

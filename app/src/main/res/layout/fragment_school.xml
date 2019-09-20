@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/relother"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head"
+        android:layout_marginRight="@dimen/dimension5dp"
+        android:layout_marginLeft="@dimen/dimension5dp"
+        android:layout_marginTop="@dimen/dimension10dp"
+        android:layout_marginBottom="@dimen/dimension10dp"
+        android:background="@drawable/bgcorner2">
+
+        <TextView
+            android:id="@+id/txtother"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/txtbadge"
+            android:gravity="center"
+            android:padding="@dimen/dimension10dp"
+            android:text="Other Messages"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/dimension15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txtbadge"
+            android:textSize="@dimen/dimension10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/dimension8dp"
+            android:background="@drawable/bgcorner3"
+            android:layout_margin="@dimen/dimension10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:singleLine="true"
+            android:layout_width="@dimen/dimension35dp"
+            android:layout_height="@dimen/dimension35dp"
+            android:gravity="center"
+            android:text="" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relother"
+        android:paddingLeft="@dimen/dimension5dp"
+        android:paddingTop="@dimen/dimension5dp"
+        android:paddingRight="@dimen/dimension5dp"></android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/relLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="@dimen/dimension10dp"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="@dimen/dimension20dp"
+            android:layout_height="@dimen/dimension20dp"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/colorWhite"
+            android:foregroundTint="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/txtloads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimension10dp"
+            android:layout_toRightOf="@id/pb"
+            android:text="Load more..."
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

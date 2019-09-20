@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 Log.i("@shradha", "Error: " + t.toString());
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.inProgress) + "", LENGTH_SHORT).show();
-
+                Toast.makeText(MainActivity.this, "Error...", LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
